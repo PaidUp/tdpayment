@@ -40,6 +40,13 @@ var all = {
       }
     }
   },
+  balanced: {
+    api: "ak-test-p8Ob9vp9GnqWNwFf6CeLLokeQsf76RIe",
+    marketplace: "TEST-MP2OaM2stYkoWBlGFd0M8YV7",
+    appearsOnStatementAs: "Conv. Select"
+  }
+
+
 
 };
 
