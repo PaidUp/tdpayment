@@ -2,31 +2,33 @@
 
 var express = require('express');
 var controller = require('./payment.controller');
+var config = require('../../config/environment');
+var auth = require('TDCore').auth;
+
 var router = express.Router();
 
-router.post('/createCustomer', controller.createCustomer);
-router.post('/createCard', controller.createCard);
-router.post('/associateCard', controller.associateCard);
-router.post('/createBank', controller.createBank);
-router.post('/associateBank', controller.associateBank);
-router.post('/createOrder', controller.createOrder);
-router.post('/debitCard', controller.debitCard);
-router.post('/debitBank', controller.debitBank);
-router.post('/listCustomerBanks', controller.listCustomerBanks);
-router.post('/listCards', controller.listCards);
-router.post('/createBankVerification', controller.createBankVerification);
-router.post('/loadBankVerification', controller.loadBankVerification);
-router.post('/deleteBankAccount', controller.deleteBankAccount);
-router.post('/confirmBankVerification', controller.confirmBankVerification);
-router.post('/updateOrderDescription', controller.updateOrderDescription);
-router.post('/createOrder', controller.createOrder);
-router.post('/listBanks', controller.listBanks);
-router.post('/prepareCard', controller.prepareCard);
-router.post('/prepareBank', controller.prepareBank);
-router.post('/fetchBank', controller.fetchBank);
-router.post('/fetchCard', controller.fetchCard);
-router.post('/fetchDebit', controller.fetchDebit);
-router.post('/getUserDefaultBankId', controller.getUserDefaultBankId);
-router.post('/getUserDefaultCardId', controller.getUserDefaultCardId);
+router.post('/createCustomer', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createCustomer);
+router.post('/createCard', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createCard);
+router.post('/associateCard', auth.isAuthenticatedServer(config.nodePass.me.token), controller.associateCard);
+router.post('/createBank', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createBank);
+router.post('/associateBank', auth.isAuthenticatedServer(config.nodePass.me.token), controller.associateBank);
+router.post('/createOrder', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createOrder);
+router.post('/debitCard', auth.isAuthenticatedServer(config.nodePass.me.token), controller.debitCard);
+router.post('/debitBank', auth.isAuthenticatedServer(config.nodePass.me.token), controller.debitBank);
+router.get('/listCustomerBanks', auth.isAuthenticatedServer(config.nodePass.me.token), controller.listCustomerBanks);
+router.get('/listCards', auth.isAuthenticatedServer(config.nodePass.me.token), controller.listCards);
+router.post('/createBankVerification', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createBankVerification);
+router.post('/loadBankVerification', auth.isAuthenticatedServer(config.nodePass.me.token), controller.loadBankVerification);
+router.delete('/deleteBankAccount', auth.isAuthenticatedServer(config.nodePass.me.token), controller.deleteBankAccount);
+router.post('/confirmBankVerification', auth.isAuthenticatedServer(config.nodePass.me.token), controller.confirmBankVerification);
+router.post('/updateOrderDescription', auth.isAuthenticatedServer(config.nodePass.me.token), controller.updateOrderDescription);
+router.get('/listBanks', auth.isAuthenticatedServer(config.nodePass.me.token), controller.listBanks);
+router.post('/prepareCard', auth.isAuthenticatedServer(config.nodePass.me.token), controller.prepareCard);
+router.post('/prepareBank', auth.isAuthenticatedServer(config.nodePass.me.token), controller.prepareBank);
+router.get('/fetchBank', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchBank);
+router.get('/fetchCard', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchCard);
+router.get('/fetchDebit', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchDebit);
+router.get('/getUserDefaultBankId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getUserDefaultBankId);
+router.get('/getUserDefaultCardId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getUserDefaultCardId);
 
 module.exports = router;

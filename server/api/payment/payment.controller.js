@@ -3,17 +3,36 @@
  */
 'use strict';
 
-var paymentService = require('../payment.service');
+var paymentService = require('./payment.service');
 var camelize = require('camelize');
 
 exports.createCustomer = function (req, res) {
-  if (!req.body || !req.body.user) {
+  if (!req.body || !req.body.firstName) {
     return res.json(400, {
       "code": "ValidationError",
-      "message": "User id is required"
+      "message": "First name is required"
     });
   }
-  paymentService.createCustomer(req.body.user, function(err, data){
+  if (!req.body || !req.body.lastName) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Last name is required"
+    });
+  }
+  if (!req.body || !req.body.email) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Email is required"
+    });
+  }
+  if (!req.body || !req.body.id) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Cs Id is required"
+    });
+  }
+
+  paymentService.createCustomer(req.body, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -22,13 +41,25 @@ exports.createCustomer = function (req, res) {
 };
 
 exports.createCard = function (req, res) {
-  if (!req.body || !req.body.cardDetails) {
+  if (!req.body || !req.body.number) {
     return res.json(400, {
       "code": "ValidationError",
-      "message": "Card details id is required"
+      "message": "Card number id is required"
     });
   }
-  paymentService.createCard(req.body.cardDetails, function(err, data){
+  if (!req.body || !req.body.expiration_year) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Expiration year is required"
+    });
+  }
+  if (!req.body || !req.body.expiration_month) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Expiration month is required"
+    });
+  }
+  paymentService.createCard(req.body, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -58,13 +89,25 @@ exports.associateCard = function (req, res) {
 };
 
 exports.createBank = function (req, res) {
-  if (!req.body || !req.body.bankDetails) {
+  if (!req.body || !req.body.name) {
     return res.json(400, {
       "code": "ValidationError",
-      "message": "Bank details is required"
+      "message": "Name is required"
     });
   }
-  paymentService.createBank(req.body.bankDetails, function(err, data){
+  if (!req.body || !req.body.account_number) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Account number is required"
+    });
+  }
+  if (!req.body || !req.body.routing_number) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Routing number is required"
+    });
+  }
+  paymentService.createBank(req.body, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -103,7 +146,7 @@ exports.createOrder = function (req, res) {
   if (!req.body || !req.body.description) {
     return res.json(400, {
       "code": "ValidationError",
-      "message": "Merchant Customer Id is required"
+      "message": "Description is required"
     });
   }
   paymentService.createOrder(req.body.merchantCustomerId, req.body.description, function(err, data){
@@ -324,27 +367,6 @@ exports.updateOrderDescription = function (req, res) {
     });
   }
   paymentService.updateOrderDescription(req.body.orderId, req.body.description, function(err, data){
-    if (err) {
-      return handleError(res, err);
-    }
-    return res.json(200, data);
-  });
-};
-
-exports.createOrder = function (req, res) {
-  if (!req.body || !req.body.merchantId) {
-    return res.json(400, {
-      "code": "ValidationError",
-      "message": "Merchant Id is required"
-    });
-  }
-  if (!req.body || !req.body.description) {
-    return res.json(400, {
-      "code": "ValidationError",
-      "message": "Description is required"
-    });
-  }
-  paymentService.createOrder(req.body.merchantId, req.body.description, function(err, data){
     if (err) {
       return handleError(res, err);
     }

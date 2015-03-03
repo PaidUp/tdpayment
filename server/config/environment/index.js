@@ -44,9 +44,28 @@ var all = {
     api: "ak-test-p8Ob9vp9GnqWNwFf6CeLLokeQsf76RIe",
     marketplace: "TEST-MP2OaM2stYkoWBlGFd0M8YV7",
     appearsOnStatementAs: "Conv. Select"
+  },
+
+  nodePass: {
+    me:{
+      token : 'nodePaymentPass'
+    },
+    Loan:{
+      token : 'nodeLoanPass'
+    },
+    User:{
+      token : 'nodeUserPass'
+    },
+    Payment:{
+      token : 'nodePaymentPass'
+    },
+    Crowdfunding:{
+      token : 'nodeCrowdfundingPass'
+    },
+    Angular:{
+      token : 'nodeAngularPass'
+    }
   }
-
-
 
 };
 
