@@ -205,13 +205,13 @@ exports.debitBank = function (req, res) {
   if (!req.body || !req.body.bankId) {
     return res.json(400, {
       "code": "ValidationError",
-      "message": "Card Id is required"
+      "message": "Bank Id is required"
     });
   }
   if (!req.body || !req.body.amount) {
     return res.json(400, {
       "code": "ValidationError",
-      "message": "amount is required"
+      "message": "Amount is required"
     });
   }
 
@@ -225,7 +225,7 @@ exports.debitBank = function (req, res) {
   if (!req.body || !req.body.appearsOnStatementAs) {
     return res.json(400, {
       "code": "ValidationError",
-      "message": "appearsOnStatementAs is required"
+      "message": "AppearsOnStatementAs is required"
     });
   }
 
@@ -236,7 +236,7 @@ exports.debitBank = function (req, res) {
     });
   }
 
-  paymentService.debitBank(req.body.cardId, req.body.amount, req.body.description, req.body.appearsOnStatementAs, req.body.orderId,
+  paymentService.debitBank(req.body.bankId, req.body.amount, req.body.description, req.body.appearsOnStatementAs, req.body.orderId,
     function(err, data){
       if (err) {
         return handleError(res, err);
@@ -246,13 +246,13 @@ exports.debitBank = function (req, res) {
 };
 
 exports.listCustomerBanks = function (req, res) {
-  if (!req.body || !req.body.customerId) {
+  if (!req.params || !req.params.customerId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Customer Id is required"
     });
   }
-  paymentService.listCustomerBanks(req.body.customerId, function(err, data){
+  paymentService.listCustomerBanks(req.params.customerId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -261,13 +261,13 @@ exports.listCustomerBanks = function (req, res) {
 };
 
 exports.listCards = function (req, res) {
-  if (!req.body || !req.body.customerId) {
+  if (!req.params || !req.params.customerId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Customer Id is required"
     });
   }
-  paymentService.listCards(req.body.customerId, function(err, data){
+  paymentService.listCards(req.params.customerId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -291,13 +291,13 @@ exports.createBankVerification = function (req, res) {
 };
 
 exports.loadBankVerification = function (req, res) {
-  if (!req.body || !req.body.verificationId) {
+  if (!req.params || !req.params.verificationId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Verification Id is required"
     });
   }
-  paymentService.loadBankVerification(req.body.verificationId, function(err, data){
+  paymentService.loadBankVerification(req.params.verificationId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -306,19 +306,13 @@ exports.loadBankVerification = function (req, res) {
 };
 
 exports.deleteBankAccount = function (req, res) {
-  if (!req.body || !req.body.customerId) {
-    return res.json(400, {
-      "code": "ValidationError",
-      "message": "Customer Id is required"
-    });
-  }
   if (!req.body || !req.body.bankId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Bank Id is required"
     });
   }
-  paymentService.deleteBankAccount(req.body.customerId, req.body.bankId, function(err, data){
+  paymentService.deleteBankAccount(req.body.bankId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -375,14 +369,14 @@ exports.updateOrderDescription = function (req, res) {
 };
 
 exports.listBanks = function (req, res) {
-  if (!req.body || !req.body.customerId) {
+  if (!req.params || !req.params.customerId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Customer Id is required"
     });
   }
 
-  paymentService.listBanks(req.body.customerId, function(err, data){
+  paymentService.listBanks(req.params.customerId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -433,14 +427,14 @@ exports.prepareBank = function (req, res) {
 };
 
 exports.fetchBank = function (req, res) {
-  if (!req.body || !req.body.bankId) {
+  if (!req.params || !req.params.bankId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Bank Id is required"
     });
   }
 
-  paymentService.fetchBank(req.body.bankId, function(err, data){
+  paymentService.fetchBank(req.params.bankId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -449,14 +443,14 @@ exports.fetchBank = function (req, res) {
 };
 
 exports.fetchCard = function (req, res) {
-  if (!req.body || !req.body.cardId) {
+  if (!req.params || !req.params.cardId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Card Id is required"
     });
   }
 
-  paymentService.fetchCard(req.body.cardId, function(err, data){
+  paymentService.fetchCard(req.params.cardId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -481,14 +475,14 @@ exports.fetchDebit = function (req, res) {
 };
 
 exports.getUserDefaultBankId = function (req, res) {
-  if (!req.body || !req.body.user) {
+  if (!req.params || !req.params.customerId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "User is required"
     });
   }
 
-  paymentService.getUserDefaultBankId(req.body.user, function(err, data){
+  paymentService.getUserDefaultBankId(req.params.customerId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -497,14 +491,14 @@ exports.getUserDefaultBankId = function (req, res) {
 };
 
 exports.getUserDefaultCardId = function (req, res) {
-  if (!req.body || !req.body.user) {
+  if (!req.params || !req.params.customerId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "User is required"
     });
   }
 
-  paymentService.getUserDefaultCardId(req.body.user, function(err, data){
+  paymentService.getUserDefaultCardId(req.params.customerId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -513,6 +507,7 @@ exports.getUserDefaultCardId = function (req, res) {
 };
 
 function handleError(res, err) {
+  console.log(err);
   var httpErrorCode = 500;
   var errors = [];
 

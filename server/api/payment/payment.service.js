@@ -92,7 +92,7 @@ exports.listCustomerBanks = function (customerId, cb) {
   });
 }
 
-exports.listCards = function (customerId, cb) {
+function listCards(customerId, cb) {
   paymentAdapter.listCards(customerId, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
@@ -113,7 +113,7 @@ exports.loadBankVerification = function (verificationId, cb) {
   });
 }
 
-exports.deleteBankAccount = function (customerId, bankId, cb) {
+exports.deleteBankAccount = function (bankId, cb) {
   paymentAdapter.deleteBankAccount(bankId, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
@@ -148,7 +148,7 @@ exports.createOrder = function (merchantId, description, cb) {
   });
 }
 
-exports.listBanks = function (customerId, cb) {
+function listBanks(customerId, cb) {
   paymentAdapter.listBanks(customerId, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
@@ -205,9 +205,9 @@ exports.fetchDebit = function (debitId, cb){
   });
 }
 
-exports.getUserDefaultBankId = function (user, cb) {
+exports.getUserDefaultBankId = function (BPCustomerId, cb) {
   // Check bank accounts
-  listBanks(user.BPCustomerId, function(err, data){
+  listBanks(BPCustomerId, function(err, data){
     if(err) return cb(err);
     if(data.bankAccounts.length == 0) {
       // error
@@ -224,9 +224,9 @@ exports.getUserDefaultBankId = function (user, cb) {
   });
 }
 
-exports.getUserDefaultCardId = function (user, cb) {
+exports.getUserDefaultCardId = function (BPCustomerId, cb) {
   // Check bank accounts
-  listCards(user.BPCustomerId, function(err, data){
+  listCards(BPCustomerId, function(err, data){
     if(err) return cb(err);
     if(data.cards.length == 0) {
       // error
@@ -237,3 +237,5 @@ exports.getUserDefaultCardId = function (user, cb) {
   });
 }
 
+exports.listBanks = listBanks;
+exports.listCards = listCards;

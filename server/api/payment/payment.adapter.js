@@ -219,13 +219,14 @@ function debitCard(cardId, amount, description, appearsOnStatementAs, orderId, c
  -d "order=/orders/OR49gqHygz3Idp1jezxu2esg"
  */
 function debitBank(bankId, amount, description, appearsOnStatementAs, orderId, cb) {
-  httpRequest("POST",
-    {
-      amount: Math.round(amount * 100),
-      description: description,
-      order: "/orders/"+orderId,
-      appears_on_statement_as: appearsOnStatementAs
-    }, '/bank_accounts/'+bankId+'/debits', function(err, data){
+  var params = {
+    amount: Math.round(amount * 100),
+    description: description,
+    order: "/orders/"+orderId,
+    appears_on_statement_as: appearsOnStatementAs
+  };
+
+  httpRequest("POST", params, '/bank_accounts/'+bankId+'/debits', function(err, data){
       if (err) return cb(err);
       if(hasError(data)) return cb(handleErrors(data));
       return cb(null, camelize(data));
