@@ -62,6 +62,7 @@ var data = {
             orderId : this.orderBankId
         }
     },
+    debitBankResponse : {},
     bankAccountVerification : {
 
     },

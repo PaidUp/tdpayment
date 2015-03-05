@@ -8,7 +8,10 @@ var errors = require('./components/errors');
 
 module.exports = function(app) {
 
-  app.use('/api/v1/payment', require('./api/payment'));
+  app.use('/api/v1/customer', require('./api/customer'));
+  app.use('/api/v1/bank', require('./api/bank'));
+  app.use('/api/v1/bank', require('./api/order'));
+  app.use('/api/v1/card', require('./api/card'));
 
   // Insert routes below
   // app.use('/api/things', require('./api/thing'));
