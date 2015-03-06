@@ -88,8 +88,7 @@ function debitBank (req, res) {
     });
   }
 
-  bankService.debitBank(req.body.bankId, req.body.amount, req.body.description, req.body.appearsOnStatementAs, req.body.orderId,
-    function(err, data){
+  bankService.debitBank(req.body, function(err, data){
       if (err) {
         return handleError(res, err);
       }
@@ -119,7 +118,7 @@ function createBankVerification (req, res) {
       "message": "Bank Id is required"
     });
   }
-  bankService.createBankVerification(req.body.bankId, function(err, data){
+  bankService.createBankVerification(req.body, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -134,7 +133,7 @@ function loadBankVerification (req, res) {
       "message": "Verification Id is required"
     });
   }
-  bankService.loadBankVerification(req.params.verificationId, function(err, data){
+  bankService.loadBankVerification(req.params, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -176,7 +175,7 @@ function confirmBankVerification (req, res) {
       "message": "Amount 2 is required"
     });
   }
-  bankService.confirmBankVerification(req.body.verificationId, req.body.amount1, req.body.amount2, function(err, data){
+  bankService.confirmBankVerification(req.body, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -213,7 +212,7 @@ function prepareBank (req, res) {
       "message": "Bank Id is required"
     });
   }
-  bankService.prepareBank(req.body.userId, req.body.bankId, function(err, data){
+  bankService.prepareBank(req.body, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -245,11 +244,28 @@ function getUserDefaultBankId (req, res) {
     });
   }
 
-  bankService.getUserDefaultBankId(req.params.customerId, function(err, data){
+  bankService.getUserDefaultBankId(req.params, function(err, data){
     if (err) {
       return handleError(res, err);
     }
     return res.json(200, data);
+  });
+};
+
+function handleError(res, err) {
+
+  console.log(err);
+  var httpErrorCode = 500;
+  var errors = [];
+
+  if (err.name === "ValidationError") {
+    httpErrorCode = 400;
+  }
+
+  return res.json(httpErrorCode, {
+    code: err.name,
+    message: err.message,
+    errors: err.errors
   });
 };
 

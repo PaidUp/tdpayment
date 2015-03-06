@@ -58,7 +58,6 @@ function fetchCard (cardId, cb){
 }
 
 function getUserDefaultCardId (params, cb) {
-  // Check bank accounts
   listCards(params, function(err, data){
     if(err) return cb(err);
     if(data.cards.length == 0) {

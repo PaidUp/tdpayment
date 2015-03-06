@@ -10,11 +10,15 @@ module.exports = function(app) {
 
   app.use('/api/v1/customer', require('./api/customer'));
   app.use('/api/v1/bank', require('./api/bank'));
-  app.use('/api/v1/bank', require('./api/order'));
+  app.use('/api/v1/order', require('./api/order'));
   app.use('/api/v1/card', require('./api/card'));
 
   // Insert routes below
   // app.use('/api/things', require('./api/thing'));
+
+  app.get('/swagger.json', function(req,res){
+    return res.sendfile(__dirname + '/swagger.json', 'swagger.json');
+  });
 
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')

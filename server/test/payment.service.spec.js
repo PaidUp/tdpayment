@@ -1,4 +1,3 @@
-
 'use strict';
 var assert = require('assert');
 var customerService = require('../api/customer/customer.service');
@@ -18,7 +17,7 @@ function createOrder(order, cb){
 };
 
 
-describe.only('payment services test', function () {
+describe('payment services test', function () {
   it('createCustomer', function (done) {
     this.timeout(60000);
     var user = modelSpec.user;
@@ -205,9 +204,9 @@ describe.only('payment services test', function () {
           if(err){
               return done(err);
           }
-          modelSpec.creditCard = data;
           assert(data, 'No data response from credit card');
           assert.notEqual(0, data.id.length, 'id from credit card is not present');
+          modelSpec.creditCard = data;
           return done();
       })
   });

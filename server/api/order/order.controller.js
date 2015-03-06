@@ -60,6 +60,23 @@ function fetchDebit (req, res) {
   });
 };
 
+function handleError(res, err) {
+
+  console.log(err);
+  var httpErrorCode = 500;
+  var errors = [];
+
+  if (err.name === "ValidationError") {
+    httpErrorCode = 400;
+  }
+
+  return res.json(httpErrorCode, {
+    code: err.name,
+    message: err.message,
+    errors: err.errors
+  });
+}
+
 module.exports = {
   createOrder : createOrder,
   updateOrderDescription : updateOrderDescription,
