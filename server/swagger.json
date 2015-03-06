@@ -1,0 +1,87 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "title": "CS API",
+        "description": "TD Payment Service",
+        "version": "1.0.0"
+    },
+    "host": "localhost:9005",
+    "schemes": [
+        "http",
+        "https"
+    ],
+    "basePath": "/api/v1",
+    "produces": [
+        "application/json"
+    ],
+    "paths": {
+      "/customer/create": {
+        "post": {
+          "operationId": "customerCreate",
+          "summary": "Create customer in balanced payment (TDPayment.createCustomer)",
+          "description": "Create customer user.",
+          "produces": [
+            "application/json"
+          ],
+          "parameters": [
+            {
+              "name": "user",
+              "in": "body",
+              "description": "User model",
+              "required": true,
+              "schema": {
+                "$ref": "#/definitions/reqCustomerCreate"
+              }
+            }
+          ]
+          ,
+          "tags": [
+            "Customer"
+          ],
+          "responses": {
+            "200": {
+              "description": "Successful user create",
+              "schema": {
+                "properties" : {
+                  "name" : {
+                    "type" : "string",
+                    "Description" : "User full name"
+                  }
+
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+  "definitions": {
+    "reqCustomerCreate": {
+      "required": [
+        "firstName",
+        "lastName",
+        "email",
+        "id"
+      ],
+      "properties": {
+        "firstName": {
+          "type": "string",
+          "description": "First name"
+        },
+        "lastName": {
+          "type": "string",
+          "description": "Last name"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email"
+        },
+        "id": {
+          "type": "string",
+          "description": "Id user reference"
+        }
+      }
+    }
+  }
+
+}

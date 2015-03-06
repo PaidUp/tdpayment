@@ -17,7 +17,7 @@ function createOrder(order, cb){
 };
 
 
-describe('payment services test', function () {
+describe.skip('payment services test', function () {
   it('createCustomer', function (done) {
     this.timeout(60000);
     var user = modelSpec.user;

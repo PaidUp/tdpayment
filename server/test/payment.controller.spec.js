@@ -11,7 +11,7 @@ var modelSpec = require('./payment.model.spec');
 
 var token = require('../config/environment').nodePass.me.token;
 
-describe('test customer controller' , function(){
+describe.only('test customer controller' , function(){
   it('create customer' , function(done){
     this.timeout(60000);
     var user = modelSpec.user;
@@ -26,6 +26,7 @@ describe('test customer controller' , function(){
         assert.equal(user.firstName +' '+ user.lastName,  res.body.name, 'The name in not correct');
         assert.equal(user.email,  res.body.email, 'The email in not correct');
         modelSpec.customer = res.body;
+        console.log(res.body);
         done();
       });
   });
