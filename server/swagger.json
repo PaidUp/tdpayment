@@ -1,60 +1,496 @@
 {
-    "swagger": "2.0",
-    "info": {
-        "title": "CS API",
-        "description": "TD Payment Service",
-        "version": "1.0.0"
-    },
-    "host": "localhost:9005",
-    "schemes": [
-        "http",
-        "https"
-    ],
-    "basePath": "/api/v1",
-    "produces": [
-        "application/json"
-    ],
-    "paths": {
-      "/customer/create": {
-        "post": {
-          "operationId": "customerCreate",
-          "summary": "Create customer in balanced payment (TDPayment.createCustomer)",
-          "description": "Create customer user.",
-          "produces": [
-            "application/json"
-          ],
-          "parameters": [
-            {
-              "name": "user",
-              "in": "body",
-              "description": "User model",
-              "required": true,
-              "schema": {
-                "$ref": "#/definitions/reqCustomerCreate"
-              }
+  "swagger": "2.0",
+  "info": {
+    "title": "TDPayment API",
+    "description": "TD Payment Service",
+    "version": "1.0.0"
+  },
+  "host": "localhost:9005",
+  "schemes": [
+    "http",
+    "https"
+  ],
+  "basePath": "/api/v1",
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/customer/create": {
+      "post": {
+        "operationId": "customerCreate",
+        "summary": "Create customer in balanced payment (TDPayment.createCustomer)",
+        "description": "Create customer user.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "user",
+            "in": "body",
+            "description": "User model",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reqCustomerCreate"
             }
-          ]
-          ,
-          "tags": [
-            "Customer"
-          ],
-          "responses": {
-            "200": {
-              "description": "Successful user create",
-              "schema": {
-                "properties" : {
-                  "name" : {
-                    "type" : "string",
-                    "Description" : "User full name"
-                  }
-
-                }
-              }
+          }
+        ]
+      ,
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful user create",
+            "schema": {
+              "$ref" : "resCustomerCreate"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
             }
           }
         }
       }
     },
+    "/bank/create": {
+      "post": {
+        "operationId": "bankCreate",
+        "summary": "Create bank account in gateway payment (TDPayment.createBank)",
+        "description": "Create bank account .",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Data bank details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqBankCreate"
+            }
+            }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful bank account created",
+            "schema": {
+              "$ref" : "resBankCreate"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/bank/associate": {
+      "post": {
+        "operationId": "bankAssociate",
+        "summary": "Associate customer with bank account in gateway payment (TDPayment.associateBank)",
+        "description": "Associate customer with bank account in gateway payment.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Data associate bank details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqBankAssociate"
+            }
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful customer and bank account associate",
+            "schema": {
+              "$ref" : "resBankAssociate"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/order/create": {
+      "post": {
+        "operationId": "orderCreate",
+        "summary": "Create order in gateway payment (TDPayment.createOrder)",
+        "description": "Create order.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Order details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqOrderCreate"
+            }
+          }],
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful order created",
+            "schema": {
+              "$ref" : "resOrderCreate"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/order/update/description": {
+      "post": {
+        "operationId": "orderUpdateDescription",
+        "summary": "Update description in the order (TDPayment.updateOrderDescription)",
+        "description": "Update order description.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Order details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqOrderUpdateDescription"
+            }
+          }],
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful order updated",
+            "schema": {
+              "$ref" : "resOrderUpdateDescription"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/bank/debit": {
+      "post": {
+        "operationId": "bankDebit",
+        "summary": "debited order value from bank account (TDPayment.debitBank)",
+        "description": "Debit from bank account.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Debit details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqBankDebit"
+            }
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful bank account debited value",
+            "schema": {
+              "$ref" : "resBankDebit"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/bank/create/verification": {
+      "post": {
+        "operationId": "bankCreateVerification",
+        "summary": "Create bank verification (TDPayment.createBankVerification)",
+        "description": "Create bank verification.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Verification details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqBankCreateVerification"
+            }
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful bank verification created",
+            "schema": {
+              "$ref" : "resBankCreateVerification"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/bank/confirm/verification": {
+      "post": {
+        "operationId": "bankConfirmVerification",
+        "summary": "Confirm bank verification (TDPayment.confirmBankVerification)",
+        "description": "Confirm bank verification.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Confirm Verification details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqBankConfirmVerification"
+            }
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful bank confirm verification",
+            "schema": {
+              "$ref" : "resBankConfirmVerification"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/bank/prepare": {
+      "post": {
+        "operationId": "bankPrepare",
+        "summary": "Associate bank with user id (TDPayment.prepareBank)",
+        "description": "Associate bank with user id.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Prepare bank details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqBankPrepare"
+            }
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful bank confirm verification",
+            "schema": {
+              "$ref" : "resBankPrepare"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/bank/load/verification/verificationId/{verificationId}": {
+      "get": {
+        "operationId": "bankLoadVerification",
+        "summary": "Load bank verification (TDPayment.loadBankVerification)",
+        "description": "Load bank account verification.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "verificationId",
+            "in": "path",
+            "description": "Id verification bank account",
+            "required": true,
+            "type" : "string"
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful load verification account",
+            "schema": {
+              "$ref" : "resBankLoadVerification"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/bank/list/customerId/{customerId}": {
+      "get": {
+        "operationId": "bankList",
+        "summary": "Get list of banks by customer (TDPayment.listBanks)",
+        "description": "Get list of banks by customer.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Id customer",
+            "required": true,
+            "type" : "string"
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful load verification account",
+            "schema": {
+              "$ref" : "resBankList"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    }
+  },
+
+
+
+
   "definitions": {
     "reqCustomerCreate": {
       "required": [
@@ -81,7 +517,636 @@
           "description": "Id user reference"
         }
       }
+    },
+    "reqBankCreate": {
+      "required": [
+        "name",
+        "account_number",
+        "routing_number"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Full name of account owner"
+        },
+        "account_number": {
+          "type": "string",
+          "description": "Account Number"
+        },
+        "routing_number": {
+          "type": "string",
+          "description": "Routing Number"
+        }
+      }
+    },
+    "reqBankAssociate": {
+      "required": [
+        "customerId",
+        "bankId"
+      ],
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "description": "Id customer"
+        },
+        "bankId": {
+          "type": "string",
+          "description": "Id bank account"
+        }
+      }
+    },
+    "reqOrderCreate": {
+      "required": [
+        "merchantCustomerId",
+        "description"
+      ],
+      "properties": {
+        "merchantCustomerId": {
+          "type": "string",
+          "description": "Id customer"
+        },
+        "description": {
+          "type": "string",
+          "description": "General description of the order"
+        }
+      }
+    },
+    "reqOrderUpdateDescription": {
+      "required": [
+        "orderId",
+        "description"
+      ],
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "description": "Id order"
+        },
+        "description": {
+          "type": "string",
+          "description": "New general description of the order"
+        }
+      }
+    },
+    "reqBankDebit": {
+      "required": [
+        "bankId",
+        "amount",
+        "description",
+        "appearsOnStatementAs",
+        "orderId"
+      ],
+      "properties": {
+        "orderId": {
+          "type": "string",
+          "description": "Id order"
+        },
+        "bankId": {
+          "type": "string",
+          "description": "Id bank account"
+        },
+        "description": {
+          "type": "string",
+          "description": "General description for the debit"
+        },
+        "amount" : {
+          "type" : "number",
+          "description" : "Value of the order"
+        },
+        "appearsOnStatementAs" : {
+          "type" : "string",
+          "description" : "Appears on statement as"
+        }
+      }
+    },
+    "reqBankCreateVerification": {
+      "required": [
+        "bankId"
+      ],
+      "properties": {
+        "bankId": {
+          "type": "string",
+          "description": "Id bank"
+        }
+      }
+    },
+    "reqBankConfirmVerification": {
+      "required": [
+        "verificationId",
+        "amount1",
+        "amount2"
+      ],
+      "properties": {
+        "verificationId": {
+          "type": "string",
+          "description": "Id verification"
+        },
+        "amount1": {
+          "type": "number",
+          "description": "First amount debited"
+        },
+        "amount2": {
+          "type": "number",
+          "description": "second amount debited"
+        }
+      }
+    },
+    "reqBankPrepare": {
+      "required": [
+        "userId",
+        "bankId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Id user maintained relation with the customer"
+        },
+        "bankId": {
+          "type": "string",
+          "description": "Id bank"
+        }
+      }
+    },
+
+
+
+    "resCustomerCreate" : {
+      "properties" : {
+        "body" : {
+          "type" : "object",
+          "default" : {"name": "string string",
+          "links": {
+            "source": null,
+            "destination": null
+          },
+          "updated_at": "2015-03-09T15:32:59.399498Z",
+          "created_at": "2015-03-09T15:32:59.243526Z",
+          "dob_month": null,
+          "id": "CU7i62HVMY28sfjpaw4VocsU",
+          "phone": null,
+          "href": "/customers/CU7i62HVMY28sfjpaw4VocsU",
+          "merchant_status": "no-match",
+          "meta": {
+            "csId": "string"
+          },
+          "dob_year": null,
+          "address": {
+            "city": null,
+            "line2": null,
+            "line1": null,
+            "state": null,
+            "postal_code": null,
+            "country_code": null
+          },
+          "business_name": null,
+          "ssn_last4": null,
+          "email": "test@sfsd.com",
+          "ein": null
+        }}
+      }
+    },
+    "resBankCreate" : {
+      "properties" : {
+        "body" : {
+          "type" : "object",
+          "default" : {
+            "routing_number": "123123123",
+            "bank_name": "",
+            "account_type": "checking",
+            "name": "ewerwrewrw",
+            "links": {
+              "customer": null,
+              "bank_account_verification": null
+            },
+            "can_credit": true,
+            "created_at": "2015-03-09T16:34:10.906920Z",
+            "fingerprint": "932f3c1b56257ce8539ac269d7aab42550dacf8818d075f0bdf1990562aae3ef",
+            "updated_at": "2015-03-09T16:34:10.906922Z",
+            "href": "/bank_accounts/BA3M18xrWAuGOwWqk7tbkTeg",
+            "meta": {},
+            "account_number": "xxxxx3123",
+            "address": {
+              "city": null,
+              "line2": null,
+              "line1": null,
+              "state": null,
+              "postal_code": null,
+              "country_code": null
+            },
+            "can_debit": false,
+            "id": "BA3M18xrWAuGOwWqk7tbkTeg"
+          }
+        }
+      }
+    },
+    "resBankAssociate" : {
+      "properties" : {
+        "bankAccounts" : {
+          "type" : "list",
+          "default" :[{
+            "routingNumber": "123123123",
+            "bankName": "",
+            "accountType": "checking",
+            "name": "ewerwrewrw",
+            "links": {
+              "customer": "CU7i62HVMY28sfjpaw4VocsU",
+              "bankAccountVerification": null
+            },
+            "canCredit": true,
+            "createdAt": "2015-03-09T16:34:10.906920Z",
+            "fingerprint": "932f3c1b56257ce8539ac269d7aab42550dacf8818d075f0bdf1990562aae3ef",
+            "updatedAt": "2015-03-09T17:00:20.262585Z",
+            "href": "/bank_accounts/BA3M18xrWAuGOwWqk7tbkTeg",
+            "meta": {},
+            "accountNumber": "xxxxx3123",
+            "address": {
+              "city": null,
+              "line2": null,
+              "line1": null,
+              "state": null,
+              "postalCode": null,
+              "countryCode": null
+            },
+            "canDebit": false,
+            "id": "BA3M18xrWAuGOwWqk7tbkTeg"
+          }]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "bankAccountsSettlements": "/bank_accounts/{bank_accounts.id}/settlements",
+            "bankAccountsBankAccountVerification": "/verifications/{bank_accounts.bank_account_verification}",
+            "bankAccountsDebits": "/bank_accounts/{bank_accounts.id}/debits",
+            "bankAccountsCustomer": "/customers/{bank_accounts.customer}",
+            "bankAccountsCredits": "/bank_accounts/{bank_accounts.id}/credits",
+            "bankAccountsBankAccountVerifications": "/bank_accounts/{bank_accounts.id}/verifications"
+          }
+        }
+      }
+    },
+    "resOrderCreate" : {
+      "properties" : {
+        "orders" : {
+          "type" : "list",
+          "default" : [
+            {
+              "deliveryAddress": {
+                "city": null,
+                "line2": null,
+                "line1": null,
+                "state": null,
+                "postalCode": null,
+                "countryCode": null
+              },
+              "description": "string",
+              "links": {
+                "merchant": "CU7i62HVMY28sfjpaw4VocsU"
+              },
+              "href": "/orders/OR7kd6KLUvooBxi1CaDqgi57",
+              "createdAt": "2015-03-09T19:36:24.353267Z",
+              "updatedAt": "2015-03-09T19:36:24.353269Z",
+              "id": "OR7kd6KLUvooBxi1CaDqgi57",
+              "currency": "USD",
+              "amount": 0,
+              "meta": {},
+              "amountEscrowed": 0
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "ordersMerchant": "/customers/{orders.merchant}",
+            "ordersCredits": "/orders/{orders.id}/credits",
+            "ordersReversals": "/orders/{orders.id}/reversals",
+            "ordersEvents": "/orders/{orders.id}/events",
+            "ordersRefunds": "/orders/{orders.id}/refunds",
+            "ordersDebits": "/orders/{orders.id}/debits",
+            "ordersBuyers": "/orders/{orders.id}/buyers"
+          }
+
+        }
+      }
+    },
+    "resOrderUpdateDescription" : {
+      "properties" : {
+        "orders": {
+          "type": "list",
+          "default": [
+            {
+              "deliveryAddress": {
+                "city": null,
+                "line2": null,
+                "line1": null,
+                "state": null,
+                "postalCode": null,
+                "countryCode": null
+              },
+              "description": "string",
+              "links": {
+                "merchant": "CU7i62HVMY28sfjpaw4VocsU"
+              },
+              "href": "/orders/OR7F4cIJqcZuR5WfhF5HtkpW",
+              "createdAt": "2015-03-09T18:03:39.315477Z",
+              "updatedAt": "2015-03-09T18:39:34.393529Z",
+              "id": "OR7F4cIJqcZuR5WfhF5HtkpW",
+              "currency": "USD",
+              "amount": 0,
+              "meta": {},
+              "amountEscrowed": 0
+            }
+            ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "ordersMerchant": "/customers/{orders.merchant}",
+            "ordersCredits": "/orders/{orders.id}/credits",
+            "ordersReversals": "/orders/{orders.id}/reversals",
+            "ordersEvents": "/orders/{orders.id}/events",
+            "ordersRefunds": "/orders/{orders.id}/refunds",
+            "ordersDebits": "/orders/{orders.id}/debits",
+            "ordersBuyers": "/orders/{orders.id}/buyers"
+          }
+        }
+      }
+    },
+    "resBankCreateVerification" : {
+      "properties" : {
+        "bankAccountVerifications" : {
+          "type" : "list",
+          "default" : [
+            {
+              "verificationStatus": "pending",
+              "links": {
+                "bankAccount": "BA3M18xrWAuGOwWqk7tbkTeg"
+              },
+              "href": "/verifications/BZ5sUuhCEBbstOmvA29UVaBf",
+              "createdAt": "2015-03-09T20:17:38.878934Z",
+              "attemptsRemaining": 3,
+              "updatedAt": "2015-03-09T20:17:39.295983Z",
+              "depositStatus": "succeeded",
+              "attempts": 0,
+              "meta": {},
+              "id": "BZ5sUuhCEBbstOmvA29UVaBf"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "bankAccountVerificationsBankAccount": "/bank_accounts/{bank_account_verifications.bank_account}"
+          }
+        }
+      }
+    },
+    "resBankConfirmVerification" : {
+      "properties" : {
+        "bankAccountVerifications" : {
+          "type" : "list",
+          "default" : [
+            {
+              "verificationStatus": "succeeded",
+              "links": {
+                "bankAccount": "BA3M18xrWAuGOwWqk7tbkTeg"
+              },
+              "href": "/verifications/BZ5sUuhCEBbstOmvA29UVaBf",
+              "createdAt": "2015-03-09T20:17:38.878934Z",
+              "attemptsRemaining": 2,
+              "updatedAt": "2015-03-09T20:42:51.287443Z",
+              "depositStatus": "succeeded",
+              "attempts": 1,
+              "meta": {},
+              "id": "BZ5sUuhCEBbstOmvA29UVaBf"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "bankAccountVerificationsBankAccount": "/bank_accounts/{bank_account_verifications.bank_account}"
+          }
+        }
+      }
+    },
+    "resBankDebit" : {
+      "properties" : {
+        "debits" : {
+          "type" : "list",
+          "default" : [
+            {
+              "status": "succeeded",
+              "description": "string",
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU",
+                "source": "BA3M18xrWAuGOwWqk7tbkTeg",
+                "cardHold": null,
+                "order": "OR7kd6KLUvooBxi1CaDqgi57",
+                "dispute": null
+              },
+              "updatedAt": "2015-03-09T20:51:40.952902Z",
+              "createdAt": "2015-03-09T20:51:40.634234Z",
+              "transactionNumber": "WCAE-UY6-TORC",
+              "failureReason": null,
+              "currency": "USD",
+              "amount": 150000,
+              "failureReasonCode": null,
+              "meta": {},
+              "href": "/debits/WD3xVZUknW6z5Wpqvn0Vundu",
+              "appearsOnStatementAs": "BAL*string",
+              "id": "WD3xVZUknW6z5Wpqvn0Vundu"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "debitsCustomer": "/customers/{debits.customer}",
+            "debitsOrder": "/orders/{debits.order}",
+            "debitsDispute": "/disputes/{debits.dispute}",
+            "debitsSource": "/resources/{debits.source}",
+            "debitsEvents": "/debits/{debits.id}/events",
+            "debitsRefunds": "/debits/{debits.id}/refunds",
+            "debitsCardHold": "/holds/{debits.card_hold}"
+          }
+
+        }
+      }
+    },
+    "resBankPrepare" : {
+      "properties" : {
+        "bankAccounts" : {
+          "type" : "list",
+          "default" : [
+            {
+              "routingNumber": "123123123",
+              "bankName": "",
+              "accountType": "checking",
+              "name": "ewerwrewrw",
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU",
+                "bankAccountVerification": "BZ5sUuhCEBbstOmvA29UVaBf"
+              },
+              "canCredit": true,
+              "createdAt": "2015-03-09T16:34:10.906920Z",
+              "fingerprint": "932f3c1b56257ce8539ac269d7aab42550dacf8818d075f0bdf1990562aae3ef",
+              "updatedAt": "2015-03-09T20:42:51.280994Z",
+              "href": "/bank_accounts/BA3M18xrWAuGOwWqk7tbkTeg",
+              "meta": {},
+              "accountNumber": "xxxxx3123",
+              "address": {
+                "city": null,
+                "line2": null,
+                "line1": null,
+                "state": null,
+                "postalCode": null,
+                "countryCode": null
+              },
+              "canDebit": true,
+              "id": "BA3M18xrWAuGOwWqk7tbkTeg"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "bankAccountsSettlements": "/bank_accounts/{bank_accounts.id}/settlements",
+            "bankAccountsBankAccountVerification": "/verifications/{bank_accounts.bank_account_verification}",
+            "bankAccountsDebits": "/bank_accounts/{bank_accounts.id}/debits",
+            "bankAccountsCustomer": "/customers/{bank_accounts.customer}",
+            "bankAccountsCredits": "/bank_accounts/{bank_accounts.id}/credits",
+            "bankAccountsBankAccountVerifications": "/bank_accounts/{bank_accounts.id}/verifications"
+          }
+        }
+      }
+    },
+    "resBankLoadVerification" : {
+      "properties" : {
+        "bankAccountVerifications" : {
+          "type" : "list",
+          "default" : [
+            {
+              "verificationStatus": "succeeded",
+              "links": {
+                "bankAccount": "BA3M18xrWAuGOwWqk7tbkTeg"
+              },
+              "href": "/verifications/BZ5sUuhCEBbstOmvA29UVaBf",
+              "createdAt": "2015-03-09T20:17:38.878934Z",
+              "attemptsRemaining": 2,
+              "updatedAt": "2015-03-09T20:42:51.287443Z",
+              "depositStatus": "succeeded",
+              "attempts": 1,
+              "meta": {},
+              "id": "BZ5sUuhCEBbstOmvA29UVaBf"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "bankAccountVerificationsBankAccount": "/bank_accounts/{bank_account_verifications.bank_account}"
+          }
+        }
+      }
+    },
+    "resBankList" : {
+      "properties" : {
+        "bankAccounts" : {
+          "type" : "list",
+          "default" : [
+            {
+              "routingNumber": "123123123",
+              "bankName": "",
+              "accountType": "checking",
+              "name": "ewerwrewrw",
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU",
+                "bankAccountVerification": "BZ5sUuhCEBbstOmvA29UVaBf"
+              },
+              "canCredit": true,
+              "createdAt": "2015-03-09T16:34:10.906920Z",
+              "fingerprint": "932f3c1b56257ce8539ac269d7aab42550dacf8818d075f0bdf1990562aae3ef",
+              "updatedAt": "2015-03-09T20:42:51.280994Z",
+              "href": "/bank_accounts/BA3M18xrWAuGOwWqk7tbkTeg",
+              "meta": {},
+              "accountNumber": "xxxxx3123",
+              "address": {
+                "city": null,
+                "line2": null,
+                "line1": null,
+                "state": null,
+                "postalCode": null,
+                "countryCode": null
+              },
+              "canDebit": true,
+              "id": "BA3M18xrWAuGOwWqk7tbkTeg"
+            }
+          ]
+        },
+        "meta" : {
+          "type" : "object",
+          "default" : {
+            "last": "/customers/CU7i62HVMY28sfjpaw4VocsU/bank_accounts?limit=10&offset=0",
+            "next": null,
+            "href": "/customers/CU7i62HVMY28sfjpaw4VocsU/bank_accounts?limit=10&offset=0",
+            "limit": 10,
+            "offset": 0,
+            "previous": null,
+            "total": 1,
+            "first": "/customers/CU7i62HVMY28sfjpaw4VocsU/bank_accounts?limit=10&offset=0"
+          }
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "bankAccountsSettlements": "/bank_accounts/{bank_accounts.id}/settlements",
+            "bankAccountsBankAccountVerification": "/verifications/{bank_accounts.bank_account_verification}",
+            "bankAccountsCredits": "/bank_accounts/{bank_accounts.id}/credits",
+            "bankAccountsCustomer": "/customers/{bank_accounts.customer}",
+            "bankAccountsDebits": "/bank_accounts/{bank_accounts.id}/debits",
+            "bankAccountsBankAccountVerifications": "/bank_accounts/{bank_accounts.id}/verifications"
+          }
+        }
+      }
+    },
+
+
+    "ValidationError" : {
+      "properties": {
+        "code": {
+          "type": "string",
+          "default": "ValidationError"
+        },
+        "message": {
+          "type": "string",
+          "description": "Error description",
+          "default": "Field error description"
+        },
+        "errors": {
+          "type": "string",
+          "description": "Optional detail of errors",
+          "default": "Optional array with detail of errors"
+        }
+      }
+    },
+    "UnexpectedError": {
+      "properties": {
+        "code": {
+          "type": "string",
+          "default" : "Error"
+        },
+        "message": {
+          "type": "String",
+          "description": "Object with details of error",
+            "default" :{"errors": [{"status":"Bad Request",
+              "category_code":"request",
+              "additional": null,
+              "status_code": 400,
+              "category_type": "request",
+              "extras": {"field"  : "..."},
+              "request_id": "OHM5be42588c66a11e498ff02a1fe52a36c",
+              "description": "Invalid ..."}]}
+        }
+      }
     }
   }
-
 }
