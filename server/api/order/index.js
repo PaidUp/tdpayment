@@ -12,6 +12,6 @@ var router = express.Router();
 
 router.post('/create', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createOrder);
 router.post('/update/description', auth.isAuthenticatedServer(config.nodePass.me.token), controller.updateOrderDescription);
-router.post('/debit', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchDebit);
+router.get('/debit/debitId/:debitId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchDebit);
 
 module.exports = router;

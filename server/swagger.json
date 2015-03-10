@@ -232,6 +232,47 @@
         }
       }
     },
+    "/order/debit/debitId/{debitId}": {
+      "get": {
+        "operationId": "orderDebit",
+        "summary": "Get details of debited order (TDPayment.fetchDebit)",
+        "description": "Get details of debited order.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "debitId",
+            "in": "path",
+            "description": "Id debit",
+            "required": true,
+            "type" : "string"
+          }],
+        "tags": [
+          "Order"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful get debited order details",
+            "schema": {
+              "$ref" : "resOrderDebit"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
     "/bank/debit": {
       "post": {
         "operationId": "bankDebit",
@@ -485,6 +526,421 @@
           }
         }
       }
+    },
+    "/bank/fetch/bankId/{bankId}": {
+      "get": {
+        "operationId": "bankFetch",
+        "summary": "Get bank details by id (TDPayment.fetchBank)",
+        "description": "Get bank details by id.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "bankId",
+            "in": "path",
+            "description": "Id bank",
+            "required": true,
+            "type" : "string"
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful fetch bank account",
+            "schema": {
+              "$ref" : "resBankFetch"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/bank/default/customerId/{customerId}": {
+      "get": {
+        "operationId": "bankDefault",
+        "summary": "Get default id bank for customer (TDPayment.getUserDefaultBankId)",
+        "description": "Get default id bank for customer.",
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Id customer",
+            "required": true,
+            "type" : "string"
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful fetch default id bank account."
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/bank/delete": {
+      "delete": {
+        "operationId": "bankDelete",
+        "summary": "Delete bank account (TDPayment.deleteBankAccount)",
+        "description": "Delete bank account.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Bank identifier",
+            "required": true,
+            "schema" : {
+              "$ref": "reqBankDelete"
+            }
+          }],
+        "tags": [
+          "Bank"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful bank deleted",
+            "schema": {
+              "$ref" : "resBankDelete"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+
+    "/card/create": {
+      "post": {
+        "operationId": "cardCreate",
+        "summary": "Create credit card in gateway payment (TDPayment.createCard)",
+        "description": "Create credit card.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Data card details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqCardCreate"
+            }
+          }],
+        "tags": [
+          "Card"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful credit card created",
+            "schema": {
+              "$ref" : "resCardCreate"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/card/associate": {
+      "post": {
+        "operationId": "cardAssociate",
+        "summary": "Associate credit card with a customer (TDPayment.associateCard)",
+        "description": "Associate credit card with a customer.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Data card associate details",
+            "required": true,
+            "schema" : {
+              "$ref": "reqCardAssociate"
+            }
+          }],
+        "tags": [
+          "Card"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful credit card associated",
+            "schema": {
+              "$ref" : "resCardAssociate"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/card/debit": {
+      "post": {
+        "operationId": "cardDebit",
+        "summary": "Debit credit card (TDPayment.debitCard)",
+        "description": "debit credit card.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Data debit card",
+            "required": true,
+            "schema" : {
+              "$ref": "reqCardDebit"
+            }
+          }],
+        "tags": [
+          "Card"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful credit card debited",
+            "schema": {
+              "$ref" : "resCardDebit"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/card/prepare": {
+      "post": {
+        "operationId": "cardPrepare",
+        "summary": "Associate card with user id (TDPayment.prepareCard)",
+        "description": "Associate card with user id.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "data",
+            "in": "body",
+            "description": "Data prepare card",
+            "required": true,
+            "schema" : {
+              "$ref": "reqCardPrepare"
+            }
+          }],
+        "tags": [
+          "Card"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful credit card prepare",
+            "schema": {
+              "$ref" : "resCardPrepare"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/card/list/customerId/{customerId}": {
+      "get": {
+        "operationId": "cardList",
+        "summary": "Get list of credit cards by customer (TDPayment.listCards)",
+        "description": "Get list of credit cards by customer.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Id customer",
+            "required": true,
+            "type" : "string"
+          }],
+        "tags": [
+          "Card"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful load list of credit cards by customer",
+            "schema": {
+              "$ref" : "resCardList"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/card/fetch/cardId/{cardId}": {
+      "get": {
+        "operationId": "cardFetch",
+        "summary": "Get credit card details by id (TDPayment.fetchCard)",
+        "description": "Get credit card details by id.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "cardId",
+            "in": "path",
+            "description": "Id card",
+            "required": true,
+            "type" : "string"
+          }],
+        "tags": [
+          "Card"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful fetch credit card",
+            "schema": {
+              "$ref" : "resCardFetch"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/card/default/customerId/{customerId}": {
+      "get": {
+        "operationId": "cardDefault",
+        "summary": "Get default id card for customer (TDPayment.getUserDefaultBankId)",
+        "description": "Get default id card for customer.",
+        "produces": [
+          "text/plain"
+        ],
+        "parameters": [
+          {
+            "name": "customerId",
+            "in": "path",
+            "description": "Id customer",
+            "required": true,
+            "type" : "string"
+          }],
+        "tags": [
+          "Card"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful fetch default id credit card."
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
     }
   },
 
@@ -663,6 +1119,105 @@
         "bankId": {
           "type": "string",
           "description": "Id bank"
+        }
+      }
+    },
+    "reqBankDelete": {
+      "required": [
+        "bankId"
+      ],
+      "properties": {
+        "bankId": {
+          "type": "string",
+          "description": "Id bank"
+        }
+      }
+    },
+    "reqCardCreate": {
+      "required": [
+        "number",
+        "expiration_year",
+        "expiration_month"
+      ],
+      "properties": {
+        "number": {
+          "type": "string",
+          "description": "Number of credit card"
+        },
+        "expiration_year": {
+          "type": "string",
+          "description": "Year of expiration"
+        },
+        "expiration_month": {
+          "type": "string",
+          "description": "Month of expiration"
+        }
+      }
+    },
+    "reqCardAssociate": {
+      "required": [
+        "customerId",
+        "cardId"
+      ],
+      "properties": {
+        "customerId": {
+          "type": "string",
+          "description": "Id customer"
+        },
+        "cardId": {
+          "type": "string",
+          "description": "Id credit card"
+        }
+      }
+    },
+    "reqCardDebit": {
+      "required": [
+        "cardId",
+        "amount",
+        "description",
+        "appearsOnStatementAs",
+        "oderId"
+      ],
+      "properties": {
+        "cardId": {
+          "type": "string",
+          "description": "Id cart"
+        },
+        "amount": {
+          "type": "number",
+          "description": "Id cart"
+        },
+        "cardId": {
+          "type": "string",
+          "description": "Amount to debit"
+        },
+        "description": {
+          "type": "string",
+          "description": "General description for transaction"
+        },
+        "appearsOnStatementAs": {
+          "type": "string",
+          "description": "Appears on statement as"
+        },
+        "orderId": {
+          "type": "string",
+          "description": "Id order"
+        }
+      }
+    },
+    "reqCardPrepare": {
+      "required": [
+        "userId",
+        "cardId"
+      ],
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Id user"
+        },
+        "cardId": {
+          "type": "string",
+          "description": "Id card"
         }
       }
     },
@@ -1108,6 +1663,417 @@
         }
       }
     },
+    "resBankFetch" : {
+      "properties" : {
+        "bankAccounts" : {
+          "type" : "list",
+          "default" : [
+            {
+              "routingNumber": "123123123",
+              "bankName": "",
+              "accountType": "checking",
+              "name": "ewerwrewrw",
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU",
+                "bankAccountVerification": "BZ5sUuhCEBbstOmvA29UVaBf"
+              },
+              "canCredit": true,
+              "createdAt": "2015-03-09T16:34:10.906920Z",
+              "fingerprint": "932f3c1b56257ce8539ac269d7aab42550dacf8818d075f0bdf1990562aae3ef",
+              "updatedAt": "2015-03-09T20:42:51.280994Z",
+              "href": "/bank_accounts/BA3M18xrWAuGOwWqk7tbkTeg",
+              "meta": {},
+              "accountNumber": "xxxxx3123",
+              "address": {
+                "city": null,
+                "line2": null,
+                "line1": null,
+                "state": null,
+                "postalCode": null,
+                "countryCode": null
+              },
+              "canDebit": true,
+              "id": "BA3M18xrWAuGOwWqk7tbkTeg"
+            }
+          ]
+        },
+        "links" : {
+          "bankAccountsSettlements": "/bank_accounts/{bank_accounts.id}/settlements",
+          "bankAccountsBankAccountVerification": "/verifications/{bank_accounts.bank_account_verification}",
+          "bankAccountsDebits": "/bank_accounts/{bank_accounts.id}/debits",
+          "bankAccountsCustomer": "/customers/{bank_accounts.customer}",
+          "bankAccountsCredits": "/bank_accounts/{bank_accounts.id}/credits",
+          "bankAccountsBankAccountVerifications": "/bank_accounts/{bank_accounts.id}/verifications"
+        }
+      }
+    },
+    "resBankDelete" : {
+      "properties" : {
+
+      }
+    },
+    "resOrderDebit" : {
+      "properties" : {
+        "debits" : {
+          "type" : "list",
+          "default" : [
+            {
+              "status": "succeeded",
+              "description": "string",
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU",
+                "source": "BA3M18xrWAuGOwWqk7tbkTeg",
+                "cardHold": null,
+                "order": "OR7kd6KLUvooBxi1CaDqgi57",
+                "dispute": null
+              },
+              "updatedAt": "2015-03-09T20:51:40.952902Z",
+              "createdAt": "2015-03-09T20:51:40.634234Z",
+              "transactionNumber": "WCAE-UY6-TORC",
+              "failureReason": null,
+              "currency": "USD",
+              "amount": 150000,
+              "failureReasonCode": null,
+              "meta": {},
+              "href": "/debits/WD3xVZUknW6z5Wpqvn0Vundu",
+              "appearsOnStatementAs": "BAL*string",
+              "id": "WD3xVZUknW6z5Wpqvn0Vundu"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "debitsCustomer": "/customers/{debits.customer}",
+            "debitsOrder": "/orders/{debits.order}",
+            "debitsDispute": "/disputes/{debits.dispute}",
+            "debitsSource": "/resources/{debits.source}",
+            "debitsEvents": "/debits/{debits.id}/events",
+            "debitsRefunds": "/debits/{debits.id}/refunds",
+            "debitsCardHold": "/holds/{debits.card_hold}"
+          }
+        }
+
+      }
+    },
+    "resCardCreate" : {
+      "properties" : {
+        "body" : {
+          "type" : "object",
+          "default" : {
+            "links": {
+              "customer": null
+            },
+            "fingerprint": "2a53c2329b657f896f49e5fe8b9bfe0a70d24522665ac31d57c73cda9ef9b6a8",
+            "cvv_result": null,
+            "number": "xxxxxxxxxxxx1111",
+            "avs_postal_match": null,
+            "expiration_month": 12,
+            "meta": {},
+            "id": "CC2c0nCEZyum3fZ5fp2n5qNT",
+            "category": "other",
+            "type": "credit",
+            "cvv_match": null,
+            "bank_name": "JPMORGAN CHASE BANK, N.A.",
+            "avs_street_match": null,
+            "brand": "Visa",
+            "updated_at": "2015-03-10T16:24:25.136362Z",
+            "address": {
+              "city": null,
+              "line2": null,
+              "line1": null,
+              "state": null,
+              "postal_code": null,
+              "country_code": null
+            },
+            "can_debit": true,
+            "name": null,
+            "expiration_year": 2016,
+            "cvv": null,
+            "is_verified": true,
+            "avs_result": "Postal code matches, but street address not verified.",
+            "can_credit": false,
+            "href": "/cards/CC2c0nCEZyum3fZ5fp2n5qNT",
+            "created_at": "2015-03-10T16:24:25.136359Z"
+          }
+        }
+
+      }
+    },
+    "resCardAssociate" : {
+      "properties" : {
+        "cards" : {
+          "type" : "list",
+          "default" :  [
+            {
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU"
+              },
+              "fingerprint": "2a53c2329b657f896f49e5fe8b9bfe0a70d24522665ac31d57c73cda9ef9b6a8",
+              "cvvResult": null,
+              "number": "xxxxxxxxxxxx1111",
+              "avsPostalMatch": null,
+              "expirationMonth": 12,
+              "meta": {},
+              "id": "CC2c0nCEZyum3fZ5fp2n5qNT",
+              "category": "other",
+              "type": "credit",
+              "cvvMatch": null,
+              "bankName": "JPMORGAN CHASE BANK, N.A.",
+              "avsStreetMatch": null,
+              "brand": "Visa",
+              "updatedAt": "2015-03-10T16:47:51.624886Z",
+              "address": {
+                "city": null,
+                "line2": null,
+                "line1": null,
+                "state": null,
+                "postalCode": null,
+                "countryCode": null
+              },
+              "canDebit": true,
+              "name": null,
+              "expirationYear": 2016,
+              "cvv": null,
+              "isVerified": true,
+              "avsResult": "Postal code matches, but street address not verified.",
+              "canCredit": false,
+              "href": "/cards/CC2c0nCEZyum3fZ5fp2n5qNT",
+              "createdAt": "2015-03-10T16:24:25.136359Z"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "cardsCardHolds": "/cards/{cards.id}/card_holds",
+            "cardsCustomer": "/customers/{cards.customer}",
+            "cardsDisputes": "/cards/{cards.id}/disputes",
+            "cardsDebits": "/cards/{cards.id}/debits"
+          }
+        }
+
+      }
+    },
+    "resCardDebit" : {
+      "properties" : {
+        "debits" : {
+          "type" : "list",
+          "default" :  [
+            {
+              "status": "succeeded",
+              "description": "string",
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU",
+                "source": "CC2c0nCEZyum3fZ5fp2n5qNT",
+                "cardHold": "HL1zmgoXtLotESe4yf5jDwQl",
+                "order": "OR1G08QeAAik5F0wY45kJDQk",
+                "dispute": null
+              },
+              "updatedAt": "2015-03-10T17:06:48.648508Z",
+              "createdAt": "2015-03-10T17:06:47.858328Z",
+              "transactionNumber": "WB8T-R2G-5U0H",
+              "failureReason": null,
+              "currency": "USD",
+              "amount": 150000,
+              "failureReasonCode": null,
+              "meta": {},
+              "href": "/debits/WD1zowJ9SG9G9WjSW9CFxwIl",
+              "appearsOnStatementAs": "BAL*string",
+              "id": "WD1zowJ9SG9G9WjSW9CFxwIl"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "debitsCustomer": "/customers/{debits.customer}",
+            "debitsOrder": "/orders/{debits.order}",
+            "debitsDispute": "/disputes/{debits.dispute}",
+            "debitsSource": "/resources/{debits.source}",
+            "debitsEvents": "/debits/{debits.id}/events",
+            "debitsRefunds": "/debits/{debits.id}/refunds",
+            "debitsCardHold": "/holds/{debits.card_hold}"
+          }
+        }
+      }
+    },
+    "resCardPrepare" : {
+      "properties" : {
+        "cards" : {
+          "type" : "list",
+          "default" :  [
+            {
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU"
+              },
+              "fingerprint": "2a53c2329b657f896f49e5fe8b9bfe0a70d24522665ac31d57c73cda9ef9b6a8",
+              "cvvResult": null,
+              "number": "xxxxxxxxxxxx1111",
+              "avsPostalMatch": null,
+              "expirationMonth": 12,
+              "meta": {},
+              "id": "CC2c0nCEZyum3fZ5fp2n5qNT",
+              "category": "other",
+              "type": "credit",
+              "cvvMatch": null,
+              "bankName": "JPMORGAN CHASE BANK, N.A.",
+              "avsStreetMatch": null,
+              "brand": "Visa",
+              "updatedAt": "2015-03-10T16:47:51.624886Z",
+              "address": {
+                "city": null,
+                "line2": null,
+                "line1": null,
+                "state": null,
+                "postalCode": null,
+                "countryCode": null
+              },
+              "canDebit": true,
+              "name": null,
+              "expirationYear": 2016,
+              "cvv": null,
+              "isVerified": true,
+              "avsResult": "Postal code matches, but street address not verified.",
+              "canCredit": false,
+              "href": "/cards/CC2c0nCEZyum3fZ5fp2n5qNT",
+              "createdAt": "2015-03-10T16:24:25.136359Z"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "cardsCardHolds": "/cards/{cards.id}/card_holds",
+            "cardsCustomer": "/customers/{cards.customer}",
+            "cardsDisputes": "/cards/{cards.id}/disputes",
+            "cardsDebits": "/cards/{cards.id}/debits"
+          }
+        }
+      }
+    },
+    "resCardList" : {
+      "properties" : {
+        "cards" : {
+          "type" : "list",
+          "default" :  [
+            {
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU"
+              },
+              "fingerprint": "2a53c2329b657f896f49e5fe8b9bfe0a70d24522665ac31d57c73cda9ef9b6a8",
+              "cvvResult": null,
+              "number": "xxxxxxxxxxxx1111",
+              "avsPostalMatch": null,
+              "expirationMonth": 12,
+              "meta": {},
+              "id": "CC2c0nCEZyum3fZ5fp2n5qNT",
+              "category": "other",
+              "type": "credit",
+              "cvvMatch": null,
+              "bankName": "JPMORGAN CHASE BANK, N.A.",
+              "avsStreetMatch": null,
+              "brand": "Visa",
+              "updatedAt": "2015-03-10T16:47:51.624886Z",
+              "address": {
+                "city": null,
+                "line2": null,
+                "line1": null,
+                "state": null,
+                "postalCode": null,
+                "countryCode": null
+              },
+              "canDebit": true,
+              "name": null,
+              "expirationYear": 2016,
+              "cvv": null,
+              "isVerified": true,
+              "avsResult": "Postal code matches, but street address not verified.",
+              "canCredit": false,
+              "href": "/cards/CC2c0nCEZyum3fZ5fp2n5qNT",
+              "createdAt": "2015-03-10T16:24:25.136359Z"
+            }
+          ]
+        },
+        "meta" : {
+          "type" : "object",
+          "default" : {
+            "last": "/customers/CU7i62HVMY28sfjpaw4VocsU/cards?limit=10&offset=0",
+            "next": null,
+            "href": "/customers/CU7i62HVMY28sfjpaw4VocsU/cards?limit=10&offset=0",
+            "limit": 10,
+            "offset": 0,
+            "previous": null,
+            "total": 1,
+            "first": "/customers/CU7i62HVMY28sfjpaw4VocsU/cards?limit=10&offset=0"
+          }
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "cardsDisputes": "/cards/{cards.id}/disputes",
+            "cardsCustomer": "/customers/{cards.customer}",
+            "cardsCardHolds": "/cards/{cards.id}/card_holds",
+            "cardsDebits": "/cards/{cards.id}/debits"
+          }
+        }
+      }
+    },
+    "resCardFetch" : {
+      "properties" : {
+        "cards" : {
+          "type" : "list",
+          "default" :  [
+            {
+              "links": {
+                "customer": "CU7i62HVMY28sfjpaw4VocsU"
+              },
+              "fingerprint": "2a53c2329b657f896f49e5fe8b9bfe0a70d24522665ac31d57c73cda9ef9b6a8",
+              "cvvResult": null,
+              "number": "xxxxxxxxxxxx1111",
+              "avsPostalMatch": null,
+              "expirationMonth": 12,
+              "meta": {},
+              "id": "CC2c0nCEZyum3fZ5fp2n5qNT",
+              "category": "other",
+              "type": "credit",
+              "cvvMatch": null,
+              "bankName": "JPMORGAN CHASE BANK, N.A.",
+              "avsStreetMatch": null,
+              "brand": "Visa",
+              "updatedAt": "2015-03-10T16:47:51.624886Z",
+              "address": {
+                "city": null,
+                "line2": null,
+                "line1": null,
+                "state": null,
+                "postalCode": null,
+                "countryCode": null
+              },
+              "canDebit": true,
+              "name": null,
+              "expirationYear": 2016,
+              "cvv": null,
+              "isVerified": true,
+              "avsResult": "Postal code matches, but street address not verified.",
+              "canCredit": false,
+              "href": "/cards/CC2c0nCEZyum3fZ5fp2n5qNT",
+              "createdAt": "2015-03-10T16:24:25.136359Z"
+            }
+          ]
+        },
+        "links" : {
+          "type" : "object",
+          "default" : {
+            "cardsCardHolds": "/cards/{cards.id}/card_holds",
+            "cardsCustomer": "/customers/{cards.customer}",
+            "cardsDisputes": "/cards/{cards.id}/disputes",
+            "cardsDebits": "/cards/{cards.id}/debits"
+          }
+        }
+      }
+    },
+
 
 
     "ValidationError" : {

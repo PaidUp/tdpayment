@@ -10,13 +10,17 @@ var data = {
         lastName:faker.name.lastName(),
         email: faker.internet.email(),
         id: '1'},
+
     cardDetails : {
         'number' : '4111111111111111',
         'expiration_year': '2016',
         'expiration_month': '12'
     },
+
     customer : {},
+
     creditCard : {},
+
     associateCardData : function(){
         return {
             customerId : this.customer.id,

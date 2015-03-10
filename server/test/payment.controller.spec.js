@@ -138,9 +138,8 @@ describe.only('test customer controller' , function(){
     this.timeout(60000);
     var debitId = modelSpec.debitBankResponse.debits[0].id;
     request(app)
-      .post('/api/v1/order/debit')
+      .get('/api/v1/order/debit/debitId/'+debitId)
       .set('Authorization', token)
-      .send({debitId : debitId})
       .expect(200)
       .end(function(err, res) {
         if (err)

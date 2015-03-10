@@ -45,14 +45,14 @@ function updateOrderDescription (req, res) {
 };
 
 function fetchDebit (req, res) {
-  if (!req.body || !req.body.debitId) {
+  if (!req.params || !req.params.debitId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Debit Id is required"
     });
   }
 
-  orderService.fetchDebit(req.body.debitId, function(err, data){
+  orderService.fetchDebit(req.params.debitId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
