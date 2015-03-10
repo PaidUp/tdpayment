@@ -85,8 +85,7 @@ function debitCard (req, res) {
     });
   }
 
-  cardService.debitCard(req.body.cardId, req.body.amount, req.body.description, req.body.appearsOnStatementAs, req.body.orderId,
-    function(err, data){
+  cardService.debitCard(req.body, function(err, data){
       if (err) {
         return handleError(res, err);
       }
@@ -101,7 +100,7 @@ function listCards (req, res) {
       "message": "Customer Id is required"
     });
   }
-  cardService.listCards(req.params.customerId, function(err, data){
+  cardService.listCards(req.params, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -122,7 +121,7 @@ function prepareCard (req, res) {
       "message": "Card Id is required"
     });
   }
-  cardService.prepareCard(req.body.userId, req.body.cardId, function(err, data){
+  cardService.prepareCard(req.body, function(err, data){
     if (err) {
       return handleError(res, err);
     }
@@ -154,13 +153,30 @@ function getUserDefaultCardId (req, res) {
     });
   }
 
-  cardService.getUserDefaultCardId(req.params.customerId, function(err, data){
+  cardService.getUserDefaultCardId(req.params, function(err, data){
     if (err) {
       return handleError(res, err);
     }
     return res.json(200, data);
   });
 };
+
+function handleError(res, err) {
+
+  console.log(err);
+  var httpErrorCode = 500;
+  var errors = [];
+
+  if (err.name === "ValidationError") {
+    httpErrorCode = 400;
+  }
+
+  return res.json(httpErrorCode, {
+    code: err.name,
+    message: err.message,
+    errors: err.errors
+  });
+}
 
 module.exports = {
   createCard : createCard,

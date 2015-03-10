@@ -19,7 +19,7 @@ router.post('/create/verification', auth.isAuthenticatedServer(config.nodePass.m
 router.get('/load/verification/verificationId/:verificationId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.loadBankVerification);
 router.delete('/delete', auth.isAuthenticatedServer(config.nodePass.me.token), controller.deleteBankAccount);
 router.post('/confirm/verification', auth.isAuthenticatedServer(config.nodePass.me.token), controller.confirmBankVerification);
-router.get('/list/customerId/:customerId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.listBanks);
+//router.get('/list/customerId/:customerId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.listBanks);
 router.post('/prepare', auth.isAuthenticatedServer(config.nodePass.me.token), controller.prepareBank);
 router.get('/fetch/bankId/:bankId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchBank);
 router.get('/default/customerId/:customerId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getUserDefaultBankId);

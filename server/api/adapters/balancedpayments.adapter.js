@@ -49,6 +49,7 @@ function httpRequest(method, bodyRequest, path, cb) {
 }
 
 function createCustomer(customer, cb) {
+  console.log(customer);
   balanced.configure(balancedApi);
   balanced.marketplace.customers.create(customer).then(function(data) {
     return cb(null, (data));

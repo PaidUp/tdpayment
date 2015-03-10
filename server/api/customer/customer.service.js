@@ -8,6 +8,8 @@ var paymentAdapter = require('../adapters/balancedpayments.adapter');
  * @param cb callback function
  */
 exports.createCustomer = function (user, cb) {
+  console.log('user');
+  console.log(user);
   var customer = {
     name: user.firstName + " " + user.lastName,
     email: user.email,
