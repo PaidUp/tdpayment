@@ -2086,11 +2086,6 @@
           "type": "string",
           "description": "Error description",
           "default": "Field error description"
-        },
-        "errors": {
-          "type": "string",
-          "description": "Optional detail of errors",
-          "default": "Optional array with detail of errors"
         }
       }
     },
@@ -2102,15 +2097,7 @@
         },
         "message": {
           "type": "String",
-          "description": "Object with details of error",
-            "default" :{"errors": [{"status":"Bad Request",
-              "category_code":"request",
-              "additional": null,
-              "status_code": 400,
-              "category_type": "request",
-              "extras": {"field"  : "..."},
-              "request_id": "OHM5be42588c66a11e498ff02a1fe52a36c",
-              "description": "Invalid ..."}]}
+          "default" : "..."
         }
       }
     }

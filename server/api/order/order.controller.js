@@ -1,6 +1,7 @@
 'use strict';
 
 var orderService = require('./order.service.js');
+var handleError = require('../../components/errors/handle.error').handleError;
 
 function createOrder (req, res) {
   if (!req.body || !req.body.merchantCustomerId) {
@@ -59,23 +60,6 @@ function fetchDebit (req, res) {
     return res.json(200, data);
   });
 };
-
-function handleError(res, err) {
-
-  console.log(err);
-  var httpErrorCode = 500;
-  var errors = [];
-
-  if (err.name === "ValidationError") {
-    httpErrorCode = 400;
-  }
-
-  return res.json(httpErrorCode, {
-    code: err.name,
-    message: err.message,
-    errors: err.errors
-  });
-}
 
 module.exports = {
   createOrder : createOrder,

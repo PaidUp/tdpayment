@@ -79,7 +79,7 @@ function prepareBank (params, cb) {
     if(bank.bankAccounts[0].links.customer === null) {
       associateBank(params.userId, params.bankId, function (err, data) {
         if(err) return cb(err);
-        return cb(null, bank);
+          return cb(null, bank);
       });
     }
     else {

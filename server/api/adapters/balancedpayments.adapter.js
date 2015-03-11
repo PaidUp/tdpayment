@@ -173,7 +173,6 @@ function fetchBank(bankId, cb) {
   });
 }
 
-
 /*
  curl https://api.balancedpayments.com/customers/CU40AyvBB6ny9u3oelCwyc3C/orders \
  -H "Accept: application/vnd.api+json;revision=1.1" \
@@ -366,7 +365,7 @@ function hasError(response) {
 }
 
 function handleErrors(response) {
-  return response.errors[0].description;
+  return response.errors;
 }
 
 exports.setBalancedApi = setBalancedApi;

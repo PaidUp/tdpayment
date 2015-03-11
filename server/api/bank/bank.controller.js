@@ -4,6 +4,7 @@
 
 var bankService = require('./bank.service');
 var camelize = require('camelize');
+var handleError = require('../../components/errors/handle.error').handleError;
 
 function createBank (req, res) {
   if (!req.body || !req.body.name) {
@@ -251,9 +252,15 @@ function getUserDefaultBankId (req, res) {
     return res.json(200, data);
   });
 };
+/**
+function handleValidationError(res, message){
+  return res.json(400, {
+    "code": "ValidationError",
+    "message": message
+  });
+}
 
 function handleError(res, err) {
-
   console.log(err);
   var httpErrorCode = 500;
   var errors = [];
@@ -262,12 +269,35 @@ function handleError(res, err) {
     httpErrorCode = 400;
   }
 
-  return res.json(httpErrorCode, {
-    code: err.name,
-    message: err.message,
-    errors: err.errors
-  });
+  if(err.status_code){
+    if(err.status_code === 400){
+      return handleValidationError(res, err.description);
+    }
+    return res.json(err.status_code, {
+      code: err.status_code,
+      message: err.description,
+      errors: err._raw.errors
+    });
+  }else if(err[0]){
+    if(err[0].status_code === 400){
+      var des =  err[0].description;
+      return handleValidationError(res, des);
+    }
+    return res.json(err[0].status_code, {
+      code: err[0].status_code,
+      message: err[0].description,
+      errors: err
+    });
+  }
+  else{
+    return res.json(httpErrorCode, {
+      code: httpErrorCode,
+      message: JSON.stringify(err),
+      errors: []
+    });
+  }
 };
+ */
 
 module.exports = {
   createBank : createBank,

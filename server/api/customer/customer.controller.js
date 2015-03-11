@@ -1,6 +1,7 @@
 'use strict';
 
 var customerService = require('./customer.service');
+var handleError = require('../../components/errors/handle.error').handleError;
 
 function createCustomer (req, res) {
   console.log('res');
@@ -41,23 +42,6 @@ function createCustomer (req, res) {
     return res.json(200, data);
   });
 };
-
-function handleError(res, err) {
-
-  console.log(err);
-  var httpErrorCode = 500;
-  var errors = [];
-
-  if (err.name === "ValidationError") {
-    httpErrorCode = 400;
-  }
-
-  return res.json(httpErrorCode, {
-    code: err.name,
-    message: err.message,
-    errors: err.errors
-  });
-}
 
 module.exports = {
   createCustomer : createCustomer

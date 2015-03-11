@@ -1,6 +1,7 @@
 'use strict';
 
 var cardService = require('./card.service.js');
+var handleError = require('../../components/errors/handle.error').handleError;
 
 function createCard (req, res) {
   if (!req.body || !req.body.number) {
@@ -160,23 +161,6 @@ function getUserDefaultCardId (req, res) {
     return res.json(200, data);
   });
 };
-
-function handleError(res, err) {
-
-  console.log(err);
-  var httpErrorCode = 500;
-  var errors = [];
-
-  if (err.name === "ValidationError") {
-    httpErrorCode = 400;
-  }
-
-  return res.json(httpErrorCode, {
-    code: err.name,
-    message: err.message,
-    errors: err.errors
-  });
-}
 
 module.exports = {
   createCard : createCard,
