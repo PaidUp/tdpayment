@@ -38,7 +38,8 @@ var all = {
       db: {
         safe: true
       }
-    }
+    },
+    prefix : 'tdpayment_'
   },
   balanced: {
     api: "ak-test-p8Ob9vp9GnqWNwFf6CeLLokeQsf76RIe",
