@@ -26,7 +26,6 @@ describe.only('test customer controller' , function(){
         assert.equal(user.firstName +' '+ user.lastName,  res.body.name, 'The name in not correct');
         assert.equal(user.email,  res.body.email, 'The email in not correct');
         modelSpec.customer = res.body;
-        console.log(res.body);
         done();
       });
   });

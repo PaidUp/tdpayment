@@ -12,7 +12,6 @@ function handleValidationError(res, message){
 }
 
 function handleError(res, err) {
-  console.log(err);
   var httpErrorCode = 500;
   var errors = [];
 
