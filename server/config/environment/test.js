@@ -5,6 +5,9 @@
 module.exports = {
   // MongoDB connection options
   mongo: {
-    uri: 'mongodb://localhost/tdpayment-test'
+    uri: 'mongodb://localhost/tdpayment-test',
+    options: {
+      prefix: 'tdpayment_'
+    }
   }
 };
