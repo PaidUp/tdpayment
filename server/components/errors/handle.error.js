@@ -5,8 +5,8 @@
 
 
 function handleValidationError(res, message){
-  return res.json(400, {
-    "code": "ValidationError",
+  return res.json(500, {
+    "code": "Error",
     "message": message
   });
 }
@@ -20,7 +20,7 @@ function handleError(res, err) {
   }
 
   if(err.status_code){
-    if(err.status_code === 400){
+    if(err.status_code !== 200){
       return handleValidationError(res, err.description);
     }
     return res.json(httpErrorCode, {
@@ -28,7 +28,7 @@ function handleError(res, err) {
       message: err.description
     });
   }else if(err[0]){
-    if(err[0].status_code === 400){
+    if(err[0].status_code !== 200){
       var des =  err[0].description;
       return handleValidationError(res, des);
     }
@@ -39,7 +39,7 @@ function handleError(res, err) {
   }
   else{
     return res.json(httpErrorCode, {
-      code: httpErrorCode,
+      code: 'UnexpectedError',
       message: JSON.stringify(err)
     });
   }

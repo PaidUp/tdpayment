@@ -360,6 +360,11 @@ function hasError(response) {
   if(response.errors) {
     return true;
   }
+  if(response[0]){
+    if(response[0].status_code !== 200){
+      return true;
+    }
+  }
   return false;
 }
 
