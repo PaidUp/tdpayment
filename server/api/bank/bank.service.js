@@ -33,7 +33,7 @@ function associateBank (customerId, bankId, cb) {
 }
 
 function listCustomerBanks (customerId, cb) {
-  paymentAdapter.listCustomerBanks(customerId, function(err, data){
+  paymentAdapter.listBanks(customerId, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
   });
