@@ -158,7 +158,6 @@ function deleteBankAccount (req, res) {
 };
 
 function confirmBankVerification (req, res) {
-  console.log('body', req.body);
   if (!req.body || !req.body.verificationId) {
     return res.json(400, {
       "code": "ValidationError",
