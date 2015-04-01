@@ -20,6 +20,9 @@ function associateBank (customerId, bankId, cb) {
 
 function debitBank (debitBankData, cb) {
   paymentAdapter.debitBank(debitBankData.bankId, debitBankData.amount, debitBankData.description, debitBankData.appearsOnStatementAs, debitBankData.orderId, function(err, data){
+    console.log('err',err);
+    console.log('data' , data);
+
     if(err) return cb(err);
     return cb(null, data);
   });
