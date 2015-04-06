@@ -49,7 +49,7 @@ var all = {
 
   nodePass: {
     me:{
-      token : 'nodePaymentPass'
+      token : 'TDPaymentToken-CHANGE-ME!'
     },
     Loan:{
       token : 'nodeLoanPass'
