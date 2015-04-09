@@ -9,6 +9,7 @@ var config = require('../../config/environment');
 //var camelize = require('camelize');
 //var balancedApi = config.payment.balanced.api;
 var stripeApi = require('stripe')(config.payment.stripe.api);
+
 function generateToken(data, cb){
   console.log('generate token log');
   stripeApi.tokens.create(data).then(
