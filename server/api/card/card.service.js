@@ -1,6 +1,7 @@
 'use strict';
 
-var paymentAdapter = require('../adapters/balancedpayments.adapter');
+var config = require('../../config/environment');
+var paymentAdapter = require(config.payment.adapter);
 
 /**
  * Create credit card in balanced payment

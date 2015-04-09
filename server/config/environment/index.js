@@ -41,10 +41,16 @@ var all = {
     },
     prefix : 'tdpayment_'
   },
-  balanced: {
-    api: "ak-test-p8Ob9vp9GnqWNwFf6CeLLokeQsf76RIe",
-    marketplace: "TEST-MP2OaM2stYkoWBlGFd0M8YV7",
-    appearsOnStatementAs: "Conv. Select"
+  payment: {
+    adapter: path.normalize(__dirname + '/../../..') + '/server/api/adapters/balancedpayments.adapter',
+    stripe: {
+      api: "sk_test_i1WgQIKn3mXx4GP5B8Yh79U1"
+    },
+    balanced: {
+      api: "ak-test-p8Ob9vp9GnqWNwFf6CeLLokeQsf76RIe",
+      marketplace: "TEST-MP2OaM2stYkoWBlGFd0M8YV7",
+      appearsOnStatementAs: "Conv. Select"
+    }
   },
 
   nodePass: {

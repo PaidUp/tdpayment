@@ -3,15 +3,14 @@
  */
 'use strict';
 var assert = require('assert');
-var stripAdapter =  require('../api/adapters/strip.adapter');
+var stripeAdapter = require('../api/adapters/stripe.adapter');
 var modelSpec = require('./stripe.adapter.model.spec');
-
-describe('strip adapter', function(){
+describe.only('strip adapter', function(){
   it('generate token card' , function(done){
     this.timeout(60000);
     var card = modelSpec.tokenData;
 
-    stripAdapter.generateToken(card, function(err, token){
+    stripeAdapter.generateToken(card, function(err, token){
       if(err) return done(err);
       assert(token.length > 0);
       done();
@@ -22,12 +21,11 @@ describe('strip adapter', function(){
     this.timeout(60000);
     var customer = modelSpec.customerData;
 
-    stripAdapter.createCustomer(customer, function(err, data){
+    stripeAdapter.createCustomer(customer, function(err, data){
       if(err) return done(err);
       assert(data);
       modelSpec.customerRes = data;
       done();
       });
-
   });
 });
