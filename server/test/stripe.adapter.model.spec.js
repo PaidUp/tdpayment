@@ -15,7 +15,15 @@ var data = {
       "cvc": '123'
     }
   },
+  cardToken:'',
+  cardToken2:'',
+  cardId:'',
+  amount:245,
+  description:'description',
+  appearsOnStatementAs:'appearsOnStatementAs',
+  orderId:'orderId',
   customerData : {
+    customerId:'',
     name : faker.name.firstName() + ' '+faker.name.lastName(),
     email : faker.internet.email(),
     meta : {
