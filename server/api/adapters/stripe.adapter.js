@@ -220,37 +220,11 @@ function deleteBankAccount(bankId, cb){
     return cb(null, camelize(data));
   });
 };
-
-function listBanks(customerId, cb) {
-  listCustomerBanks(customerId, function (err, dataBanks) {
-    if (err) return cb(err);
-    if(hasError(dataBanks)) return cb(handleErrors(dataBanks));
-    delete dataBanks.meta;
-    delete dataBanks.links;
-    async.eachSeries(dataBanks.bankAccounts, function (bankAccount, callback) {
-      loadBankVerification(bankAccount.links.bankAccountVerification, function (err, bankStatus) {
-        if (err) return cb(err);
-        if(hasError(dataBanks)) return cb(handleErrors(dataBanks));
-        bankAccount.state = bankStatus.bankAccountVerifications[0].verificationStatus;
-        bankAccount.attemptsRemaining = bankStatus.bankAccountVerifications[0].attemptsRemaining;
-        delete bankAccount.can_credit;
-        delete bankAccount.href;
-        delete bankAccount.routingNumber;
-        delete bankAccount.fingerprint;
-        delete bankAccount.meta;
-        delete bankAccount.address;
-        delete bankAccount.canDebit;
-        callback();
-      });
-    }, function (err) {
-      if (err) {
-        return cb(err);
-      }
-      return cb(null, camelize(dataBanks));
-    });
-  })
-}
 */
+function listBanks(customerId, cb) {
+  return cb(null, []);
+}
+
 function hasError(response) {
   if(response.errors) {
     return true;
@@ -274,5 +248,6 @@ module.exports = {
   associateCard : associateCard,
   listCards : listCards,
   fetchCard : fetchCard,
-  debitCard : debitCard
+  debitCard : debitCard,
+  listBanks : listBanks
 }
