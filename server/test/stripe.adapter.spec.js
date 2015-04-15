@@ -2,6 +2,7 @@
  * Created by riclara on 4/8/15.
  */
 'use strict';
+var app = require('../app');
 var assert = require('chai').assert;
 var stripeAdapter = require('../api/adapters/stripe.adapter');
 var modelSpec = require('./stripe.adapter.model.spec');
@@ -95,6 +96,22 @@ describe.only('stripe adapter', function(){
       assert(data);
       done();
       });
+  });
+
+  it('create bank token' , function(done){
+    this.timeout(60000);
+    var bankDetails = {
+      country: 'US',
+      routing_number: '110000000',
+      account_number: '000123456789'
+    };
+
+    stripeAdapter.createBank(bankDetails , function(err , data){
+      if(err) return done(err)
+      assert.isDefined(data.id);
+      done();
+    })
+
   });
 
 });
