@@ -222,7 +222,9 @@ function deleteBankAccount(bankId, cb){
 };
 */
 function listBanks(customerId, cb) {
-  return cb(null, []);
+  var result = {};
+  result.bankAccounts = [];
+  return cb(null, result);
 }
 
 function hasError(response) {

@@ -42,7 +42,7 @@ var all = {
     prefix : 'tdpayment_'
   },
   payment: {
-    adapter: path.normalize(__dirname + '/../../..') + '/server/api/adapters/balancedpayments.adapter',
+    adapter: path.normalize(__dirname + '/../../..') + '/server/api/adapters/stripe.adapter',
     stripe: {
       api: "sk_test_i1WgQIKn3mXx4GP5B8Yh79U1"
     },
