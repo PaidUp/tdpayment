@@ -51,8 +51,8 @@ function prepareCard (params, cb) {
   });
 }
 
-function fetchCard (cardId, cb){
-  paymentAdapter.fetchCard(cardId, function(err, creditCard){
+function fetchCard (customerId, cardId, cb){
+  paymentAdapter.fetchCard(customerId, cardId, function(err, creditCard){
     if(err) return cb(err);
     return cb(null, creditCard);
   });

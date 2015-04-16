@@ -91,8 +91,13 @@ function listCards(customerId, cb) {
 }
 
 function fetchCard(customerId,cardId, cb) {
+  console.log('customerId' ,customerId);
+  console.log('cardId' ,cardId);
   //TODO: send customerId in request.
   stripeApi.customers.retrieveCard(customerId,cardId,function(err, card) {
+      console.log('err' ,err);
+      console.log('card' ,card);
+
       if (err) return cb(err);
       if(hasError(card)) return cb(handleErrors(card));
       return cb(null, camelize(card));

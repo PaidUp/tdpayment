@@ -138,7 +138,14 @@ function fetchCard (req, res) {
     });
   }
 
-  cardService.fetchCard(req.params.cardId, function(err, data){
+  if (!req.params || !req.params.customerId) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Customer Id is required"
+    });
+  }
+
+  cardService.fetchCard(req.params.customerId, req.params.cardId, function(err, data){
     if (err) {
       return handleError(res, err);
     }
