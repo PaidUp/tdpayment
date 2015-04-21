@@ -100,15 +100,47 @@ describe.only('stripe adapter', function(){
 
   it('create bank token' , function(done){
     this.timeout(60000);
+
     var bankDetails = {
       country: 'US',
       routing_number: '110000000',
-      account_number: '000123456789'
+      account_number: '000123456789',
+      customerId : modelSpec.customerRes.id
     };
 
     stripeAdapter.createBank(bankDetails , function(err , data){
       if(err) return done(err)
-      assert.isDefined(data.id);
+      console.log('data' , data)
+
+      assert.isDefined(data);
+      done();
+    })
+
+  });
+
+  it('create account' , function(done){
+    this.timeout(60000);
+
+    stripeAdapter.createAccount(modelSpec.accountDetails , function(err , data){
+      if(err) return done(err)
+      console.log('data' , data)
+
+      assert.isDefined(data);
+      modelSpec.account = data;
+      done();
+    })
+
+  });
+
+  it('add bank account to account' , function(done){
+    this.timeout(60000);
+
+    stripeAdapter.addBankToAccount(modelSpec.account.id, modelSpec.bankDetails , function(err , data){
+      if(err) return done(err)
+      console.log('data' , data)
+
+      assert.isDefined(data);
+      modelSpec.account = data;
       done();
     })
 

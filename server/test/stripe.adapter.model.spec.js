@@ -30,8 +30,16 @@ var data = {
       id : faker.finance.account()
     }
   },
-  customerRes : {}
+  customerRes : {},
+  accountDetails : {email : faker.internet.email(),
+                    country: 'US'},
+  account : {},
+  bankDetails : {
+  country: 'US',
+  routing_number: '110000000',
+  account_number: '000123456789',
+}}
 
-};
+;
 
 module.exports = data;

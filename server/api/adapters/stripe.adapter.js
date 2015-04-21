@@ -1,8 +1,51 @@
 'use strict';
 
 var config = require('../../config/environment');
+var https = require('https');
+var querystring = require('querystring');
 var camelize = require('camelize');
 var stripeApi = require('stripe')(config.payment.stripe.api);
+var stripeToken = config.payment.stripe.api;
+
+function setStripeToken(api) {
+  stripeToken = api;
+}
+
+function httpRequest(method, bodyRequest, path, cb) {
+  var bodyRequest = querystring.stringify(bodyRequest);
+
+  var options = {
+    host: 'api.stripe.com',
+    port: 443,
+    method: method,
+    path: path,
+    headers: {
+      'Authorization': 'Basic ' + new Buffer(stripeToken + ':' + '').toString('base64'),
+      'Accept': 'application/vnd.api+json;revision=1.1',
+      'Content-Length': bodyRequest.length,
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }
+  };
+  var body = "";
+  var request = https.request(options, function(res){
+    res.on('data', function(data) {
+      body += data;
+    });
+    res.on('end', function() {
+      var pbody = {};
+      if(body !== ""){
+        pbody = JSON.parse(body);
+      }
+      return cb(null, pbody);
+    })
+    res.on('error', function(e) {
+      return (e, null);
+    });
+  });
+  request.write(bodyRequest);
+  request.end();
+}
+
 
 function generateToken(data, cb){
   stripeApi.tokens.create(data).then(
@@ -58,7 +101,14 @@ function createBank(bankDetails, cb) {
   };
   stripeApi.tokens.create(bankAccount, function(err, token) {
     if(err) return cb(err);
-    return cb(null , token);
+
+    httpRequest('POST', {source : token.id} , '/v1/customers/'+bankDetails.customerId+'/sources', function(err1, data){
+      if(err1) return cb(err1);
+
+      return cb(null , data);
+    });
+
+
   });
 }
 
@@ -239,6 +289,27 @@ function hasError(response) {
   return false;
 }
 
+function createAccount(accountDetails, cb){
+  stripeApi.accounts.create({
+    managed: true,
+    country: accountDetails.country,
+    email: accountDetails.email
+  }, function(err, account) {
+    if(err) return cb(err);
+
+    return cb(false , account);
+  });
+};
+
+function addBankToAccount(accountId, bankDetails, cb){
+  stripeApi.accounts.update(accountId, {
+    bank_account: bankDetails
+  }, function(err , data){
+    if(err) return cb(err);
+    return cb(false , data);
+  });
+};
+
 function handleErrors(response) {
   return response.errors;
 }
@@ -251,5 +322,8 @@ module.exports = {
   listCards : listCards,
   fetchCard : fetchCard,
   debitCard : debitCard,
-  listBanks : listBanks
+  listBanks : listBanks,
+  createBank:createBank,
+  createAccount:createAccount,
+  addBankToAccount:addBankToAccount
 }
