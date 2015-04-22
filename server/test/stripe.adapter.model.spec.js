@@ -18,7 +18,8 @@ var data = {
   cardToken:'',
   cardToken2:'',
   cardId:'',
-  amount:245,
+  amount:10,
+  csFee:5,
   description:'description',
   appearsOnStatementAs:'appearsOnStatementAs',
   orderId:'orderId',
@@ -33,7 +34,9 @@ var data = {
   customerRes : {},
   accountDetails : {email : faker.internet.email(),
                     country: 'US'},
-  account : {},
+  account : {
+    id:''
+  },
   bankDetails : {
   country: 'US',
   routing_number: '110000000',

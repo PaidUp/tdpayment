@@ -73,31 +73,6 @@ describe.only('stripe adapter', function(){
       });
   });
 
-  it('generate token card2' , function(done){
-    this.timeout(60000);
-    var card = modelSpec.tokenData;
-    stripeAdapter.generateToken(card, function(err, token){
-      if(err) return done(err);
-      modelSpec.cardToken2 = token;
-      assert(token.length > 0);
-      done();
-    });
-  });
-
-  it('debit card', function(done){
-    this.timeout(60000);
-    var cardToken = modelSpec.cardToken2;
-    var amount = modelSpec.amount;
-    var description = modelSpec.description;
-    var appearsOnStatementAs = modelSpec.appearsOnStatementAs;
-    var orderId = modelSpec.orderId;
-    stripeAdapter.debitCard(cardToken, amount, description, appearsOnStatementAs, orderId, function(err, data){
-      if(err) return done(err);
-      assert(data);
-      done();
-      });
-  });
-
   it('create bank token' , function(done){
     this.timeout(60000);
 
@@ -110,7 +85,7 @@ describe.only('stripe adapter', function(){
 
     stripeAdapter.createBank(bankDetails , function(err , data){
       if(err) return done(err)
-      console.log('data' , data)
+      //console.log('data' , data)
 
       assert.isDefined(data);
       done();
@@ -123,7 +98,7 @@ describe.only('stripe adapter', function(){
 
     stripeAdapter.createAccount(modelSpec.accountDetails , function(err , data){
       if(err) return done(err)
-      console.log('data' , data)
+      //console.log('data' , data)
 
       assert.isDefined(data);
       modelSpec.account = data;
@@ -137,13 +112,32 @@ describe.only('stripe adapter', function(){
 
     stripeAdapter.addBankToAccount(modelSpec.account.id, modelSpec.bankDetails , function(err , data){
       if(err) return done(err)
-      console.log('data' , data)
+      //console.log('data' , data)
 
       assert.isDefined(data);
       modelSpec.account = data;
       done();
     })
 
+  });
+
+  it('debit card', function(done){
+    this.timeout(60000);
+    var cardId = modelSpec.cardId;
+    var amount = modelSpec.amount;
+    var description = modelSpec.description;
+    var appearsOnStatementAs = modelSpec.appearsOnStatementAs;
+    var orderId = modelSpec.orderId;
+    var customerId = modelSpec.customerRes.id;//cus
+    var destination = modelSpec.account.id;//acc
+    //console.log('source',cardId);
+    stripeAdapter.debitCard(cardId, amount, description, appearsOnStatementAs, orderId, customerId, destination, function(err, data){
+      //console.log('data',data);
+      //console.log('err',err);
+      if(err) return done(err);
+      assert(data);
+      done();
+      });
   });
 
 });
