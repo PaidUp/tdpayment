@@ -182,12 +182,17 @@ function debitCard(cardId, amount, description, appearsOnStatementAs, orderId, c
     customer: customerId, // cus_xx
     destination: destination, // acc_xx
     description: orderId,
-    application_fee:Math.round(5 * 100)
+    application_fee:Math.round(calculateApplicationFee(amount) * 100)
   }, function(err, charge) {
     if (err) return cb(err);
     if(hasError(charge)) return cb(handleErrors(charge));
     return cb(null, camelize(charge));
   });
+}
+
+function calculateApplicationFee(amount){
+  var stripeFee  = (amount * (config.payment.stripe.feeStripePercent / 100))+ config.payment.stripe.feeStripeBase;
+  return stripeFee + config.payment.stripe.feeApplication;
 }
 /*
 url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
