@@ -86,6 +86,20 @@ function debitCard (req, res) {
     });
   }
 
+  if (!req.body || !req.body.customerId) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Customer Id is required"
+    });
+  }
+
+  if (!req.body || !req.body.destination) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Destination Id is required"
+    });
+  }
+
   cardService.debitCard(req.body, function(err, data){
       if (err) {
         return handleError(res, err);
@@ -138,7 +152,14 @@ function fetchCard (req, res) {
     });
   }
 
-  cardService.fetchCard(req.params.cardId, function(err, data){
+  if (!req.params || !req.params.customerId) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Customer Id is required"
+    });
+  }
+
+  cardService.fetchCard(req.params.customerId, req.params.cardId, function(err, data){
     if (err) {
       return handleError(res, err);
     }

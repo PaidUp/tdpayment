@@ -11,7 +11,7 @@ var modelSpec = require('./payment.model.spec');
 
 var token = require('../config/environment').nodePass.me.token;
 
-describe.only('test customer controller' , function(){
+describe.skip('test customer controller' , function(){
   it('create customer' , function(done){
     this.timeout(60000);
     var user = modelSpec.user;
