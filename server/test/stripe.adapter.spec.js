@@ -85,8 +85,6 @@ describe.only('stripe adapter', function(){
 
     stripeAdapter.createBank(bankDetails , function(err , data){
       if(err) return done(err)
-      //console.log('data' , data)
-
       assert.isDefined(data);
       done();
     })
@@ -98,8 +96,6 @@ describe.only('stripe adapter', function(){
 
     stripeAdapter.createAccount(modelSpec.accountDetails , function(err , data){
       if(err) return done(err)
-      //console.log('data' , data)
-
       assert.isDefined(data);
       modelSpec.account = data;
       done();
@@ -112,8 +108,6 @@ describe.only('stripe adapter', function(){
 
     stripeAdapter.addBankToAccount(modelSpec.account.id, modelSpec.bankDetails , function(err , data){
       if(err) return done(err)
-      //console.log('data' , data)
-
       assert.isDefined(data);
       modelSpec.account = data;
       done();
@@ -130,10 +124,7 @@ describe.only('stripe adapter', function(){
     var orderId = modelSpec.orderId;
     var customerId = modelSpec.customerRes.id;//cus
     var destination = modelSpec.account.id;//acc
-    //console.log('source',cardId);
     stripeAdapter.debitCard(cardId, amount, description, appearsOnStatementAs, orderId, customerId, destination, function(err, data){
-      //console.log('data',data);
-      //console.log('err',err);
       if(err) return done(err);
       assert(data);
       done();
