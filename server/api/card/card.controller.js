@@ -93,7 +93,7 @@ function debitCard (req, res) {
     });
   }
 
-  if (!req.body || !req.body.destination) {
+  if (!req.body || !req.body.providerId) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Destination Id is required"
