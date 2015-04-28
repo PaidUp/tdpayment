@@ -6,9 +6,11 @@ var app = require('../app');
 var assert = require('chai').assert;
 var stripeAdapter = require('../api/adapters/stripe.adapter');
 var modelSpec = require('./stripe.adapter.model.spec');
+
 describe.only('stripe adapter', function(){
+  this.timeout(30000);
+
   it('generate token card' , function(done){
-    this.timeout(60000);
     var card = modelSpec.tokenData;
     stripeAdapter.generateToken(card, function(err, token){
       if(err) return done(err);
@@ -19,7 +21,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('create customer', function(done){
-    this.timeout(60000);
     var customer = modelSpec.customerData;
     stripeAdapter.createCustomer(customer, function(err, data){
       if(err) return done(err);
@@ -30,7 +31,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('fetch customer', function(done){
-    this.timeout(60000);
     var customerId = modelSpec.customerRes.id;
     stripeAdapter.fetchCustomer(customerId, function(err, data){
       if(err) return done(err);
@@ -40,7 +40,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('associate card', function(done){
-    this.timeout(60000);
     var customerId = modelSpec.customerRes.id;
     var cardId = modelSpec.cardToken;
     stripeAdapter.associateCard(customerId ,cardId , function(err, data){
@@ -51,7 +50,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('list Cards', function(done){
-    this.timeout(60000);
     var customerId = modelSpec.customerRes.id;
     stripeAdapter.listCards(customerId, function(err, data){
       if(err) return done(err);
@@ -63,7 +61,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('fetch card', function(done){
-    this.timeout(60000);
     var customerId = modelSpec.customerRes.id;
     var cardId = modelSpec.cardId;
     stripeAdapter.fetchCard(customerId, cardId, function(err, data){
@@ -74,7 +71,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('create bank token' , function(done){
-    this.timeout(60000);
 
     var bankDetails = {
       country: 'US',
@@ -92,7 +88,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('create account' , function(done){
-    this.timeout(60000);
 
     stripeAdapter.createAccount(modelSpec.accountDetails , function(err , data){
       if(err) return done(err)
@@ -104,7 +99,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('add bank account to account' , function(done){
-    this.timeout(60000);
 
     stripeAdapter.addBankToAccount(modelSpec.account.id, modelSpec.bankDetails , function(err , data){
       if(err) return done(err)
@@ -116,7 +110,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('debit card', function(done){
-    this.timeout(60000);
     var cardId = modelSpec.cardId;
     var amount = modelSpec.amount;
     var description = modelSpec.description;
@@ -128,7 +121,7 @@ describe.only('stripe adapter', function(){
       if(err) return done(err);
       assert(data);
       done();
-      });
+    });
   });
 
 });
