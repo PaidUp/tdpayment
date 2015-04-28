@@ -79,13 +79,6 @@ function debitCard (req, res) {
     });
   }
 
-  if (!req.body || !req.body.orderId) {
-    return res.json(400, {
-      "code": "ValidationError",
-      "message": "Order Id is required"
-    });
-  }
-
   if (!req.body || !req.body.customerId) {
     return res.json(400, {
       "code": "ValidationError",
