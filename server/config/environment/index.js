@@ -44,7 +44,7 @@ var all = {
   payment: {
     adapter: path.normalize(__dirname + '/../../..') + '/server/api/adapters/stripe.adapter',
     stripe: {
-      api: "sk_test_JISXVuDEbW6l4gJ2QXdg2jB7",
+      api: "sk_test_i1WgQIKn3mXx4GP5B8Yh79U1",
       feeStripePercent : 2.9,
       feeStripeBase : 0.3,
       feeApplication : 5
