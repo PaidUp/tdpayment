@@ -88,7 +88,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('create account' , function(done){
-
     stripeAdapter.createAccount(modelSpec.accountDetails , function(err , data){
       if(err) return done(err)
       assert.isDefined(data);
@@ -99,7 +98,6 @@ describe.only('stripe adapter', function(){
   });
 
   it('add bank account to account' , function(done){
-
     stripeAdapter.addBankToAccount(modelSpec.account.id, modelSpec.bankDetails , function(err , data){
       if(err) return done(err)
       assert.isDefined(data);

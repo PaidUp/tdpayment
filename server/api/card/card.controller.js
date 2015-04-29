@@ -10,19 +10,19 @@ function createCard (req, res) {
       "message": "Card number id is required"
     });
   }
-  if (!req.body || !req.body.expiration_year) {
+  if (!req.body || !req.body.exp_year) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Expiration year is required"
     });
   }
-  if (!req.body || !req.body.expiration_month) {
+  if (!req.body || !req.body.exp_month) {
     return res.json(400, {
       "code": "ValidationError",
       "message": "Expiration month is required"
     });
   }
-  cardService.createCard(req.body, function(err, data){
+  cardService.createCard({card: req.body}, function(err, data){
     if (err) {
       return handleError(res, err);
     }

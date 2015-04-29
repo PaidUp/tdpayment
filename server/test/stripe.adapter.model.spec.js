@@ -32,7 +32,7 @@ var data = {
     },
     customerRes: {},
     accountDetails: {
-      email: 'info@austinboom.com',
+      email: faker.internet.email(),
       country: 'US'
     },
     account: {
@@ -41,7 +41,7 @@ var data = {
     bankDetails: {
       country: 'US',
       routing_number: '110000000',
-      account_number: '000123456789',
+      account_number: '000123456789'
     }
   }
 

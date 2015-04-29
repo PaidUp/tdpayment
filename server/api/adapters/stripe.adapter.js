@@ -79,9 +79,12 @@ function fetchCustomer(customerId, cb) {
 }
 
 function createCard(cardDetails, cb) {
-  //without funcionality from backend.
-  return cb(null, {'stripe':'creat'});
+  generateToken(cardDetails, function(err, data){
+    if(err) return cb(err);
+    cb(null, data);
+  });
 }
+
 function associateCard(customerId, cardId, cb) {
   stripeApi.customers.createSource(customerId,{source: cardId}, function(err, card) {
       if (err) return cb(err);
@@ -333,5 +336,6 @@ module.exports = {
   listBanks : listBanks,
   createBank:createBank,
   createAccount:createAccount,
-  addBankToAccount:addBankToAccount
+  addBankToAccount:addBankToAccount,
+  createCard:createCard
 }
