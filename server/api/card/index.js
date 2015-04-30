@@ -15,7 +15,7 @@ router.post('/associate', auth.isAuthenticatedServer(config.nodePass.me.token), 
 router.post('/debit', auth.isAuthenticatedServer(config.nodePass.me.token), controller.debitCard);
 router.get('/list/customerId/:customerId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.listCards);
 router.post('/prepare', auth.isAuthenticatedServer(config.nodePass.me.token), controller.prepareCard);
-router.get('/fetch/cardId/:cardId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchCard);
+router.get('/fetch/customerId/:customerId/cardId/:cardId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchCard);
 router.get('/default/customerId/:customerId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getUserDefaultCardId);
 
 module.exports = router;

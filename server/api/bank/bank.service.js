@@ -2,7 +2,8 @@
  * Created by riclara on 3/5/15.
  */
 
-var paymentAdapter = require('../adapters/balancedpayments.adapter');
+ var config = require('../../config/environment');
+ var paymentAdapter = require(config.payment.adapter);
 
 function createBank (bankDetails, cb) {
   paymentAdapter.createBank(bankDetails, function(err, data){
@@ -20,9 +21,6 @@ function associateBank (customerId, bankId, cb) {
 
 function debitBank (debitBankData, cb) {
   paymentAdapter.debitBank(debitBankData.bankId, debitBankData.amount, debitBankData.description, debitBankData.appearsOnStatementAs, debitBankData.orderId, function(err, data){
-    console.log('err',err);
-    console.log('data' , data);
-
     if(err) return cb(err);
     return cb(null, data);
   });

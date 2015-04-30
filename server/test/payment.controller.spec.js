@@ -11,7 +11,7 @@ var modelSpec = require('./payment.model.spec');
 
 var token = require('../config/environment').nodePass.me.token;
 
-describe.only('test customer controller' , function(){
+describe.skip('test customer controller' , function(){
   it('create customer' , function(done){
     this.timeout(60000);
     var user = modelSpec.user;
@@ -108,8 +108,7 @@ describe.only('test customer controller' , function(){
       .send(confirmBankVerificationData)
       .expect(200)
       .end(function(err, res) {
-        if (err)
-          return done(err);
+        if (err) return done(err);
         assert.equal(1, res.body.bankAccountVerifications.length, 'Must exist one account pending to verification');
         modelSpec.bankAccountVerification = res.body.bankAccountVerifications[0];
         done();
@@ -125,8 +124,7 @@ describe.only('test customer controller' , function(){
       .send(debitBankData)
       .expect(200)
       .end(function(err, res) {
-        if (err)
-          return done(err);
+        if (err) return done(err);
         assert.equal(1, res.body.debits.length, 'Must exist one debit bank');
         modelSpec.debitBankResponse = res.body;
         done();

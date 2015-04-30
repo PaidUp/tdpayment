@@ -7,7 +7,7 @@ var https = require('https');
 var querystring = require('querystring');
 var async = require('async');
 var camelize = require('camelize');
-var balancedApi = config.balanced.api;
+var balancedApi = config.payment.balanced.api;
 
 function setBalancedApi(api) {
   balancedApi = api;

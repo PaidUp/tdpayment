@@ -19,7 +19,7 @@ module.exports = function(app) {
   app.get('/swagger.json', function(req,res){
     return res.sendfile(__dirname + '/swagger.json', 'swagger.json');
   });
-
+  
   // All undefined asset or api routes should return a 404
   app.route('/:url(api|auth|components|app|bower_components|assets)/*')
    .get(function(req, res){
