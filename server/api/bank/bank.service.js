@@ -2,7 +2,8 @@
  * Created by riclara on 3/5/15.
  */
 
-var paymentAdapter = require('../adapters/balancedpayments.adapter');
+ var config = require('../../config/environment');
+ var paymentAdapter = require(config.payment.adapter);
 
 function createBank (bankDetails, cb) {
   paymentAdapter.createBank(bankDetails, function(err, data){

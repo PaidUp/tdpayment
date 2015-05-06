@@ -1,6 +1,7 @@
 'use strict';
 
-var paymentAdapter = require('../adapters/balancedpayments.adapter');
+var config = require('../../config/environment');
+var paymentAdapter = require(config.payment.adapter);
 
 /**
  * Create credit card in balanced payment
@@ -22,7 +23,7 @@ function  associateCard (customerId, cardId, cb) {
 }
 
 function debitCard (debitCardData, cb) {
-  paymentAdapter.debitCard(debitCardData.cardId, debitCardData.amount, debitCardData.description, debitCardData.appearsOnStatementAs, debitCardData.orderId, function(err, data){
+  paymentAdapter.debitCard(debitCardData.cardId, debitCardData.amount, debitCardData.description, debitCardData.appearsOnStatementAs, debitCardData.customerId, debitCardData.providerId, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
   });
@@ -50,8 +51,8 @@ function prepareCard (params, cb) {
   });
 }
 
-function fetchCard (cardId, cb){
-  paymentAdapter.fetchCard(cardId, function(err, creditCard){
+function fetchCard (customerId, cardId, cb){
+  paymentAdapter.fetchCard(customerId, cardId, function(err, creditCard){
     if(err) return cb(err);
     return cb(null, creditCard);
   });

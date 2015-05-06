@@ -160,15 +160,21 @@ module.exports = function (grunt) {
 
     copy: {
       dist: {
-        files: [ {
-          expand: true,
-          dest: '<%= yeoman.dist %>',
-          src: [
-            'package.json',
-            'server/**/*',
-            'client/**/*'
-          ]
-        }]
+        files: [
+          {
+            cwd: 'client',  // set working folder / root to copy
+            src: '**/*',           // copy all files and subfolders
+            dest: '<%= yeoman.dist %>/public',    // destination folder
+            expand: true           // required when using cwd
+          },
+          {
+            expand: true,
+            dest: '<%= yeoman.dist %>',
+            src: [
+              'package.json',
+              'server/**/*'
+            ]
+          }]
       }
     },
 
