@@ -89,8 +89,7 @@
     "winston": "^0.8.3",
     "faker": "^2.1.2",
     "gulp": "^3.8.11",
-    "gulp-mocha": "^2.0.0",
-    "TDCore": "https://github.com/talosdigital/TDCore/tarball/CS-352-payment"
+    "gulp-mocha": "^2.0.0"
   },
   "engines": {
     "node": ">=0.10.0"
