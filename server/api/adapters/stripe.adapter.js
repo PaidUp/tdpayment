@@ -314,7 +314,11 @@ function createAccount(accountDetails, cb){
 
 function addBankToAccount(accountId, bankDetails, cb){
   stripeApi.accounts.update(accountId, {
-    bank_account: bankDetails
+    bank_account: {
+      country: bankDetails.country,
+      routing_number: bankDetails.routingNumber,
+      account_number: bankDetails.accountNumber
+    }
   }, function(err , data){
     if(err) return cb(err);
     return cb(false , data);
