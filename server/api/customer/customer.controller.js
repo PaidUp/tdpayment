@@ -36,6 +36,28 @@ function createCustomer (req, res) {
   });
 };
 
+function createConnectAccount (req, res) {
+  if (!req.body || !req.body.email) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Email is required"
+    });
+  }
+  if (!req.body.country) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Country is required"
+    });
+  }
+  customerService.createConnectAccount(req.body, function(err, data){
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.json(200, data);
+  });
+};
+
 module.exports = {
-  createCustomer : createCustomer
+  createCustomer : createCustomer,
+  createConnectAccount : createConnectAccount
 };

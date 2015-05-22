@@ -11,5 +11,6 @@ var auth = require('TDCore').auth;
 var router = express.Router();
 
 router.post('/create', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createCustomer);
+router.post('/create/connect', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createConnectAccount);
 
 module.exports = router;

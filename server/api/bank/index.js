@@ -24,5 +24,7 @@ router.post('/prepare', auth.isAuthenticatedServer(config.nodePass.me.token), co
 router.get('/fetch/bankId/:bankId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchBank);
 router.get('/default/customerId/:customerId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getUserDefaultBankId);
 
+router.post('/create/connect', auth.isAuthenticatedServer(config.nodePass.me.token), controller.addBankToAccount);
+
 module.exports = router;
 

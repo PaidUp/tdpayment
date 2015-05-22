@@ -115,6 +115,13 @@ function getUserDefaultBankId (params, cb) {
   });
 }
 
+function addBankToAccount (accountId, bankDetails, cb) {
+  paymentAdapter.addBankToAccount(accountId, bankDetails, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}
+
 module.exports = {
   createBank : createBank,
   associateBank : associateBank,
@@ -128,5 +135,6 @@ module.exports = {
   listBanks : listBanks,
   prepareBank : prepareBank,
   fetchBank : fetchBank,
-  getUserDefaultBankId : getUserDefaultBankId
+  getUserDefaultBankId : getUserDefaultBankId,
+  addBankToAccount : addBankToAccount
 };

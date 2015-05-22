@@ -256,6 +256,44 @@ function getUserDefaultBankId (req, res) {
   });
 };
 
+function addBankToAccount (req, res) {
+  if (!req.body || !req.body.accountId) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Account id is required"
+    });
+  }
+  if (!req.body || !req.body.bankAccount) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Bank account is required"
+    });
+  }
+  if (!req.body.bankAccount || !req.body.bankAccount.country) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Country is required"
+    });
+  }
+  if (!req.body.bankAccount || !req.body.bankAccount.routingNumber) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Routing number is required"
+    });
+  }
+  if (!req.body.bankAccount || !req.body.bankAccount.accountNumber) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "Routing number is required"
+    });
+  }
+  bankService.addBankToAccount(req.body.accountId, req.body.bankAccount, function(err, data){
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.json(200, data);
+  });
+};
 
 module.exports = {
   createBank : createBank,
@@ -269,5 +307,6 @@ module.exports = {
   listBanks : listBanks,
   prepareBank : prepareBank,
   fetchBank : fetchBank,
-  getUserDefaultBankId : getUserDefaultBankId
+  getUserDefaultBankId : getUserDefaultBankId,
+  addBankToAccount : addBankToAccount
 };

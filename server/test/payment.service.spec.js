@@ -258,41 +258,41 @@ describe.skip('payment services test', function () {
         });
   })
 
-    it('prepareCard', function(done){
-        this.timeout(60000);
-        var prepareCardData = modelSpec.prepareCardData();
-        cardService.prepareCard(prepareCardData, function(err, data){
-            if(err){
-                return done(err);
-            }
-            assert.equal(1, data.cards.length, 'Must exist one credit card');
-            return done();
-        });
-    });
+  it('prepareCard', function(done){
+      this.timeout(60000);
+      var prepareCardData = modelSpec.prepareCardData();
+      cardService.prepareCard(prepareCardData, function(err, data){
+          if(err){
+              return done(err);
+          }
+          assert.equal(1, data.cards.length, 'Must exist one credit card');
+          return done();
+      });
+  });
 
 
-    it('fetchCard', function(done){
-        this.timeout(60000);
-        cardService.fetchCard(modelSpec.creditCard.id, function(err, data){
-            if(err){
-                return done(err);
-            }
-            assert.equal(1, data.cards.length, 'Must exist one credit card');
-            return done();
-        });
-    });
+  it('fetchCard', function(done){
+      this.timeout(60000);
+      cardService.fetchCard(modelSpec.creditCard.id, function(err, data){
+          if(err){
+              return done(err);
+          }
+          assert.equal(1, data.cards.length, 'Must exist one credit card');
+          return done();
+      });
+  });
 
 
-    it('getUserDefaultCardId', function(done){
-        this.timeout(60000);
-        cardService.getUserDefaultCardId({customerId : modelSpec.customer.id}, function(err, data){
-            if(err){
-                return done(err);
-            }
-            assert.equal(modelSpec.creditCard.id, data, 'card id is not correct');
-            return done();
-        });
-    });
+  it('getUserDefaultCardId', function(done){
+      this.timeout(60000);
+      cardService.getUserDefaultCardId({customerId : modelSpec.customer.id}, function(err, data){
+          if(err){
+              return done(err);
+          }
+          assert.equal(modelSpec.creditCard.id, data, 'card id is not correct');
+          return done();
+      });
+  });
 
 
 });
