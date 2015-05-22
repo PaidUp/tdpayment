@@ -40,8 +40,8 @@ var data = {
     },
     bankDetails: {
       country: 'US',
-      routing_number: '110000000',
-      account_number: '000123456789'
+      routingNumber: '110000000',
+      accountNumber: '000123456789'
     }
   }
 

@@ -19,3 +19,14 @@ exports.createCustomer = function (user, cb) {
     return cb(null, data);
   });
 }
+
+exports.createConnectAccount = function (dataAccount, cb) {
+  var account = {
+    email: dataAccount.email,
+    country: dataAccount.country
+  }
+  paymentAdapter.createAccount(account, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}
