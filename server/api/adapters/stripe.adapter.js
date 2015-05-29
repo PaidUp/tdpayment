@@ -194,8 +194,11 @@ function debitCard(cardId, amount, description, appearsOnStatementAs, customerId
 }
 
 function calculateApplicationFee(amount){
-  var stripeFee  = (amount * (config.payment.stripe.feeStripePercent / 100))+ config.payment.stripe.feeStripeBase;
-  return stripeFee + config.payment.stripe.feeApplication;
+  var stripeFee  = (amount * (config.payment.stripe.feeStripePercent / 100))+ config.payment.stripe.feeStripeBase
+  if(config.payment.CSPayFee){
+    stripeFee += config.payment.stripe.feeApplication
+  };
+  return stripeFee;
 }
 /*
 url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
