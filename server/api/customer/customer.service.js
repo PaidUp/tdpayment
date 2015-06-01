@@ -30,3 +30,10 @@ exports.createConnectAccount = function (dataAccount, cb) {
     return cb(null, data);
   });
 }
+
+exports.addToSAccount = function (dataToS, cb) {
+  paymentAdapter.addToSAccount(dataToS, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}

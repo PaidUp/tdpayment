@@ -6,6 +6,7 @@ var app = require('../app');
 var assert = require('chai').assert;
 var stripeAdapter = require('../api/adapters/stripe.adapter');
 var modelSpec = require('./stripe.adapter.model.spec');
+var ip = require('os').networkInterfaces();
 
 describe.only('stripe adapter', function(){
   this.timeout(30000);
@@ -104,7 +105,18 @@ describe.only('stripe adapter', function(){
       modelSpec.account = data;
       done();
     })
+  });
 
+  it('add ToS to account' , function(done){
+    var dataToS = {
+      accountId:modelSpec.account.id,
+      ip: ip.wlan0[0].address
+    }
+    stripeAdapter.addToSAccount(dataToS , function(err , data){
+      if(err) return done(err)
+      assert.isDefined(data);
+      done();
+    })
   });
 
   it('debit card', function(done){
