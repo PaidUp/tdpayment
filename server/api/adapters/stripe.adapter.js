@@ -328,6 +328,19 @@ function addBankToAccount(accountId, bankDetails, cb){
   });
 };
 
+function addToSAccount(dataToS, cb){
+  stripeApi.accounts.update(dataToS.accountId,
+    {
+      tos_acceptance: {
+        date: Math.floor(Date.now() / 1000),
+        ip: dataToS.ip // Assumes you're not using a proxy
+      }
+    }, function (err, data) {
+      if(err) return cb(err);
+      return cb(null , data.tos_acceptance);
+    });
+};
+
 function handleErrors(response) {
   return response.errors;
 }
@@ -344,5 +357,6 @@ module.exports = {
   createBank:createBank,
   createAccount:createAccount,
   addBankToAccount:addBankToAccount,
-  createCard:createCard
+  createCard:createCard,
+  addToSAccount:addToSAccount
 }
