@@ -18,7 +18,7 @@
     "/customer/create": {
       "post": {
         "operationId": "customerCreate",
-        "summary": "Create customer in balanced payment (TDPayment.createCustomer)",
+        "summary": "Create customer (TDPayment.createCustomer)",
         "description": "Create customer user.",
         "produces": [
           "application/json"
@@ -31,6 +31,96 @@
             "required": true,
             "schema": {
               "$ref": "#/definitions/reqCustomerCreate"
+            }
+          }
+        ]
+      ,
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful user create",
+            "schema": {
+              "$ref" : "resCustomerCreate"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/customer/create/connect": {
+      "post": {
+        "operationId": "customerCreateConnect",
+        "summary": "Create customer connect (TDPayment.createConnectAccount)",
+        "description": "Create customer connect user.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dataUser",
+            "in": "body",
+            "description": "User model",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reqCustomerConnectCreate"
+            }
+          }
+        ]
+      ,
+        "tags": [
+          "Customer"
+        ],
+        "responses": {
+          "200": {
+            "description": "Successful user create",
+            "schema": {
+              "$ref" : "resCustomerCreate"
+            }
+          },
+          "400": {
+            "description": "Validation field error",
+            "schema": {
+              "$ref": "ValidationError"
+            }
+          },
+          "500": {
+            "description": "Unexpected error",
+            "schema": {
+              "$ref": "UnexpectedError"
+            }
+          }
+        }
+      }
+    },
+    "/customer/add/tos": {
+      "post": {
+        "operationId": "customerAddToS",
+        "summary": "add ToS connect (TDPayment.addToSAccount)",
+        "description": "add ToS connect user.",
+        "produces": [
+          "application/json"
+        ],
+        "parameters": [
+          {
+            "name": "dataToS",
+            "in": "body",
+            "description": "User model",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/reqAddToS"
             }
           }
         ]
@@ -943,10 +1033,6 @@
       }
     }
   },
-
-
-
-
   "definitions": {
     "reqCustomerCreate": {
       "required": [
@@ -971,6 +1057,38 @@
         "id": {
           "type": "string",
           "description": "Id user reference"
+        }
+      }
+    },
+    "reqCustomerConnectCreate": {
+      "required": [
+        "country",
+        "email"
+      ],
+      "properties": {
+        "country": {
+          "type": "string",
+          "description": "country"
+        },
+        "email": {
+          "type": "string",
+          "description": "Email"
+        }
+      }
+    },
+    "reqAddToS": {
+      "required": [
+        "ip",
+        "accountId"
+      ],
+      "properties": {
+        "ip": {
+          "type": "string",
+          "description": "ip"
+        },
+        "accountId": {
+          "type": "string",
+          "description": "accountId"
         }
       }
     },
@@ -1221,9 +1339,6 @@
         }
       }
     },
-
-
-
     "resCustomerCreate" : {
       "properties" : {
         "body" : {
@@ -2073,9 +2188,6 @@
         }
       }
     },
-
-
-
     "ValidationError" : {
       "properties": {
         "code": {

@@ -57,7 +57,29 @@ function createConnectAccount (req, res) {
   });
 };
 
+function addToSAccount (req, res) {
+  if (!req.body || !req.body.ip) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "ip is required"
+    });
+  }
+  if (!req.body.accountId) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "accountId is required"
+    });
+  }
+  customerService.addToSAccount(req.body, function(err, data){
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.json(200, data);
+  });
+};
+
 module.exports = {
   createCustomer : createCustomer,
-  createConnectAccount : createConnectAccount
+  createConnectAccount : createConnectAccount,
+  addToSAccount : addToSAccount
 };
