@@ -54,7 +54,7 @@ var all = {
       marketplace: "TEST-MP2OaM2stYkoWBlGFd0M8YV7",
       appearsOnStatementAs: "Conv. Select"
     },
-    CSPayFee : no
+    CSPayFee : false
   },
 
   nodePass: {
