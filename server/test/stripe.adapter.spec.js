@@ -107,7 +107,7 @@ describe.only('stripe adapter', function(){
     })
   });
 
-  it('add ToS to account' , function(done){
+  it.skip('add ToS to account' , function(done){
     var dataToS = {
       accountId:modelSpec.account.id,
       ip: ip.wlan0[0].address
