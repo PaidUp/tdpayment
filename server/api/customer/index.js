@@ -6,7 +6,7 @@
 var express = require('express');
 var controller = require('./customer.controller');
 var config = require('../../config/environment');
-var auth = require('TDCore').auth;
+var auth = require('TDCore').authCoreService
 
 var router = express.Router();
 
