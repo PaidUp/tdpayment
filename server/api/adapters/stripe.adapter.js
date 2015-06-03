@@ -185,7 +185,7 @@ function debitCard(cardId, amount, description, appearsOnStatementAs, customerId
     customer: customerId, // cus_xx
     destination: providerId, // acc_xx
     description: description,
-    application_fee:Math.round(calculateApplicationFee(amount, fee) * 100)
+    application_fee: calculateApplicationFee(amount, fee) * 100
   }, function(err, charge) {
     if (err) return cb(err);
     if(hasError(charge)) return cb(handleErrors(charge));
@@ -197,7 +197,7 @@ function calculateApplicationFee(amount, fee){
   if(!config.payment.CSPayFee){
     fee += (amount * (config.payment.stripe.feeStripePercent / 100))+ config.payment.stripe.feeStripeBase
   };
-  return fee;
+  return Math.round(fee);
 }
 /*
 url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
