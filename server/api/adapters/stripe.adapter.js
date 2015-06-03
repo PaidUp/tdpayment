@@ -197,7 +197,7 @@ function calculateApplicationFee(amount, fee){
   if(!config.payment.CSPayFee){
     fee += (amount * (config.payment.stripe.feeStripePercent / 100))+ config.payment.stripe.feeStripeBase
   };
-  return Math.round(fee);
+  return Math.ceil(fee);
 }
 /*
 url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
