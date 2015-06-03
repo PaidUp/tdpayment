@@ -127,7 +127,7 @@ describe.only('stripe adapter', function(){
     var orderId = modelSpec.orderId;
     var customerId = modelSpec.customerRes.id;//cus
     var destination = modelSpec.account.id;//acc
-    stripeAdapter.debitCard(cardId, amount, description, appearsOnStatementAs, customerId, destination, function(err, data){
+    stripeAdapter.debitCard(cardId, amount, description, appearsOnStatementAs, customerId, destination,10, function(err, data){
       if(err) return done(err);
       assert(data);
       done();

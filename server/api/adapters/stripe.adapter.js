@@ -176,7 +176,7 @@ function createOrder(merchantCustomerId, description, cb) {
   });
 }
 */
-function debitCard(cardId, amount, description, appearsOnStatementAs, customerId, providerId, cb) {
+function debitCard(cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, cb) {
   //TODO: Do question about description, appearsOnStatementAs and orderId
   stripeApi.charges.create({
     amount: Math.round(amount * 100),
@@ -185,7 +185,7 @@ function debitCard(cardId, amount, description, appearsOnStatementAs, customerId
     customer: customerId, // cus_xx
     destination: providerId, // acc_xx
     description: description,
-    application_fee:Math.round(calculateApplicationFee(amount) * 100)
+    application_fee:Math.round(calculateApplicationFee(amount, fee) * 100)
   }, function(err, charge) {
     if (err) return cb(err);
     if(hasError(charge)) return cb(handleErrors(charge));
@@ -193,12 +193,11 @@ function debitCard(cardId, amount, description, appearsOnStatementAs, customerId
   });
 }
 
-function calculateApplicationFee(amount){
-  var stripeFee  = (amount * (config.payment.stripe.feeStripePercent / 100))+ config.payment.stripe.feeStripeBase
-  if(config.payment.CSPayFee){
-    stripeFee += config.payment.stripe.feeApplication
+function calculateApplicationFee(amount, fee){
+  if(!config.payment.CSPayFee){
+    fee += (amount * (config.payment.stripe.feeStripePercent / 100))+ config.payment.stripe.feeStripeBase
   };
-  return stripeFee;
+  return fee;
 }
 /*
 url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \

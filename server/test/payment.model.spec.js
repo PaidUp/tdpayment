@@ -54,7 +54,8 @@ var data = {
             amount : '150',
             description : 'Order test '+this.user.firstName,
             appearsOnStatementAs: 'Conv. Select',
-            orderId : this.orderId
+            orderId : this.orderId,
+          fee : 10
         }
     },
     debitBankData : function(){
