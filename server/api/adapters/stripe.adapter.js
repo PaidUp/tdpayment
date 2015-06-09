@@ -61,7 +61,7 @@ function generateToken(data, cb){
 function createCustomer(customer, cb){
   var stripeCustomer = {
     description : customer.name,
-    mail : customer.mail,
+    email : customer.email,
     metadata : customer.meta
   }
   stripeApi.customers.create(stripeCustomer, function(err, customer) {
