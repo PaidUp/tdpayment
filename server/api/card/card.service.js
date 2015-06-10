@@ -25,7 +25,7 @@ function  associateCard (customerId, cardId, cb) {
 function debitCard (debitCardData, cb) {
   paymentAdapter.debitCard(debitCardData.cardId, debitCardData.amount, debitCardData.description,
     debitCardData.appearsOnStatementAs, debitCardData.customerId, debitCardData.providerId,
-    debitCardData.fee, function(err, data){
+    debitCardData.fee, debitCardData.meta, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
   });

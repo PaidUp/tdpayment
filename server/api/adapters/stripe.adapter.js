@@ -176,7 +176,7 @@ function createOrder(merchantCustomerId, description, cb) {
   });
 }
 */
-function debitCard(cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, cb) {
+function debitCard(cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
   //TODO: Do question about description, appearsOnStatementAs and orderId
   stripeApi.charges.create({
     amount: Math.round(amount * 100),
@@ -185,7 +185,8 @@ function debitCard(cardId, amount, description, appearsOnStatementAs, customerId
     customer: customerId, // cus_xx
     destination: providerId, // acc_xx
     description: description,
-    application_fee: fee === 0 ? 0 : Math.round(calculateApplicationFee(amount, fee) * 100)
+    application_fee: fee === 0 ? 0 : Math.round(calculateApplicationFee(amount, fee) * 100),
+    metadata : meta
   }, function(err, charge) {
     if (err) return cb(err);
     if(hasError(charge)) return cb(handleErrors(charge));
