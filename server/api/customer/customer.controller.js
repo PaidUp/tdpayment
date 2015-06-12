@@ -78,8 +78,30 @@ function addToSAccount (req, res) {
   });
 };
 
+function addLegaInfoAccount (req, res) {
+  if (!req.body || !req.body.firstName) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "firstName is required"
+    });
+  }
+  if (!req.body.lastName) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "lastName is required"
+    });
+  }
+  customerService.addLegaInfoAccount(req.body, function(err, data){
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.json(200, data);
+  });
+};
+
 module.exports = {
   createCustomer : createCustomer,
   createConnectAccount : createConnectAccount,
-  addToSAccount : addToSAccount
+  addToSAccount : addToSAccount,
+  addLegaInfoAccount : addLegaInfoAccount
 };

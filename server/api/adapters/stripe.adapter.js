@@ -342,6 +342,26 @@ function addToSAccount(dataToS, cb){
     });
 };
 
+function addLegaInfoAccount(dataLegal, cb){
+  stripeApi.accounts.update(dataLegal.accountId,
+    {
+      legal_entity: {
+        first_name:dataLegal.firstName,
+        last_name:dataLegal.lastName,
+        dob:{
+          day:dataLegal.day,
+          month:dataLegal.month,
+          year:dataLegal.year
+        },
+        type:dataLegal.type,//'individual' or 'company'
+        business_name: dataLegal.businessName
+      }
+    }, function (err, data) {
+      if(err) return cb(err);
+      return cb(null , data.legal_entity);
+    });
+};
+
 function handleErrors(response) {
   return response.errors;
 }
@@ -359,5 +379,6 @@ module.exports = {
   createAccount:createAccount,
   addBankToAccount:addBankToAccount,
   createCard:createCard,
-  addToSAccount:addToSAccount
+  addToSAccount:addToSAccount,
+  addLegaInfoAccount:addLegaInfoAccount
 }
