@@ -107,12 +107,32 @@ describe.only('stripe adapter', function(){
     })
   });
 
-  it.skip('add ToS to account' , function(done){
+  it('add ToS to account' , function(done){
+    this.timeout(30000);
     var dataToS = {
       accountId:modelSpec.account.id,
-      ip: ip.wlan0[0].address
+      ip: '192.168.1.9'
     }
     stripeAdapter.addToSAccount(dataToS , function(err , data){
+      if(err) return done(err)
+      assert.isDefined(data);
+      done();
+    })
+  });
+
+  it('add Legal info to account' , function(done){
+    this.timeout(30000);
+    var legalEntity= {
+        accountId:modelSpec.account.id,
+        firstName:'first_name',
+        lastName:'last_name',
+        day:12,
+        month:12,
+        year:1987,
+        type:'company',
+        businessName:'business_name'
+      }
+    stripeAdapter.addLegaInfoAccount(legalEntity , function(err , data){
       if(err) return done(err)
       assert.isDefined(data);
       done();

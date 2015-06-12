@@ -37,3 +37,10 @@ exports.addToSAccount = function (dataToS, cb) {
     return cb(null, data);
   });
 }
+
+exports.addLegaInfoAccount = function (dataLegal, cb) {
+  paymentAdapter.addLegaInfoAccount(dataLegal, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}
