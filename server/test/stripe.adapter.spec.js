@@ -139,14 +139,12 @@ describe.only('stripe adapter', function(){
     })
   });
 
-  it.skip('update account' , function(done){
+  it('update account' , function(done){
     this.timeout(30000);
     var data= {
-        legal_entity: {additional_owners: ''}
+        statement_descriptor:'first_name'+ ' ' + 'last_name' 
       }
     stripeAdapter.updateAccount(modelSpec.account.id, data , function(err , data){
-      console.log('err',err);
-      console.log('data',data);
       if(err) return done(err)
       assert.isDefined(data);
       done();

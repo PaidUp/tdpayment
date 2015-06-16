@@ -44,3 +44,10 @@ exports.addLegaInfoAccount = function (dataLegal, cb) {
     return cb(null, data);
   });
 }
+
+exports.updateAccount = function (dataUpdate, cb) {
+  paymentAdapter.updateAccount(dataUpdate.accountId, dataUpdate.data, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}
