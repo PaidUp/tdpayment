@@ -14,5 +14,6 @@ router.post('/create', auth.isAuthenticatedServer(config.nodePass.me.token), con
 router.post('/create/connect', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createConnectAccount);
 router.post('/add/tos', auth.isAuthenticatedServer(config.nodePass.me.token), controller.addToSAccount);
 router.post('/add/legal', auth.isAuthenticatedServer(config.nodePass.me.token), controller.addLegaInfoAccount);
+router.post('/update/connect', auth.isAuthenticatedServer(config.nodePass.me.token), controller.updateAccount);
 
 module.exports = router;

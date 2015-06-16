@@ -6,6 +6,7 @@ var querystring = require('querystring');
 var camelize = require('camelize');
 var stripeApi = require('stripe')(config.payment.stripe.api);
 var stripeToken = config.payment.stripe.api;
+var fs = require('fs');
 
 function setStripeToken(api) {
   stripeToken = api;
@@ -362,9 +363,32 @@ function addLegaInfoAccount(dataLegal, cb){
     });
 };
 
+function updateAccount(accountId, dataUpdate, cb){
+  stripeApi.accounts.update(accountId,dataUpdate, function (err, data) {
+      if(err) return cb(err);
+      return cb(null , data);
+    });
+};
+
+/*function UploadingFileAccount(objectData, cb){
+  stripeApi.fileUploads.create({
+    purpose: 'identity_document',
+    file: {
+      data: fs.readFileSync('../../views/test.jpg'),
+      name: 'test.jpg',
+      type: 'application/octet-stream'
+    }
+  }, function(err, fileUpload) {
+    if (err) {
+      return cb(err);
+    }
+    return cb(null , fileUpload);
+  });
+};*/
+
 function handleErrors(response) {
   return response.errors;
-}
+};
 
 module.exports = {
   generateToken : generateToken,
@@ -380,5 +404,6 @@ module.exports = {
   addBankToAccount:addBankToAccount,
   createCard:createCard,
   addToSAccount:addToSAccount,
-  addLegaInfoAccount:addLegaInfoAccount
+  addLegaInfoAccount:addLegaInfoAccount,
+  updateAccount:updateAccount
 }

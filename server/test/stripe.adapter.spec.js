@@ -139,6 +139,32 @@ describe.only('stripe adapter', function(){
     })
   });
 
+  it('update account' , function(done){
+    this.timeout(30000);
+    var data= {
+        statement_descriptor:'first_name'+ ' ' + 'last_name' 
+      }
+    stripeAdapter.updateAccount(modelSpec.account.id, data , function(err , data){
+      if(err) return done(err)
+      assert.isDefined(data);
+      done();
+    })
+  });
+
+  it.skip('Uploading a file' , function(done){
+    this.timeout(30000);
+    var legalEntity= {
+      legal_entity: {
+        additional_owners: ''
+      }
+    };
+    stripeAdapter.UploadingFileAccount(legalEntity, function(err , data){
+      if(err) return done(err)
+      assert.isDefined(data);
+      done();
+    })
+  });
+
   it('debit card', function(done){
     var cardId = modelSpec.cardId;
     var amount = modelSpec.amount;
