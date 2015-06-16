@@ -99,9 +99,19 @@ function addLegaInfoAccount (req, res) {
   });
 };
 
+function updateAccount (req, res) {
+  customerService.updateAccount(req.body, function(err, data){
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.json(200, data);
+  });
+};
+
 module.exports = {
   createCustomer : createCustomer,
   createConnectAccount : createConnectAccount,
   addToSAccount : addToSAccount,
-  addLegaInfoAccount : addLegaInfoAccount
+  addLegaInfoAccount : addLegaInfoAccount,
+  updateAccount : updateAccount
 };
