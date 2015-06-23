@@ -12,6 +12,7 @@ module.exports = function(app) {
   app.use('/api/v1/bank', require('./api/bank'));
   app.use('/api/v1/order', require('./api/order'));
   app.use('/api/v1/card', require('./api/card'));
+  app.use('/api/v1/webhook', require('./api/webhook'));
 
   // Insert routes below
   // app.use('/api/things', require('./api/thing'));
