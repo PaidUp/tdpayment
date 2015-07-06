@@ -130,9 +130,12 @@ describe.only('stripe adapter', function(){
         month:12,
         year:1987,
         type:'company',
-        businessName:'business_name'
+        businessName:'business_name',
+        last4:'0000',
+        EIN:'00-0000000'
       }
     stripeAdapter.addLegaInfoAccount(legalEntity , function(err , data){
+      
       if(err) return done(err)
       assert.isDefined(data);
       done();
@@ -142,7 +145,7 @@ describe.only('stripe adapter', function(){
   it('update account' , function(done){
     this.timeout(30000);
     var data= {
-        statement_descriptor:'first_name'+ ' ' + 'last_name' 
+        statement_descriptor:'first_name'+ ' ' + 'last_name'
       }
     stripeAdapter.updateAccount(modelSpec.account.id, data , function(err , data){
       if(err) return done(err)

@@ -4,7 +4,6 @@ var webhookService = require('./webhook.service.js');
 var handleError = require('../../components/errors/handle.error').handleError;
 
 function wone (req, res) {
-  console.log('req.body',req.body);
   if (!req.body || !req.body.id) {
     return res.json(400, {
       "code": "ValidationError",
