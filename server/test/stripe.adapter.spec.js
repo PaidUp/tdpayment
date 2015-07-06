@@ -131,7 +131,7 @@ describe.only('stripe adapter', function(){
         year:1987,
         type:'company',
         businessName:'business_name',
-        last4:'4321',
+        last4:'0000',
         EIN:'00-0000000'
       }
     stripeAdapter.addLegaInfoAccount(legalEntity , function(err , data){
