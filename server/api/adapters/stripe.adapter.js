@@ -357,8 +357,7 @@ function addLegaInfoAccount(dataLegal, cb){
         type:dataLegal.type,//'individual' or 'company'
         business_name: dataLegal.businessName,
         ssn_last_4:dataLegal.last4,
-        business_tax_id:dataLegal.EIN,
-        personal_id_number:dataLegal.personalId,
+        business_tax_id:dataLegal.EIN
       }
     }, function (err, data) {
       if(err) return cb(err);
