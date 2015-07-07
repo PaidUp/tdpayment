@@ -1,5 +1,6 @@
 /**
  * Created by riclara on 3/11/15.
+ * https://stripe.com/docs/api#errors
  */
 'use strict';
 
@@ -12,37 +13,33 @@ function handleValidationError(res, message){
 }
 
 function handleError(res, err) {
+  
   var httpErrorCode = 500;
-  var errors = [];
-
-  if (err.name === "ValidationError") {
+  if (err.rawType === "invalid_request_error" || err.rawType === "api_error" || err.rawType === "card_error") {
     httpErrorCode = 400;
   }
-
-  if(err.status_code){
-    if(err.status_code !== 200){
-      return handleValidationError(res, err.description);
-    }
-    return res.json(httpErrorCode, {
-      code: err.status_code,
-      message: err.description
-    });
-  }else if(err[0]){
-    if(err[0].status_code !== 200){
-      var des =  err[0].description;
-      return handleValidationError(res, des);
-    }
-    return res.json(httpErrorCode, {
-      code: err[0].status_code,
-      message: err[0].description
-    });
+  switch (err.type) {
+    case 'StripeCardError':
+      // A declined card error
+      err.message; // => e.g. "Your card's expiration year is invalid."
+      break;
+    case 'StripeInvalidRequest':
+      // Invalid parameters were supplied to Stripe's API
+      break;
+    case 'StripeAPIError':
+      // An error occurred internally with Stripe's API
+      break;
+    case 'StripeConnectionError':
+      // Some kind of error occurred during the HTTPS communication
+      break;
+    case 'StripeAuthenticationError':
+      // You probably used an incorrect API key
+      break;
   }
-  else{
-    return res.json(httpErrorCode, {
-      code: 'UnexpectedError',
-      message: JSON.stringify(err)
-    });
-  }
+  return res.json(httpErrorCode, {
+    code: err.type,
+    message:"Oh oh. An error has occurred. If you continue to have this problem, please let us know: ourteam@convenienceselect.com and we will work to resolve the issue quickly."
+  });
 };
 
 exports.handleError = handleError;
