@@ -357,7 +357,15 @@ function addLegaInfoAccount(dataLegal, cb){
         type:dataLegal.type,//'individual' or 'company'
         business_name: dataLegal.businessName,
         ssn_last_4:dataLegal.last4,
-        business_tax_id:dataLegal.EIN
+        business_tax_id:dataLegal.EIN,
+        address:{
+          line1:dataLegal.line1,
+          line2:dataLegal.line2,
+          city:dataLegal.city,
+          state:dataLegal.state,
+          postal_code:dataLegal.postalCode,
+          country:dataLegal.country
+        }
       }
     }, function (err, data) {
       if(err) return cb(err);
