@@ -178,6 +178,8 @@ function createOrder(merchantCustomerId, description, cb) {
 }
 */
 function debitCard(cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
+  fee = parseFloat(fee);
+  amount = parseFloat(amount);
   //TODO: Do question about description, appearsOnStatementAs and orderId
   meta.cs_fee_amount = fee;
   stripeApi.charges.create({
