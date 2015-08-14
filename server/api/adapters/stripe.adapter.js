@@ -73,6 +73,7 @@ function createCustomer(customer, cb){
 
 function fetchCustomer(customerId, cb) {
   stripeApi.customers.retrieve(customerId,function(err, customer) {
+    console.log('customer',customer);
       if(err) return cb(err);
       cb(null , camelize(customer));
     }
@@ -138,6 +139,7 @@ function listCustomerBanks(customerId, cb) {
 */
 function listCards(customerId, cb) {
   stripeApi.customers.listCards(customerId, function(err, cards) {
+    console.log('cards',cards);
     if (err) return cb(err);
     if(hasError(cards)) return cb(handleErrors(cards));
     return cb(null, camelize(cards));

@@ -32,8 +32,9 @@ describe.only('stripe adapter', function(){
   });
 
   it('fetch customer', function(done){
-    var customerId = modelSpec.customerRes.id;
+    var customerId = 'cus_6jIjEACpsRotFE';//modelSpec.customerRes.id;
     stripeAdapter.fetchCustomer(customerId, function(err, data){
+      console.log('data',data);
       if(err) return done(err);
       assert(data);
       done();
@@ -185,6 +186,63 @@ describe.only('stripe adapter', function(){
     stripeAdapter.debitCard(cardId, amount, description, appearsOnStatementAs, customerId, destination,10, {data : 'test'}, function(err, data){
       if(err) return done(err);
       assert(data);
+      done();
+    });
+  });
+
+
+  it('generate token with invalid card' , function(done){
+    var card = modelSpec.tokenDataFail;
+    stripeAdapter.generateToken(card, function(err, token){
+      if(err) return done(err);
+      modelSpec.cardTokenFail = token;
+      assert(token.length > 0);
+      done();
+    });
+  });
+
+  it('associate invalid card', function(done){
+    var customerId = modelSpec.customerRes.id;
+    var cardId = modelSpec.cardTokenFail;
+    stripeAdapter.associateCard(customerId ,cardId , function(err, data){
+      if(err) return done(err);
+      assert(data);
+      assert.equal(data.object,'card');
+      assert.equal(data.brand,'Visa');
+      assert.equal(data.last4,'0019');
+      assert.equal(data.funding,'credit');
+      assert.equal(data.expMonth,7);
+      assert.equal(data.expYear,2016);
+      assert.equal(data.country,'US');
+      assert.equal(data.cvcCheck,'unavailable');
+      done();
+      });
+  });
+
+  it('list Cards again', function(done){
+    var customerId = modelSpec.customerRes.id;
+    stripeAdapter.listCards(customerId, function(err, data){
+      if(err) return done(err);
+      assert.operator(data.data.length, '>', 0,'retrieve cards associate');
+      modelSpec.cardIdFail = data.data[1].id;
+      assert(data);
+      done();
+      });
+  });
+
+  it('debit card with invalid card', function(done){
+    var cardId = modelSpec.cardIdFail;
+    var amount = modelSpec.amount;
+    var description = modelSpec.description;
+    var appearsOnStatementAs = modelSpec.appearsOnStatementAs;
+    var orderId = modelSpec.orderId;
+    var customerId = modelSpec.customerRes.id;//cus
+    var destination = modelSpec.account.id;//acc
+    stripeAdapter.debitCard(cardId, amount, description, appearsOnStatementAs, customerId, destination,10, {data : 'test'}, function(err, data){
+      assert(err);
+      assert.equal(err.type,'StripeCardError');
+      assert.equal(err.code,'card_declined');
+      assert.equal(err.message,'Your card was declined.');
       done();
     });
   });
