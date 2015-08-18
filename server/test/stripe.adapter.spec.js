@@ -32,9 +32,8 @@ describe.only('stripe adapter', function(){
   });
 
   it('fetch customer', function(done){
-    var customerId = 'cus_6jIjEACpsRotFE';//modelSpec.customerRes.id;
+    var customerId = modelSpec.customerRes.id;
     stripeAdapter.fetchCustomer(customerId, function(err, data){
-      console.log('data',data);
       if(err) return done(err);
       assert(data);
       done();
@@ -246,5 +245,40 @@ describe.only('stripe adapter', function(){
       done();
     });
   });
+
+  it('fetch customer II', function(done){
+    var customerId = modelSpec.customerRes.id;
+    stripeAdapter.fetchCustomer(customerId, function(err, data){
+      if(err) return done(err);
+      assert(data);
+      done();
+      });
+  });
+
+  it('update customer', function(done){
+    var customerId = modelSpec.customerRes.id;
+    var data = {
+      description:'test',
+      default_source:modelSpec.cardIdFail
+    }
+    stripeAdapter.updateCustomer(customerId, data, function(err, data){
+      console.log('-----');
+      console.log('update',data);
+      console.log('-----');
+      if(err) return done(err);
+      assert(data);
+      done();
+      });
+  });
+
+  it('fetch customer II', function(done){
+    var customerId = modelSpec.customerRes.id;
+    stripeAdapter.fetchCustomer(customerId, function(err, data){
+      if(err) return done(err);
+      assert(data);
+      done();
+      });
+  });
+
 
 });

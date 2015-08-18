@@ -73,7 +73,6 @@ function createCustomer(customer, cb){
 
 function fetchCustomer(customerId, cb) {
   stripeApi.customers.retrieve(customerId,function(err, customer) {
-    console.log('customer',customer);
       if(err) return cb(err);
       cb(null , camelize(customer));
     }
@@ -95,6 +94,18 @@ function associateCard(customerId, cardId, cb) {
     }
   );
 }
+
+function updateCustomer(customer, data, cb){
+  var stripeCustomer = {
+    description : customer.name,
+    email : customer.email,
+    metadata : customer.meta
+  }
+  stripeApi.customers.update(customer, data, function(err, customer) {
+    if(err) return cb(err);
+    cb(null , camelize(customer));
+  });
+};
 
 function createBank(bankDetails, cb) {
   var bankAccount = {
@@ -139,7 +150,6 @@ function listCustomerBanks(customerId, cb) {
 */
 function listCards(customerId, cb) {
   stripeApi.customers.listCards(customerId, function(err, cards) {
-    console.log('cards',cards);
     if (err) return cb(err);
     if(hasError(cards)) return cb(handleErrors(cards));
     return cb(null, camelize(cards));
@@ -419,5 +429,6 @@ module.exports = {
   createCard:createCard,
   addToSAccount:addToSAccount,
   addLegaInfoAccount:addLegaInfoAccount,
-  updateAccount:updateAccount
+  updateAccount:updateAccount,
+  updateCustomer:updateCustomer
 }
