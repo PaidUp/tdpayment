@@ -20,6 +20,13 @@ exports.createCustomer = function (user, cb) {
   });
 }
 
+exports.fetchCustomer = function (customerId, cb) {
+  paymentAdapter.fetchCustomer(customerId, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}
+
 exports.createConnectAccount = function (dataAccount, cb) {
   var account = {
     email: dataAccount.email,

@@ -36,6 +36,21 @@ function createCustomer (req, res) {
   });
 };
 
+function fetchCustomer (req, res) {
+  if (!req.params || !req.params.customerId) {
+    return res.json(400, {
+      "code": "ValidationError",
+      "message": "customerId is required"
+    });
+  }
+  customerService.fetchCustomer(req.params.customerId, function(err, data){
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.json(200, data);
+  });
+};
+
 function createConnectAccount (req, res) {
   if (!req.body || !req.body.email) {
     return res.json(400, {
@@ -124,5 +139,6 @@ module.exports = {
   addToSAccount : addToSAccount,
   addLegaInfoAccount : addLegaInfoAccount,
   updateAccount : updateAccount,
-  updateCustomer : updateCustomer
+  updateCustomer : updateCustomer,
+  fetchCustomer : fetchCustomer
 };
