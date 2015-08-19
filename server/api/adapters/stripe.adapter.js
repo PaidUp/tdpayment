@@ -96,11 +96,6 @@ function associateCard(customerId, cardId, cb) {
 }
 
 function updateCustomer(customer, data, cb){
-  var stripeCustomer = {
-    description : customer.name,
-    email : customer.email,
-    metadata : customer.meta
-  }
   stripeApi.customers.update(customer, data, function(err, customer) {
     if(err) return cb(err);
     cb(null , camelize(customer));

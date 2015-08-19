@@ -31,11 +31,15 @@ describe.only('stripe adapter', function(){
       });
   });
 
-  it('fetch customer', function(done){
+  it('fetch customer I', function(done){
     var customerId = modelSpec.customerRes.id;
     stripeAdapter.fetchCustomer(customerId, function(err, data){
       if(err) return done(err);
       assert(data);
+      assert.equal(data.id,modelSpec.customerRes.id);
+      assert.equal(data.livemode,modelSpec.customerRes.livemode);
+      assert.equal(data.email,modelSpec.customerRes.email);
+      assert.equal(data.defaultSource,null);
       done();
       });
   });
@@ -85,7 +89,6 @@ describe.only('stripe adapter', function(){
       assert.isDefined(data);
       done();
     })
-
   });
 
   it('create account' , function(done){
@@ -95,7 +98,6 @@ describe.only('stripe adapter', function(){
       modelSpec.account = data;
       done();
     })
-
   });
 
   it('add bank account to account' , function(done){
@@ -251,31 +253,43 @@ describe.only('stripe adapter', function(){
     stripeAdapter.fetchCustomer(customerId, function(err, data){
       if(err) return done(err);
       assert(data);
+      assert.equal(data.id,modelSpec.customerRes.id);
+      assert.equal(data.livemode,modelSpec.customerRes.livemode);
+      assert.equal(data.email,modelSpec.customerRes.email);
+      assert.equal(data.defaultSource,modelSpec.cardId);
       done();
       });
   });
 
   it('update customer', function(done){
     var customerId = modelSpec.customerRes.id;
-    var data = {
+    var dataSend = {
       description:'test',
       default_source:modelSpec.cardIdFail
     }
-    stripeAdapter.updateCustomer(customerId, data, function(err, data){
-      console.log('-----');
-      console.log('update',data);
-      console.log('-----');
+    stripeAdapter.updateCustomer(customerId, dataSend, function(err, data){
       if(err) return done(err);
       assert(data);
+      assert.equal(data.id,modelSpec.customerRes.id);
+      assert.equal(data.livemode,modelSpec.customerRes.livemode);
+      assert.equal(data.email,modelSpec.customerRes.email);
+      assert.equal(data.defaultSource,modelSpec.cardIdFail);
+      assert.equal(data.description,'test');
       done();
       });
   });
 
-  it('fetch customer II', function(done){
+  it('fetch customer III', function(done){
     var customerId = modelSpec.customerRes.id;
     stripeAdapter.fetchCustomer(customerId, function(err, data){
+      modelSpec.cardIdFail
       if(err) return done(err);
       assert(data);
+      assert.equal(data.id,modelSpec.customerRes.id);
+      assert.equal(data.livemode,modelSpec.customerRes.livemode);
+      assert.equal(data.email,modelSpec.customerRes.email);
+      assert.equal(data.defaultSource,modelSpec.cardIdFail);
+      assert.equal(data.description,'test');
       done();
       });
   });

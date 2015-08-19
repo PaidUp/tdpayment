@@ -51,3 +51,10 @@ exports.updateAccount = function (dataUpdate, cb) {
     return cb(null, data);
   });
 }
+
+exports.updateCustomer = function (dataUpdate, cb) {
+  paymentAdapter.updateCustomer(dataUpdate.accountId, dataUpdate.data, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}

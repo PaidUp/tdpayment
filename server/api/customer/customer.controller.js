@@ -108,10 +108,21 @@ function updateAccount (req, res) {
   });
 };
 
+function updateCustomer (req, res) {
+  customerService.updateCustomer(req.body, function(err, data){
+    if (err) {
+      return handleError(res, err);
+    }
+    return res.json(200, data);
+  });
+};
+
+
 module.exports = {
   createCustomer : createCustomer,
   createConnectAccount : createConnectAccount,
   addToSAccount : addToSAccount,
   addLegaInfoAccount : addLegaInfoAccount,
-  updateAccount : updateAccount
+  updateAccount : updateAccount,
+  updateCustomer : updateCustomer
 };
