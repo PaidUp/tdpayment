@@ -95,6 +95,13 @@ function associateCard(customerId, cardId, cb) {
   );
 }
 
+function updateCustomer(customer, data, cb){
+  stripeApi.customers.update(customer, data, function(err, customer) {
+    if(err) return cb(err);
+    cb(null , camelize(customer));
+  });
+};
+
 function createBank(bankDetails, cb) {
   var bankAccount = {
     bank_account: {
@@ -417,5 +424,6 @@ module.exports = {
   createCard:createCard,
   addToSAccount:addToSAccount,
   addLegaInfoAccount:addLegaInfoAccount,
-  updateAccount:updateAccount
+  updateAccount:updateAccount,
+  updateCustomer:updateCustomer
 }
