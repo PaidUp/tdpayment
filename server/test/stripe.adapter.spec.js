@@ -140,10 +140,10 @@ describe.only('stripe adapter', function(){
         city:'Austin',
         state:'Tx',
         postalCode:'00000',
-        country:'US'
+        country:'US',
+        personalIdNumber: '123450000'
       }
     stripeAdapter.addLegaInfoAccount(legalEntity , function(err , data){
-      
       if(err) return done(err)
       assert.isDefined(data);
       done();
