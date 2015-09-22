@@ -5,12 +5,12 @@ var handleError = require('../../components/errors/handle.error').handleError;
 
 function wone (req, res) {
   if (!req.body || !req.body.id) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Id is required"
     });
   }
-  return res.json(200,req.body);
+  return res.status(200).json(req.body);
 };
 
 exports.wone = wone;

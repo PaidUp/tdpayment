@@ -5,19 +5,19 @@ var handleError = require('../../components/errors/handle.error').handleError;
 
 function createCard (req, res) {
   if (!req.body || !req.body.number) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Card number id is required"
     });
   }
   if (!req.body || !req.body.exp_year) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Expiration year is required"
     });
   }
   if (!req.body || !req.body.exp_month) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Expiration month is required"
     });
@@ -26,19 +26,19 @@ function createCard (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function associateCard (req, res) {
   if (!req.body || !req.body.customerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Customer id is required"
     });
   }
   if (!req.body || !req.body.cardId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Card id is required"
     });
@@ -47,47 +47,47 @@ function associateCard (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function debitCard (req, res) {
   if (!req.body || !req.body.cardId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Card Id is required"
     });
   }
   if (!req.body || !req.body.amount) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "amount is required"
     });
   }
 
   if (!req.body || !req.body.description) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Description is required"
     });
   }
 
   if (!req.body || !req.body.appearsOnStatementAs) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "appearsOnStatementAs is required"
     });
   }
 
   if (!req.body || !req.body.customerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Customer Id is required"
     });
   }
 
   if (!req.body || !req.body.providerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Destination Id is required"
     });
@@ -97,13 +97,13 @@ function debitCard (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, data);
+      return res.status(200).json(data);
     });
 };
 
 function listCards (req, res) {
   if (!req.params || !req.params.customerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Customer Id is required"
     });
@@ -112,19 +112,19 @@ function listCards (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function prepareCard (req, res) {
   if (!req.body || !req.body.userId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "User Id is required"
     });
   }
   if (!req.body || !req.body.cardId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Card Id is required"
     });
@@ -133,20 +133,20 @@ function prepareCard (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function fetchCard (req, res) {
   if (!req.params || !req.params.cardId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Card Id is required"
     });
   }
 
   if (!req.params || !req.params.customerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Customer Id is required"
     });
@@ -156,13 +156,13 @@ function fetchCard (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function getUserDefaultCardId (req, res) {
   if (!req.params || !req.params.customerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "User is required"
     });
@@ -172,7 +172,7 @@ function getUserDefaultCardId (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
