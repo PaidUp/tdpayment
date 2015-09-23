@@ -42,7 +42,17 @@ var data = {
       country: 'US',
       routingNumber: '110000000',
       accountNumber: '000123456789'
-    }
+    },
+    tokenDataFail: {
+      card: {
+        "number": '4100000000000019',//https://stripe.com/docs/testing
+        "exp_month": 7,
+        "exp_year": 2016,
+        "cvc": '123'
+      }
+    },
+    cardTokenFail: '',
+    cardIdFail: '',
   }
 
   ;

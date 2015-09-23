@@ -20,6 +20,13 @@ exports.createCustomer = function (user, cb) {
   });
 }
 
+exports.fetchCustomer = function (customerId, cb) {
+  paymentAdapter.fetchCustomer(customerId, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}
+
 exports.createConnectAccount = function (dataAccount, cb) {
   var account = {
     email: dataAccount.email,
@@ -47,6 +54,13 @@ exports.addLegaInfoAccount = function (dataLegal, cb) {
 
 exports.updateAccount = function (dataUpdate, cb) {
   paymentAdapter.updateAccount(dataUpdate.accountId, dataUpdate.data, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}
+
+exports.updateCustomer = function (dataUpdate, cb) {
+  paymentAdapter.updateCustomer(dataUpdate.accountId, dataUpdate.data, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
   });

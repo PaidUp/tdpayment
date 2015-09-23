@@ -12,8 +12,10 @@ var router = express.Router();
 
 router.post('/create', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createCustomer);
 router.post('/create/connect', auth.isAuthenticatedServer(config.nodePass.me.token), controller.createConnectAccount);
+router.get('/fetch/:customerId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchCustomer);
 router.post('/add/tos', auth.isAuthenticatedServer(config.nodePass.me.token), controller.addToSAccount);
 router.post('/add/legal', auth.isAuthenticatedServer(config.nodePass.me.token), controller.addLegaInfoAccount);
+router.post('/update', auth.isAuthenticatedServer(config.nodePass.me.token), controller.updateCustomer);
 router.post('/update/connect', auth.isAuthenticatedServer(config.nodePass.me.token), controller.updateAccount);
 
 module.exports = router;
