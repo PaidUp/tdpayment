@@ -5,25 +5,25 @@ var handleError = require('../../components/errors/handle.error').handleError;
 
 function createCustomer (req, res) {
   if (!req.body || !req.body.firstName) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "First name is required"
     });
   }
   if (!req.body || !req.body.lastName) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Last name is required"
     });
   }
   if (!req.body || !req.body.email) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Email is required"
     });
   }
   if (!req.body || !req.body.id) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Cs Id is required"
     });
@@ -32,13 +32,13 @@ function createCustomer (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function fetchCustomer (req, res) {
   if (!req.params || !req.params.customerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "customerId is required"
     });
@@ -47,19 +47,19 @@ function fetchCustomer (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function createConnectAccount (req, res) {
   if (!req.body || !req.body.email) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Email is required"
     });
   }
   if (!req.body.country) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Country is required"
     });
@@ -68,19 +68,19 @@ function createConnectAccount (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function addToSAccount (req, res) {
   if (!req.body || !req.body.ip) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "ip is required"
     });
   }
   if (!req.body.accountId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "accountId is required"
     });
@@ -89,19 +89,19 @@ function addToSAccount (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function addLegaInfoAccount (req, res) {
   if (!req.body || !req.body.firstName) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "firstName is required"
     });
   }
   if (!req.body.lastName) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "lastName is required"
     });
@@ -110,7 +110,7 @@ function addLegaInfoAccount (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
@@ -119,7 +119,7 @@ function updateAccount (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
@@ -128,10 +128,9 @@ function updateCustomer (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
-
 
 module.exports = {
   createCustomer : createCustomer,

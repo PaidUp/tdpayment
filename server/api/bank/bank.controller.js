@@ -11,19 +11,19 @@ var tdAuthService
 
 function createBank (req, res) {
   if (!req.body || !req.body.name) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Name is required"
     });
   }
   if (!req.body || !req.body.account_number) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Account number is required"
     });
   }
   if (!req.body || !req.body.routing_number) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Routing number is required"
     });
@@ -32,19 +32,19 @@ function createBank (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function associateBank (req, res) {
   if (!req.body || !req.body.customerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Customer id is required"
     });
   }
   if (!req.body || !req.body.bankId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Bank id is required"
     });
@@ -53,40 +53,40 @@ function associateBank (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function debitBank (req, res) {
   if (!req.body || !req.body.bankId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Bank Id is required"
     });
   }
   if (!req.body || !req.body.amount) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Amount is required"
     });
   }
 
   if (!req.body || !req.body.description) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Description is required"
     });
   }
 
   if (!req.body || !req.body.appearsOnStatementAs) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "AppearsOnStatementAs is required"
     });
   }
 
   if (!req.body || !req.body.orderId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Order Id is required"
     });
@@ -96,13 +96,13 @@ function debitBank (req, res) {
       if (err) {
         return handleError(res, err);
       }
-      return res.json(200, data);
+      return res.status(200).json(data);
     });
 };
 
 function listCustomerBanks (req, res) {
   if (!req.params || !req.params.customerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Customer Id is required"
     });
@@ -111,13 +111,13 @@ function listCustomerBanks (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function createBankVerification (req, res) {
   if (!req.body || !req.body.bankId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Bank Id is required"
     });
@@ -126,13 +126,13 @@ function createBankVerification (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function loadBankVerification (req, res) {
   if (!req.params || !req.params.verificationId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Verification Id is required"
     });
@@ -141,13 +141,13 @@ function loadBankVerification (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function deleteBankAccount (req, res) {
   if (!req.body || !req.body.bankId) {
-    return res.json(400, {
+    return res.status(400).json(400, {
       "code": "ValidationError",
       "message": "Bank Id is required"
     });
@@ -156,25 +156,25 @@ function deleteBankAccount (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function confirmBankVerification (req, res) {
   if (!req.body || !req.body.verificationId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Verification Id is required"
     });
   }
   if (!req.body || !req.body.amount1) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Amount 1 is required"
     });
   }
   if (!req.body || !req.body.amount2) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Amount 2 is required"
     });
@@ -183,13 +183,13 @@ function confirmBankVerification (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function listBanks (req, res) {
   if (!req.params || !req.params.customerId) {
-    return res.json(400, {
+    return res.status(200).json({
       "code": "ValidationError",
       "message": "Customer Id is required"
     });
@@ -199,19 +199,19 @@ function listBanks (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function prepareBank (req, res) {
   if (!req.body || !req.body.userId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "User Id is required"
     });
   }
   if (!req.body || !req.body.bankId) {
-    return res.json(400, {
+    return res.status(200).json({
       "code": "ValidationError",
       "message": "Bank Id is required"
     });
@@ -220,13 +220,13 @@ function prepareBank (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function fetchBank(req, res) {
   if (!req.params || !req.params.bankId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Bank Id is required"
     });
@@ -236,13 +236,13 @@ function fetchBank(req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function getUserDefaultBankId (req, res) {
   if (!req.params || !req.params.customerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "User is required"
     });
@@ -252,37 +252,37 @@ function getUserDefaultBankId (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function addBankToAccount (req, res) {
   if (!req.body || !req.body.accountId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Account id is required"
     });
   }
   if (!req.body || !req.body.bankAccount) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Bank account is required"
     });
   }
   if (!req.body.bankAccount || !req.body.bankAccount.country) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Country is required"
     });
   }
   if (!req.body.bankAccount || !req.body.bankAccount.routingNumber) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Routing number is required"
     });
   }
   if (!req.body.bankAccount || !req.body.bankAccount.accountNumber) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Routing number is required"
     });
@@ -291,7 +291,7 @@ function addBankToAccount (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
