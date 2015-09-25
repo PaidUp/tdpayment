@@ -5,13 +5,13 @@ var handleError = require('../../components/errors/handle.error').handleError;
 
 function createOrder (req, res) {
   if (!req.body || !req.body.merchantCustomerId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Merchant Customer Id is required"
     });
   }
   if (!req.body || !req.body.description) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Description is required"
     });
@@ -20,19 +20,19 @@ function createOrder (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function updateOrderDescription (req, res) {
   if (!req.body || !req.body.orderId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Order Id is required"
     });
   }
   if (!req.body || !req.body.description) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Description is required"
     });
@@ -41,13 +41,13 @@ function updateOrderDescription (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 
 function fetchDebit (req, res) {
   if (!req.params || !req.params.debitId) {
-    return res.json(400, {
+    return res.status(400).json({
       "code": "ValidationError",
       "message": "Debit Id is required"
     });
@@ -57,7 +57,7 @@ function fetchDebit (req, res) {
     if (err) {
       return handleError(res, err);
     }
-    return res.json(200, data);
+    return res.status(200).json(data);
   });
 };
 

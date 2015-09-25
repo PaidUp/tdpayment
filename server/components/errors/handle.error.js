@@ -6,14 +6,14 @@
 
 
 function handleValidationError(res, message){
-  return res.json(500, {
+  return res.status(500).json({
     "code": "Error",
     "message": message
   });
 }
 
 function handleError(res, err) {
-  
+
   var httpErrorCode = 500;
   if (err.rawType === "invalid_request_error" || err.rawType === "api_error" || err.rawType === "card_error") {
     httpErrorCode = 400;
@@ -36,7 +36,7 @@ function handleError(res, err) {
       // You probably used an incorrect API key
       break;
   }
-  return res.json(httpErrorCode, {
+  return res.status(httpErrorCode).json({
     code: err.type,
     message:"Oh oh. An error has occurred. If you continue to have this problem, please let us know: ourteam@convenienceselect.com and we will work to resolve the issue quickly."
   });
