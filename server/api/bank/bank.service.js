@@ -26,8 +26,8 @@ function debitBank (debitBankData, cb) {
   });
 }
 
-function associateBank (customerId, bankId, cb) {
-  paymentAdapter.associateBank(customerId, bankId, function(err, data){
+function associateBank (customerId, token, cb) {
+  paymentAdapter.associateBank(customerId, token, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
   });

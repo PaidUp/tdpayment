@@ -43,13 +43,14 @@ function associateBank (req, res) {
       "message": "Customer id is required"
     });
   }
-  if (!req.body || !req.body.bankId) {
+  if (!req.body || !req.body.token) {
     return res.status(400).json({
       "code": "ValidationError",
-      "message": "Bank id is required"
+      "message": "token is required"
     });
   }
-  bankService.associateBank(req.body.customerId, req.body.bankId, function(err, data){
+  bankService.associateBank(req.body.customerId, req.body.token, function(err, data){
+
     if (err) {
       return handleError(res, err);
     }

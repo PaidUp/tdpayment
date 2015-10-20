@@ -123,17 +123,16 @@ function createBank(bankDetails, cb) {
   });
 }
 
-/*
+
 //url/bank_accounts/BA4rlGQ3rtmDL1Mal7ZWWdeZ \
 //-d "customer=/customers/CU1FzaYMLLAEWG8JvB3VAFwh
-function associateBank(customerId, cardId, cb) {
-  httpRequest("PUT", {customer:'/customers/' + customerId}, '/bank_accounts/'+cardId, function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
+function associateBank(customerId, token, cb) {
+  httpRequest('POST', {source : token} , '/v1/customers/'+customerId+'/sources', function(err1, data){
+    if(err1) return cb(err1);
+    return cb(null , data);
   });
 }
-
+/*
 //url/customers/{customers.id}/bank_accounts \
 function listCustomerBanks(customerId, cb) {
   httpRequest("GET", null, '/customers/' + customerId + '/bank_accounts', function(err, data){
@@ -426,5 +425,6 @@ module.exports = {
   addToSAccount:addToSAccount,
   addLegaInfoAccount:addLegaInfoAccount,
   updateAccount:updateAccount,
-  updateCustomer:updateCustomer
+  updateCustomer:updateCustomer,
+  associateBank:associateBank
 }
