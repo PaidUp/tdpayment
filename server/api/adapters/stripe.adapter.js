@@ -298,7 +298,7 @@ function deleteBankAccount(bankId, cb){
 
 function confirmBankVerification(customerId, bankId, amount1, amount2, cb) {
   var amounts = [amount1, amount2];
-  httpRequest("POST", {amounts: amounts}, '/v1/customers/'+ urlencode(customerId) +'/sources/'+urlencode(bankId)+'/verify', function(err, data){
+  httpRequest("POST", {'amounts[]': amounts}, '/v1/customers/'+ urlencode(customerId) +'/sources/'+urlencode(bankId)+'/verify', function(err, data){
     console.log('err' , err);
     console.log('data' , data);
 
