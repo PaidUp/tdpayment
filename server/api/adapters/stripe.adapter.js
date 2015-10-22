@@ -129,6 +129,7 @@ function createBank(bankDetails, cb) {
 function associateBank(customerId, token, cb) {
   httpRequest('POST', {source : token} , '/v1/customers/'+urlencode(customerId)+'/sources', function(err1, data){
     if(err1) return cb(err1);
+    if(data.error) return cb(data);
     return cb(null , data);
   });
 }
@@ -299,11 +300,12 @@ function deleteBankAccount(bankId, cb){
 function confirmBankVerification(customerId, bankId, amount1, amount2, cb) {
   var amounts = [amount1, amount2];
   httpRequest("POST", {'amounts[]': amounts}, '/v1/customers/'+ urlencode(customerId) +'/sources/'+urlencode(bankId)+'/verify', function(err, data){
-    console.log('err' , err);
-    console.log('data' , data);
-
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
+    if (err) {
+      return cb(err)
+    };
+    if (data.error) {
+      return cb(data)
+    };
     return cb(null, camelize(data));
   });
 }

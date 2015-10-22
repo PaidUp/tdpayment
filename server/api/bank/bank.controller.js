@@ -50,9 +50,8 @@ function associateBank (req, res) {
     });
   }
   bankService.associateBank(req.body.customerId, req.body.token, function(err, data){
-
     if (err) {
-      return handleError(res, err);
+      return res.status(500).json(err);
     }
     return res.status(200).json(data);
   });
@@ -126,7 +125,7 @@ function createBankVerification (req, res) {
   }
   bankService.createBankVerification(req.body, function(err, data){
     if (err) {
-      return handleError(res, err);
+      return res.status(500).json(err);
     }
     return res.status(200).json(data);
   });
@@ -189,7 +188,7 @@ function confirmBankVerification (req, res) {
   }
   bankService.confirmBankVerification(req.body, function(err, data){
     if (err) {
-      return handleError(res, err);
+      return res.status(500).json(err);
     }
     return res.status(200).json(data);
   });
