@@ -7,6 +7,7 @@ var camelize = require('camelize');
 var stripeApi = require('stripe')(config.payment.stripe.api);
 var stripeToken = config.payment.stripe.api;
 var fs = require('fs');
+var urlencode = require('urlencode');
 
 function setStripeToken(api) {
   stripeToken = api;
@@ -46,7 +47,6 @@ function httpRequest(method, bodyRequest, path, cb) {
   request.write(bodyRequest);
   request.end();
 }
-
 
 function generateToken(data, cb){
   stripeApi.tokens.create(data).then(
@@ -113,7 +113,7 @@ function createBank(bankDetails, cb) {
   stripeApi.tokens.create(bankAccount, function(err, token) {
     if(err) return cb(err);
 
-    httpRequest('POST', {source : token.id} , '/v1/customers/'+bankDetails.customerId+'/sources', function(err1, data){
+    httpRequest('POST', {source : token.id} , '/v1/customers/'+urlencode(bankDetails.customerId)+'/sources', function(err1, data){
       if(err1) return cb(err1);
 
       return cb(null , data);
@@ -127,7 +127,7 @@ function createBank(bankDetails, cb) {
 //url/bank_accounts/BA4rlGQ3rtmDL1Mal7ZWWdeZ \
 //-d "customer=/customers/CU1FzaYMLLAEWG8JvB3VAFwh
 function associateBank(customerId, token, cb) {
-  httpRequest('POST', {source : token} , '/v1/customers/'+customerId+'/sources', function(err1, data){
+  httpRequest('POST', {source : token} , '/v1/customers/'+urlencode(customerId)+'/sources', function(err1, data){
     if(err1) return cb(err1);
     return cb(null , data);
   });
@@ -295,10 +295,27 @@ function deleteBankAccount(bankId, cb){
   });
 };
 */
+
+function confirmBankVerification(customerId, bankId, amount1, amount2, cb) {
+  var amounts = [amount1, amount2];
+  httpRequest("POST", {amounts: amounts}, '/v1/customers/'+ urlencode(customerId) +'/sources/'+urlencode(bankId)+'/verify', function(err, data){
+    console.log('err' , err);
+    console.log('data' , data);
+
+    if (err) return cb(err);
+    if(hasError(data)) return cb(handleErrors(data));
+    return cb(null, camelize(data));
+  });
+}
+
 function listBanks(customerId, cb) {
-  var result = {};
-  result.bankAccounts = [];
-  return cb(null, result);
+  httpRequest('GET', {} , '/v1/customers/'+urlencode(customerId)+'/sources?object=bank_account', function(err1, data){
+    if(err1) {
+      return cb(err1);
+    } else {
+      return cb(null , data);
+    }
+  });
 }
 
 function hasError(response) {
@@ -426,5 +443,6 @@ module.exports = {
   addLegaInfoAccount:addLegaInfoAccount,
   updateAccount:updateAccount,
   updateCustomer:updateCustomer,
-  associateBank:associateBank
+  associateBank:associateBank,
+  confirmBankVerification:confirmBankVerification
 }

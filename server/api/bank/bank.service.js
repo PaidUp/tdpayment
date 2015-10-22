@@ -35,8 +35,11 @@ function associateBank (customerId, token, cb) {
 
 function listCustomerBanks (customerId, cb) {
   paymentAdapter.listBanks(customerId, function(err, data){
-    if(err) return cb(err);
-    return cb(null, data);
+    if(err) {
+      return cb(err);
+    }else{
+      return cb(null, data);
+    }
   });
 }
 
@@ -62,7 +65,7 @@ function deleteBankAccount (bankId, cb) {
 }
 
 function confirmBankVerification (params, cb) {
-  paymentAdapter.confirmBankVerification(params.verificationId, params.amount1, params.amount2, function(err, data){
+  paymentAdapter.confirmBankVerification(params.customerId, params.bankId, params.amount1, params.amount2, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
   });

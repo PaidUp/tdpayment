@@ -111,8 +111,9 @@ function listCustomerBanks (req, res) {
   bankService.listCustomerBanks(req.params.customerId, function(err, data){
     if (err) {
       return handleError(res, err);
+    }else{
+      return res.status(200).json(data);
     }
-    return res.status(200).json(data);
   });
 };
 
@@ -162,10 +163,16 @@ function deleteBankAccount (req, res) {
 };
 
 function confirmBankVerification (req, res) {
-  if (!req.body || !req.body.verificationId) {
+  if (!req.body || !req.body.bankId) {
     return res.status(400).json({
       "code": "ValidationError",
-      "message": "Verification Id is required"
+      "message": "Bank Id is required"
+    });
+  }
+  if (!req.body || !req.body.customerId) {
+    return res.status(400).json({
+      "code": "ValidationError",
+      "message": "Customer Id is required"
     });
   }
   if (!req.body || !req.body.amount1) {
