@@ -239,7 +239,14 @@ function fetchBank(req, res) {
     });
   }
 
-  bankService.fetchBank(req.params.bankId, function(err, data){
+  if (!req.params || !req.params.customerId) {
+    return res.status(400).json({
+      "code": "ValidationError",
+      "message": "User is required"
+    });
+  }
+
+  bankService.fetchBank(req.params.customerId, req.params.bankId, function(err, data){
     if (err) {
       return handleError(res, err);
     }

@@ -162,14 +162,6 @@ function fetchCard(customerId,cardId, cb) {
 }
 
 /*
-//url/bank_accounts/CC506bcUEIw5mc2iaRELcXHv \
-function fetchBank(bankId, cb) {
-  httpRequest("GET", null, '/bank_accounts/' + bankId, function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
-  });
-}
 
 //url/customers/CU40AyvBB6ny9u3oelCwyc3C/orders \
 //-d "description=Order #12341234"
@@ -320,6 +312,26 @@ function listBanks(customerId, cb) {
   });
 }
 
+function fetchBank(customerId, bankId, cb) {
+  httpRequest('GET', {} , '/v1/customers/'+urlencode(customerId)+'/sources?object=bank_account', function(err1, bnkAccounts){
+    console.log('bnkAccounts',bnkAccounts);
+    if(err1) {
+      return cb(err1);
+    } else {
+      bnkAccounts.data.forEach(function(ele, idx, arr){
+        console.log('ele.id',ele);
+        console.log('bankId',bankId.id);
+
+        if(ele.id == bankId){
+          return cb(null, ele);
+        }
+      });
+
+      return cb(null , []);
+    }
+  });
+};
+
 function hasError(response) {
   if(response.errors) {
     return true;
@@ -446,5 +458,6 @@ module.exports = {
   updateAccount:updateAccount,
   updateCustomer:updateCustomer,
   associateBank:associateBank,
-  confirmBankVerification:confirmBankVerification
+  confirmBankVerification:confirmBankVerification,
+  fetchBank:fetchBank
 }

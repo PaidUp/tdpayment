@@ -92,8 +92,8 @@ function prepareBank (params, cb) {
   });
 }
 
-function fetchBank (bankId, cb){
-  paymentAdapter.fetchBank(bankId, function(err, bank){
+function fetchBank (customerId, bankId, cb){
+  paymentAdapter.fetchBank(customerId, bankId, function(err, bank){
     if(err) return cb(err);
     return cb(null, bank);
   });
