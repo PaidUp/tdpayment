@@ -314,20 +314,20 @@ function listBanks(customerId, cb) {
 
 function fetchBank(customerId, bankId, cb) {
   httpRequest('GET', {} , '/v1/customers/'+urlencode(customerId)+'/sources?object=bank_account', function(err1, bnkAccounts){
-    console.log('bnkAccounts',bnkAccounts);
     if(err1) {
       return cb(err1);
     } else {
+      var result = null;
       bnkAccounts.data.forEach(function(ele, idx, arr){
-        console.log('ele.id',ele);
-        console.log('bankId',bankId.id);
-
         if(ele.id == bankId){
-          return cb(null, ele);
+          result = ele;
         }
       });
-
-      return cb(null , []);
+      if(result){
+        return cb(null, result);
+      }else{
+        return cb(null , []);
+      }
     }
   });
 };

@@ -247,10 +247,14 @@ function fetchBank(req, res) {
   }
 
   bankService.fetchBank(req.params.customerId, req.params.bankId, function(err, data){
+
+
     if (err) {
       return handleError(res, err);
+    }else{
+      return res.status(200).json(data);
     }
-    return res.status(200).json(data);
+
   });
 };
 
