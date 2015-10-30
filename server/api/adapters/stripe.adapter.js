@@ -203,8 +203,8 @@ function calculateApplicationFee(amount, fee){
   };
   return  parseFloat(Math.ceil(fee * 100) / 100).toFixed(2);
 }
-/*
-url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
+
+//url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
 //-d "amount=5000" \
 //-d "order=/orders/OR49gqHygz3Idp1jezxu2esg"
 function debitBank(bankId, amount, description, appearsOnStatementAs, orderId, cb) {
@@ -220,7 +220,7 @@ function debitBank(bankId, amount, description, appearsOnStatementAs, orderId, c
     return cb(null, camelize(data));
   });
 }
-
+/*
 url/debits/{debit_id} \
 function fetchDebit(debitId, cb) {
   httpRequest("GET",
@@ -448,6 +448,7 @@ module.exports = {
   listCards : listCards,
   fetchCard : fetchCard,
   debitCard : debitCard,
+  debitBank : debitBank,
   listBanks : listBanks,
   createBank:createBank,
   createAccount:createAccount,
