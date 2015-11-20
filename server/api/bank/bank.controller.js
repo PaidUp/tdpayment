@@ -43,15 +43,15 @@ function associateBank (req, res) {
       "message": "Customer id is required"
     });
   }
-  if (!req.body || !req.body.bankId) {
+  if (!req.body || !req.body.token) {
     return res.status(400).json({
       "code": "ValidationError",
-      "message": "Bank id is required"
+      "message": "token is required"
     });
   }
-  bankService.associateBank(req.body.customerId, req.body.bankId, function(err, data){
+  bankService.associateBank(req.body.customerId, req.body.token, function(err, data){
     if (err) {
-      return handleError(res, err);
+      return res.status(500).json(err);
     }
     return res.status(200).json(data);
   });
@@ -110,8 +110,9 @@ function listCustomerBanks (req, res) {
   bankService.listCustomerBanks(req.params.customerId, function(err, data){
     if (err) {
       return handleError(res, err);
+    }else{
+      return res.status(200).json(data);
     }
-    return res.status(200).json(data);
   });
 };
 
@@ -124,7 +125,7 @@ function createBankVerification (req, res) {
   }
   bankService.createBankVerification(req.body, function(err, data){
     if (err) {
-      return handleError(res, err);
+      return res.status(500).json(err);
     }
     return res.status(200).json(data);
   });
@@ -161,10 +162,16 @@ function deleteBankAccount (req, res) {
 };
 
 function confirmBankVerification (req, res) {
-  if (!req.body || !req.body.verificationId) {
+  if (!req.body || !req.body.bankId) {
     return res.status(400).json({
       "code": "ValidationError",
-      "message": "Verification Id is required"
+      "message": "Bank Id is required"
+    });
+  }
+  if (!req.body || !req.body.customerId) {
+    return res.status(400).json({
+      "code": "ValidationError",
+      "message": "Customer Id is required"
     });
   }
   if (!req.body || !req.body.amount1) {
@@ -181,7 +188,7 @@ function confirmBankVerification (req, res) {
   }
   bankService.confirmBankVerification(req.body, function(err, data){
     if (err) {
-      return handleError(res, err);
+      return res.status(500).json(err);
     }
     return res.status(200).json(data);
   });
@@ -232,11 +239,22 @@ function fetchBank(req, res) {
     });
   }
 
-  bankService.fetchBank(req.params.bankId, function(err, data){
+  if (!req.params || !req.params.customerId) {
+    return res.status(400).json({
+      "code": "ValidationError",
+      "message": "User is required"
+    });
+  }
+
+  bankService.fetchBank(req.params.customerId, req.params.bankId, function(err, data){
+
+
     if (err) {
       return handleError(res, err);
+    }else{
+      return res.status(200).json(data);
     }
-    return res.status(200).json(data);
+
   });
 };
 
