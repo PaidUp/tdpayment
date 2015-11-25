@@ -18,6 +18,7 @@ function handleError(res, err) {
   if (err.rawType === "invalid_request_error" || err.rawType === "api_error" || err.rawType === "card_error") {
     httpErrorCode = 400;
   }
+  var result = {}
   switch (err.type) {
     case 'StripeCardError':
       // A declined card error
@@ -36,10 +37,10 @@ function handleError(res, err) {
       // You probably used an incorrect API key
       break;
   }
-  return res.status(httpErrorCode).json({
-    code: err.type,
-    message:"Oh oh. An error has occurred. If you continue to have this problem, please let us know: ourteam@convenienceselect.com and we will work to resolve the issue quickly."
-  });
+  result.detail =  err.message;
+  result.code =  err.type;
+  result.message = "Oh oh. An error has occurred. If you continue to have this problem, please let us know: ourteam@convenienceselect.com and we will work to resolve the issue quickly.";
+  return res.status(httpErrorCode).json(result);
 };
 
 exports.handleError = handleError;
