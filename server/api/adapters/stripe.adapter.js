@@ -7,6 +7,7 @@ var camelize = require('camelize');
 var stripeApi = require('stripe')(config.payment.stripe.api);
 var stripeToken = config.payment.stripe.api;
 var fs = require('fs');
+var urlencode = require('urlencode');
 
 function setStripeToken(api) {
   stripeToken = api;
@@ -46,7 +47,6 @@ function httpRequest(method, bodyRequest, path, cb) {
   request.write(bodyRequest);
   request.end();
 }
-
 
 function generateToken(data, cb){
   stripeApi.tokens.create(data).then(
@@ -113,7 +113,7 @@ function createBank(bankDetails, cb) {
   stripeApi.tokens.create(bankAccount, function(err, token) {
     if(err) return cb(err);
 
-    httpRequest('POST', {source : token.id} , '/v1/customers/'+bankDetails.customerId+'/sources', function(err1, data){
+    httpRequest('POST', {source : token.id} , '/v1/customers/'+urlencode(bankDetails.customerId)+'/sources', function(err1, data){
       if(err1) return cb(err1);
 
       return cb(null , data);
@@ -123,17 +123,17 @@ function createBank(bankDetails, cb) {
   });
 }
 
-/*
+
 //url/bank_accounts/BA4rlGQ3rtmDL1Mal7ZWWdeZ \
 //-d "customer=/customers/CU1FzaYMLLAEWG8JvB3VAFwh
-function associateBank(customerId, cardId, cb) {
-  httpRequest("PUT", {customer:'/customers/' + customerId}, '/bank_accounts/'+cardId, function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
+function associateBank(customerId, token, cb) {
+  httpRequest('POST', {source : token} , '/v1/customers/'+urlencode(customerId)+'/sources', function(err1, data){
+    if(err1) return cb(err1);
+    if(data.error) return cb(data);
+    return cb(null , data);
   });
 }
-
+/*
 //url/customers/{customers.id}/bank_accounts \
 function listCustomerBanks(customerId, cb) {
   httpRequest("GET", null, '/customers/' + customerId + '/bank_accounts', function(err, data){
@@ -162,14 +162,6 @@ function fetchCard(customerId,cardId, cb) {
 }
 
 /*
-//url/bank_accounts/CC506bcUEIw5mc2iaRELcXHv \
-function fetchBank(bankId, cb) {
-  httpRequest("GET", null, '/bank_accounts/' + bankId, function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
-  });
-}
 
 //url/customers/CU40AyvBB6ny9u3oelCwyc3C/orders \
 //-d "description=Order #12341234"
@@ -211,8 +203,8 @@ function calculateApplicationFee(amount, fee){
   };
   return  parseFloat(Math.ceil(fee * 100) / 100).toFixed(2);
 }
-/*
-url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
+
+//url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
 //-d "amount=5000" \
 //-d "order=/orders/OR49gqHygz3Idp1jezxu2esg"
 function debitBank(bankId, amount, description, appearsOnStatementAs, orderId, cb) {
@@ -228,7 +220,7 @@ function debitBank(bankId, amount, description, appearsOnStatementAs, orderId, c
     return cb(null, camelize(data));
   });
 }
-
+/*
 url/debits/{debit_id} \
 function fetchDebit(debitId, cb) {
   httpRequest("GET",
@@ -296,11 +288,49 @@ function deleteBankAccount(bankId, cb){
   });
 };
 */
-function listBanks(customerId, cb) {
-  var result = {};
-  result.bankAccounts = [];
-  return cb(null, result);
+
+function confirmBankVerification(customerId, bankId, amount1, amount2, cb) {
+  var amounts = [amount1, amount2];
+  httpRequest("POST", {'amounts[]': amounts}, '/v1/customers/'+ urlencode(customerId) +'/sources/'+urlencode(bankId)+'/verify', function(err, data){
+    if (err) {
+      return cb(err)
+    };
+    if (data.error) {
+      return cb(data)
+    };
+    return cb(null, camelize(data));
+  });
 }
+
+function listBanks(customerId, cb) {
+  httpRequest('GET', {} , '/v1/customers/'+urlencode(customerId)+'/sources?object=bank_account', function(err1, data){
+    if(err1) {
+      return cb(err1);
+    } else {
+      return cb(null , data);
+    }
+  });
+}
+
+function fetchBank(customerId, bankId, cb) {
+  httpRequest('GET', {} , '/v1/customers/'+urlencode(customerId)+'/sources?object=bank_account', function(err1, bnkAccounts){
+    if(err1) {
+      return cb(err1);
+    } else {
+      var result = null;
+      bnkAccounts.data.forEach(function(ele, idx, arr){
+        if(ele.id == bankId){
+          result = ele;
+        }
+      });
+      if(result){
+        return cb(null, result);
+      }else{
+        return cb(null , []);
+      }
+    }
+  });
+};
 
 function hasError(response) {
   if(response.errors) {
@@ -418,6 +448,7 @@ module.exports = {
   listCards : listCards,
   fetchCard : fetchCard,
   debitCard : debitCard,
+  debitBank : debitBank,
   listBanks : listBanks,
   createBank:createBank,
   createAccount:createAccount,
@@ -426,5 +457,8 @@ module.exports = {
   addToSAccount:addToSAccount,
   addLegaInfoAccount:addLegaInfoAccount,
   updateAccount:updateAccount,
-  updateCustomer:updateCustomer
+  updateCustomer:updateCustomer,
+  associateBank:associateBank,
+  confirmBankVerification:confirmBankVerification,
+  fetchBank:fetchBank
 }
