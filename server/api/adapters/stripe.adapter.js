@@ -188,7 +188,7 @@ function debitCard(cardId, amount, description, appearsOnStatementAs, customerId
     customer: customerId, // cus_xx
     destination: providerId, // acc_xx
     description: description,
-    application_fee: fee === 0 ? 0 : Math.round(calculateApplicationFee(amount, fee) * 100),
+    application_fee: Math.round(calculateApplicationFee(amount, fee) * 100),
     metadata : meta
   }, function(err, charge) {
     if (err) return cb(err);
