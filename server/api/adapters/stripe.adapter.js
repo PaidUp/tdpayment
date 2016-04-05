@@ -462,6 +462,7 @@ module.exports = {
   listCards: listCards,
   fetchCard: fetchCard,
   debitCard: debitCard,
+  debitCardv2: debitCardv2,
   debitBank: debitBank,
   listBanks: listBanks,
   createBank: createBank,

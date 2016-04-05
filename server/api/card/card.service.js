@@ -84,6 +84,7 @@ module.exports = {
   createCard: createCard,
   associateCard: associateCard,
   debitCard: debitCard,
+  debitCardv2: debitCardv2,
   listCards: listCards,
   prepareCard: prepareCard,
   fetchCard: fetchCard,
