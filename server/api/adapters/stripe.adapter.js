@@ -193,6 +193,26 @@ function debitCard (cardId, amount, description, appearsOnStatementAs, customerI
   })
 }
 
+function debitCardv2 (cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
+  fee = parseFloat(fee)
+  amount = parseFloat(amount)
+  // TODO: Do question about description, appearsOnStatementAs and orderId
+  stripeApi.charges.create({
+    amount: Math.round(amount * 100),
+    currency: 'usd',
+    source: cardId, // cardId
+    customer: customerId, // cus_xx
+    destination: providerId, // acc_xx
+    description: description,
+    application_fee: Math.round(fee * 100),
+    metadata: meta
+  }, function (err, charge) {
+    if (err) return cb(err)
+    if (hasError(charge)) return cb(handleErrors(charge))
+    return cb(null, camelize(charge))
+  })
+}
+
 function calculateApplicationFee (amount, fee) {
   if (!config.payment.CSPayFee) {
     fee += (amount * (config.payment.stripe.feeStripePercent / 100)) + config.payment.stripe.feeStripeBase
