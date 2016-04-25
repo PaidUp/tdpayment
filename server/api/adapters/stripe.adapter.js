@@ -1,20 +1,20 @@
-'use strict';
+'use strict'
 
-var config = require('../../config/environment');
-var https = require('https');
-var querystring = require('querystring');
-var camelize = require('camelize');
-var stripeApi = require('stripe')(config.payment.stripe.api);
-var stripeToken = config.payment.stripe.api;
-var fs = require('fs');
-var urlencode = require('urlencode');
+var config = require('../../config/environment')
+var https = require('https')
+var querystring = require('querystring')
+var camelize = require('camelize')
+var stripeApi = require('stripe')(config.payment.stripe.api)
+var stripeToken = config.payment.stripe.api
+var fs = require('fs')
+var urlencode = require('urlencode')
 
-function setStripeToken(api) {
-  stripeToken = api;
+function setStripeToken (api) {
+  stripeToken = api
 }
 
-function httpRequest(method, bodyRequest, path, cb) {
-  var bodyRequest = querystring.stringify(bodyRequest);
+function httpRequest (method, bodyRequest, path, cb) {
+  var bodyRequest = querystring.stringify(bodyRequest)
 
   var options = {
     host: 'api.stripe.com',
@@ -27,138 +27,135 @@ function httpRequest(method, bodyRequest, path, cb) {
       'Content-Length': bodyRequest.length,
       'Content-Type': 'application/x-www-form-urlencoded'
     }
-  };
-  var body = "";
-  var request = https.request(options, function(res){
-    res.on('data', function(data) {
-      body += data;
-    });
-    res.on('end', function() {
-      var pbody = {};
-      if(body !== ""){
-        pbody = JSON.parse(body);
-      }
-      return cb(null, pbody);
-    })
-    res.on('error', function(e) {
-      return (e, null);
-    });
-  });
-  request.write(bodyRequest);
-  request.end();
-}
-
-function generateToken(data, cb){
-  stripeApi.tokens.create(data).then(
-    function(result) {
-      cb(null, result.id);
-    },
-    function(err) {
-      cb(err);
-    }
-  );
-};
-
-function createCustomer(customer, cb){
-  var stripeCustomer = {
-    description : customer.name,
-    email : customer.email,
-    metadata : customer.meta
   }
-  stripeApi.customers.create(stripeCustomer, function(err, customer) {
-    if(err) return cb(err);
-    cb(null , camelize(customer));
-  });
-};
+  var body = ''
+  var request = https.request(options, function (res) {
+    res.on('data', function (data) {
+      body += data
+    })
+    res.on('end', function () {
+      var pbody = {}
+      if (body !== '') {
+        pbody = JSON.parse(body)
+      }
+      return cb(null, pbody)
+    })
+    res.on('error', function (e) {
+      return (e, null)
+    })
+  })
+  request.write(bodyRequest)
+  request.end()
+}
 
-function fetchCustomer(customerId, cb) {
-  stripeApi.customers.retrieve(customerId,function(err, customer) {
-      if(err) return cb(err);
-      cb(null , camelize(customer));
+function generateToken (data, cb) {
+  stripeApi.tokens.create(data).then(
+    function (result) {
+      cb(null, result.id)
+    },
+    function (err) {
+      cb(err)
     }
-  );
+  )
 }
 
-function createCard(cardDetails, cb) {
-  generateToken(cardDetails, function(err, data){
-    if(err) return cb(err);
-    cb(null, data);
-  });
+function createCustomer (customer, cb) {
+  var stripeCustomer = {
+    description: customer.name,
+    email: customer.email,
+    metadata: customer.meta
+  }
+  stripeApi.customers.create(stripeCustomer, function (err, customer) {
+    if (err) return cb(err)
+    cb(null , camelize(customer))
+  })
 }
 
-function associateCard(customerId, cardId, cb) {
-  stripeApi.customers.createSource(customerId,{source: cardId}, function(err, card) {
-      if (err) return cb(err);
-      if(hasError(card)) return cb(handleErrors(card));
-      return cb(null, camelize(card));
-    }
-  );
+function fetchCustomer (customerId, cb) {
+  stripeApi.customers.retrieve(customerId, function (err, customer) {
+    if (err) return cb(err)
+    cb(null , camelize(customer))
+  }
+  )
 }
 
-function updateCustomer(customer, data, cb){
-  stripeApi.customers.update(customer, data, function(err, customer) {
-    if(err) return cb(err);
-    cb(null , camelize(customer));
-  });
-};
+function createCard (cardDetails, cb) {
+  generateToken(cardDetails, function (err, data) {
+    if (err) return cb(err)
+    cb(null, data)
+  })
+}
 
-function createBank(bankDetails, cb) {
+function associateCard (customerId, cardId, cb) {
+  stripeApi.customers.createSource(customerId, {source: cardId}, function (err, card) {
+    if (err) return cb(err)
+    if (hasError(card)) return cb(handleErrors(card))
+    return cb(null, camelize(card))
+  }
+  )
+}
+
+function updateCustomer (customer, data, cb) {
+  stripeApi.customers.update(customer, data, function (err, customer) {
+    if (err) return cb(err)
+    cb(null , camelize(customer))
+  })
+}
+
+function createBank (bankDetails, cb) {
   var bankAccount = {
     bank_account: {
       country: bankDetails.country,
       routing_number: bankDetails.routing_number,
       account_number: bankDetails.account_number
     }
-  };
-  stripeApi.tokens.create(bankAccount, function(err, token) {
-    if(err) return cb(err);
+  }
+  stripeApi.tokens.create(bankAccount, function (err, token) {
+    if (err) return cb(err)
 
-    httpRequest('POST', {source : token.id} , '/v1/customers/'+urlencode(bankDetails.customerId)+'/sources', function(err1, data){
-      if(err1) return cb(err1);
+    httpRequest('POST', {source: token.id} , '/v1/customers/' + urlencode(bankDetails.customerId) + '/sources', function (err1, data) {
+      if (err1) return cb(err1)
 
-      return cb(null , data);
-    });
-
-
-  });
+      return cb(null , data)
+    })
+  })
 }
 
-
-//url/bank_accounts/BA4rlGQ3rtmDL1Mal7ZWWdeZ \
-//-d "customer=/customers/CU1FzaYMLLAEWG8JvB3VAFwh
-function associateBank(customerId, token, cb) {
-  httpRequest('POST', {source : token} , '/v1/customers/'+urlencode(customerId)+'/sources', function(err1, data){
-    if(err1) return cb(err1);
-    if(data.error) return cb(data);
-    return cb(null , data);
-  });
+// url/bank_accounts/BA4rlGQ3rtmDL1Mal7ZWWdeZ \
+// -d "customer=/customers/CU1FzaYMLLAEWG8JvB3VAFwh
+function associateBank (customerId, token, cb) {
+  httpRequest('POST', {source: token} , '/v1/customers/' + urlencode(customerId) + '/sources', function (err1, data) {
+    if (err1) return cb(err1)
+    if (data.error) return cb(data)
+    return cb(null , data)
+  })
 }
 /*
 //url/customers/{customers.id}/bank_accounts \
 function listCustomerBanks(customerId, cb) {
   httpRequest("GET", null, '/customers/' + customerId + '/bank_accounts', function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
-  });
+    if (err) return cb(err)
+    if(hasError(data)) return cb(handleErrors(data))
+    return cb(null, camelize(data))
+  })
 }
 */
-function listCards(customerId, cb) {
-  stripeApi.customers.listCards(customerId, function(err, cards) {
-    if (err) return cb(err);
-    if(hasError(cards)) return cb(handleErrors(cards));
-    return cb(null, camelize(cards));
-  });
+function listCards (customerId, cb) {
+  stripeApi.customers.listCards(customerId, function (err, cards) {
+    if (err) return cb(err)
+    if (hasError(cards)) return cb(handleErrors(cards))
+    return cb(null, camelize(cards))
+  })
 }
 
-function fetchCard(customerId,cardId, cb) {
-  //TODO: send customerId in request.
-  stripeApi.customers.retrieveCard(customerId,cardId,function(err, card) {
-      if (err) return cb(err);
-      if(hasError(card)) return cb(handleErrors(card));
-      return cb(null, camelize(card));
-    }
-  );
+function fetchCard (customerId, cardId, cb) {
+  // TODO: send customerId in request.
+  stripeApi.customers.retrieveCard(customerId, cardId, function (err, card) {
+    if (err) return cb(err)
+    if (hasError(card)) return cb(handleErrors(card))
+    return cb(null, camelize(card))
+  }
+  )
 }
 
 /*
@@ -167,68 +164,87 @@ function fetchCard(customerId,cardId, cb) {
 //-d "description=Order #12341234"
 function createOrder(merchantCustomerId, description, cb) {
   httpRequest("POST", {description: description}, '/customers/'+merchantCustomerId+'/orders', function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
+    if (err) return cb(err)
+    if(hasError(data)) return cb(handleErrors(data))
     if (data.errors) {
-      return cb(data.errors);
+      return cb(data.errors)
     }
-    return cb(null, camelize(data));
-  });
+    return cb(null, camelize(data))
+  })
 }
 */
-function debitCard(cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
-  fee = parseFloat(fee);
-  amount = parseFloat(amount);
-  //TODO: Do question about description, appearsOnStatementAs and orderId
-  meta.cs_fee_amount = fee;
+function debitCard (cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
+  fee = parseFloat(fee)
+  amount = parseFloat(amount)
+  // TODO: Do question about description, appearsOnStatementAs and orderId
   stripeApi.charges.create({
     amount: Math.round(amount * 100),
-    currency: "usd",
+    currency: 'usd',
     source: cardId, // cardId
     customer: customerId, // cus_xx
     destination: providerId, // acc_xx
     description: description,
     application_fee: Math.round(calculateApplicationFee(amount, fee) * 100),
-    metadata : meta
-  }, function(err, charge) {
-    if (err) return cb(err);
-    if(hasError(charge)) return cb(handleErrors(charge));
-    return cb(null, camelize(charge));
-  });
+    metadata: meta
+  }, function (err, charge) {
+    if (err) return cb(err)
+    if (hasError(charge)) return cb(handleErrors(charge))
+    return cb(null, camelize(charge))
+  })
 }
 
-function calculateApplicationFee(amount, fee){
-  if(!config.payment.CSPayFee){
-    fee += (amount * (config.payment.stripe.feeStripePercent / 100))+ config.payment.stripe.feeStripeBase
-  };
-  return  parseFloat(Math.ceil(fee * 100) / 100).toFixed(2);
+function debitCardv2 (cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
+  fee = parseFloat(fee)
+  amount = parseFloat(amount)
+  // TODO: Do question about description, appearsOnStatementAs and orderId
+  stripeApi.charges.create({
+    amount: Math.round(amount * 100),
+    currency: 'usd',
+    source: cardId, // cardId
+    customer: customerId, // cus_xx
+    destination: providerId, // acc_xx
+    description: description,
+    application_fee: Math.round(fee * 100),
+    metadata: meta
+  }, function (err, charge) {
+    if (err) return cb(err)
+    if (hasError(charge)) return cb(handleErrors(charge))
+    return cb(null, camelize(charge))
+  })
 }
 
-//url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
-//-d "amount=5000" \
-//-d "order=/orders/OR49gqHygz3Idp1jezxu2esg"
-function debitBank(bankId, amount, description, appearsOnStatementAs, orderId, cb) {
+function calculateApplicationFee (amount, fee) {
+  if (!config.payment.CSPayFee) {
+    fee += (amount * (config.payment.stripe.feeStripePercent / 100)) + config.payment.stripe.feeStripeBase
+  }
+  return parseFloat(Math.ceil(fee * 100) / 100).toFixed(2)
+}
+
+// url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
+// -d "amount=5000" \
+// -d "order=/orders/OR49gqHygz3Idp1jezxu2esg"
+function debitBank (bankId, amount, description, appearsOnStatementAs, orderId, cb) {
   var params = {
     amount: Math.round(amount * 100),
     description: description,
-    order: "/orders/"+orderId,
+    order: '/orders/' + orderId,
     appears_on_statement_as: appearsOnStatementAs
-  };
-  httpRequest("POST", params, '/bank_accounts/'+bankId+'/debits', function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
-  });
+  }
+  httpRequest('POST', params, '/bank_accounts/' + bankId + '/debits', function (err, data) {
+    if (err) return cb(err)
+    if (hasError(data)) return cb(handleErrors(data))
+    return cb(null, camelize(data))
+  })
 }
 /*
 url/debits/{debit_id} \
 function fetchDebit(debitId, cb) {
   httpRequest("GET",
     {}, '/debits/'+debitId, function(err, data){
-      if (err) return cb(err);
-      if(hasError(data)) return cb(handleErrors(data));
-      return cb(null, camelize(data));
-    });
+      if (err) return cb(err)
+      if(hasError(data)) return cb(handleErrors(data))
+      return cb(null, camelize(data))
+    })
 }
 
 //url/orders/OR5sl2RJVnbwEf45nq5eATdz \
@@ -237,139 +253,137 @@ function fetchDebit(debitId, cb) {
 //-d "meta[anykey]=valuegoeshere"
 function updateOrderDescription(orderId, description, cb) {
   httpRequest("PUT", {description: description}, '/orders/'+orderId, function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
-  });
+    if (err) return cb(err)
+    if(hasError(data)) return cb(handleErrors(data))
+    return cb(null, camelize(data))
+  })
 }
 
 //curl https://api.balancedpayments.com/bank_accounts/BA31t1BZ0fBcAvdkEPJe6vZP/verifications \
 function createBankVerification(bankId, cb) {
   httpRequest("POST", null, '/bank_accounts/'+ bankId +'/verifications', function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
-  });
+    if (err) return cb(err)
+    if(hasError(data)) return cb(handleErrors(data))
+    return cb(null, camelize(data))
+  })
 }
-
 
 //curl https://api.balancedpayments.com/verifications/BZ3mEk8cx3CmgJ62Q01nV6Zq \
 //-d "amount_1=1" \
 //-d "amount_2=1"
 function loadBankVerification(verificationId, cb) {
   httpRequest("GET", null, '/verifications/'+ verificationId, function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
-  });
+    if (err) return cb(err)
+    if(hasError(data)) return cb(handleErrors(data))
+    return cb(null, camelize(data))
+  })
 }
-
 
 //url/verifications/BZ3mEk8cx3CmgJ62Q01nV6Zq \
 //-d "amount_1=1" \
 //-d "amount_2=1"
 function confirmBankVerification(verificationId, amount1, amount2, cb) {
   httpRequest("PUT", {amount_1: amount1, amount_2: amount2}, '/verifications/'+ verificationId, function(err, data){
-    if (err) return cb(err);
-    if(hasError(data)) return cb(handleErrors(data));
-    return cb(null, camelize(data));
-  });
+    if (err) return cb(err)
+    if(hasError(data)) return cb(handleErrors(data))
+    return cb(null, camelize(data))
+  })
 }
-
 
 //url/bank_accounts/BA7iosgWjWaeqTsv3XMux19S \
 function deleteBankAccount(bankId, cb){
   httpRequest("DELETE", {},'/bank_accounts/'+bankId, function(err, data){
     if(err)
-      return cb(err);
+      return cb(err)
     if(hasError(data))
-      return cb(handleErrors(data));
-    return cb(null, camelize(data));
-  });
-};
+      return cb(handleErrors(data))
+    return cb(null, camelize(data))
+  })
+}
 */
 
-function confirmBankVerification(customerId, bankId, amount1, amount2, cb) {
-  var amounts = [amount1, amount2];
-  httpRequest("POST", {'amounts[]': amounts}, '/v1/customers/'+ urlencode(customerId) +'/sources/'+urlencode(bankId)+'/verify', function(err, data){
+function confirmBankVerification (customerId, bankId, amount1, amount2, cb) {
+  var amounts = [amount1, amount2]
+  httpRequest('POST', {'amounts[]': amounts}, '/v1/customers/' + urlencode(customerId) + '/sources/' + urlencode(bankId) + '/verify', function (err, data) {
     if (err) {
       return cb(err)
-    };
+    }
     if (data.error) {
       return cb(data)
-    };
-    return cb(null, camelize(data));
-  });
-}
-
-function listBanks(customerId, cb) {
-  httpRequest('GET', {} , '/v1/customers/'+urlencode(customerId)+'/sources?object=bank_account', function(err1, data){
-    if(err1) {
-      return cb(err1);
-    } else {
-      return cb(null , data);
     }
-  });
+    return cb(null, camelize(data))
+  })
 }
 
-function fetchBank(customerId, bankId, cb) {
-  httpRequest('GET', {} , '/v1/customers/'+urlencode(customerId)+'/sources?object=bank_account', function(err1, bnkAccounts){
-    if(err1) {
-      return cb(err1);
+function listBanks (customerId, cb) {
+  httpRequest('GET', {} , '/v1/customers/' + urlencode(customerId) + '/sources?object=bank_account', function (err1, data) {
+    if (err1) {
+      return cb(err1)
     } else {
-      var result = null;
-      bnkAccounts.data.forEach(function(ele, idx, arr){
-        if(ele.id == bankId){
-          result = ele;
+      return cb(null , data)
+    }
+  })
+}
+
+function fetchBank (customerId, bankId, cb) {
+  httpRequest('GET', {} , '/v1/customers/' + urlencode(customerId) + '/sources?object=bank_account', function (err1, bnkAccounts) {
+    if (err1) {
+      return cb(err1)
+    } else {
+      var result = null
+      bnkAccounts.data.forEach(function (ele, idx, arr) {
+        if (ele.id == bankId) {
+          result = ele
         }
-      });
-      if(result){
-        return cb(null, result);
-      }else{
-        return cb(null , []);
+      })
+      if (result) {
+        return cb(null, result)
+      } else {
+        return cb(null , [])
       }
     }
-  });
-};
-
-function hasError(response) {
-  if(response.errors) {
-    return true;
-  }
-  if(response[0]){
-    if(response[0].status_code !== 200){
-      return true;
-    }
-  }
-  return false;
+  })
 }
 
-function createAccount(accountDetails, cb){
+function hasError (response) {
+  if (response.errors) {
+    return true
+  }
+  if (response[0]) {
+    if (response[0].status_code !== 200) {
+      return true
+    }
+  }
+  return false
+}
+
+function createAccount (accountDetails, cb) {
   stripeApi.accounts.create({
     managed: true,
+    debit_negative_balances: true,
     country: accountDetails.country,
     email: accountDetails.email
-  }, function(err, account) {
-    if(err) return cb(err);
+  }, function (err, account) {
+    if (err) return cb(err)
 
-    return cb(false , account);
-  });
-};
+    return cb(false , account)
+  })
+}
 
-function addBankToAccount(accountId, bankDetails, cb){
+function addBankToAccount (accountId, bankDetails, cb) {
   stripeApi.accounts.update(accountId, {
     bank_account: {
       country: bankDetails.country,
       routing_number: bankDetails.routingNumber,
       account_number: bankDetails.accountNumber
     }
-  }, function(err , data){
-    if(err) return cb(err);
-    return cb(false , data);
-  });
-};
+  }, function (err , data) {
+    if (err) return cb(err)
+    return cb(false , data)
+  })
+}
 
-function addToSAccount(dataToS, cb){
+function addToSAccount (dataToS, cb) {
   stripeApi.accounts.update(dataToS.accountId,
     {
       tos_acceptance: {
@@ -377,48 +391,48 @@ function addToSAccount(dataToS, cb){
         ip: dataToS.ip // Assumes you're not using a proxy
       }
     }, function (err, data) {
-      if(err) return cb(err);
-      return cb(null , data.tos_acceptance);
-    });
-};
+      if (err) return cb(err)
+      return cb(null , data.tos_acceptance)
+    })
+}
 
-function addLegaInfoAccount(dataLegal, cb){
+function addLegaInfoAccount (dataLegal, cb) {
   stripeApi.accounts.update(dataLegal.accountId,
     {
       legal_entity: {
-        first_name:dataLegal.firstName,
-        last_name:dataLegal.lastName,
-        dob:{
-          day:dataLegal.day,
-          month:dataLegal.month,
-          year:dataLegal.year
+        first_name: dataLegal.firstName,
+        last_name: dataLegal.lastName,
+        dob: {
+          day: dataLegal.day,
+          month: dataLegal.month,
+          year: dataLegal.year
         },
-        type:dataLegal.type,//'individual' or 'company'
+        type: dataLegal.type, // 'individual' or 'company'
         business_name: dataLegal.businessName,
-        ssn_last_4:dataLegal.last4,
-        business_tax_id:dataLegal.EIN || '',
+        ssn_last_4: dataLegal.last4,
+        business_tax_id: dataLegal.EIN || '',
         personal_id_number: dataLegal.personalIdNumber,
-        address:{
-          line1:dataLegal.line1,
-          line2:dataLegal.line2,
-          city:dataLegal.city,
-          state:dataLegal.state,
-          postal_code:dataLegal.postalCode,
-          country:dataLegal.country
+        address: {
+          line1: dataLegal.line1,
+          line2: dataLegal.line2,
+          city: dataLegal.city,
+          state: dataLegal.state,
+          postal_code: dataLegal.postalCode,
+          country: dataLegal.country
         }
       }
     }, function (err, data) {
-      if(err) return cb(err);
-      return cb(null , data.legal_entity);
-    });
-};
+      if (err) return cb(err)
+      return cb(null , data.legal_entity)
+    })
+}
 
-function updateAccount(accountId, dataUpdate, cb){
-  stripeApi.accounts.update(accountId,dataUpdate, function (err, data) {
-      if(err) return cb(err);
-      return cb(null , data);
-    });
-};
+function updateAccount (accountId, dataUpdate, cb) {
+  stripeApi.accounts.update(accountId, dataUpdate, function (err, data) {
+    if (err) return cb(err)
+    return cb(null , data)
+  })
+}
 
 /*function UploadingFileAccount(objectData, cb){
   stripeApi.fileUploads.create({
@@ -430,35 +444,36 @@ function updateAccount(accountId, dataUpdate, cb){
     }
   }, function(err, fileUpload) {
     if (err) {
-      return cb(err);
+      return cb(err)
     }
-    return cb(null , fileUpload);
-  });
+    return cb(null , fileUpload)
+  })
 };*/
 
-function handleErrors(response) {
-  return response.errors;
-};
+function handleErrors (response) {
+  return response.errors
+}
 
 module.exports = {
-  generateToken : generateToken,
-  createCustomer : createCustomer,
-  fetchCustomer : fetchCustomer,
-  associateCard : associateCard,
-  listCards : listCards,
-  fetchCard : fetchCard,
-  debitCard : debitCard,
-  debitBank : debitBank,
-  listBanks : listBanks,
-  createBank:createBank,
-  createAccount:createAccount,
-  addBankToAccount:addBankToAccount,
-  createCard:createCard,
-  addToSAccount:addToSAccount,
-  addLegaInfoAccount:addLegaInfoAccount,
-  updateAccount:updateAccount,
-  updateCustomer:updateCustomer,
-  associateBank:associateBank,
-  confirmBankVerification:confirmBankVerification,
-  fetchBank:fetchBank
+  generateToken: generateToken,
+  createCustomer: createCustomer,
+  fetchCustomer: fetchCustomer,
+  associateCard: associateCard,
+  listCards: listCards,
+  fetchCard: fetchCard,
+  debitCard: debitCard,
+  debitCardv2: debitCardv2,
+  debitBank: debitBank,
+  listBanks: listBanks,
+  createBank: createBank,
+  createAccount: createAccount,
+  addBankToAccount: addBankToAccount,
+  createCard: createCard,
+  addToSAccount: addToSAccount,
+  addLegaInfoAccount: addLegaInfoAccount,
+  updateAccount: updateAccount,
+  updateCustomer: updateCustomer,
+  associateBank: associateBank,
+  confirmBankVerification: confirmBankVerification,
+  fetchBank: fetchBank
 }
