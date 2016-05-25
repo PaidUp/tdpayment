@@ -434,6 +434,13 @@ function updateAccount (accountId, dataUpdate, cb) {
   })
 }
 
+function getTransfers (filter, cb) {
+  stripeApi.transfers.list(filter, function (err, data) {
+    if (err) return cb(err)
+    return cb(null , data)
+  })
+}
+
 /*function UploadingFileAccount(objectData, cb){
   stripeApi.fileUploads.create({
     purpose: 'identity_document',
@@ -475,5 +482,6 @@ module.exports = {
   updateCustomer: updateCustomer,
   associateBank: associateBank,
   confirmBankVerification: confirmBankVerification,
-  fetchBank: fetchBank
+  fetchBank: fetchBank,
+  getTransfers: getTransfers
 }
