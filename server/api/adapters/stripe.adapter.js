@@ -316,12 +316,9 @@ function confirmBankVerification (customerId, bankId, amount1, amount2, cb) {
 }
 
 function listBanks (customerId, cb) {
-  httpRequest('GET', {} , '/v1/customers/' + urlencode(customerId) + '/sources?object=bank_account', function (err1, data) {
-    if (err1) {
-      return cb(err1)
-    } else {
-      return cb(null , data)
-    }
+  stripeApi.customers.listSources(customerId, {limit: 1, object: 'bank_account'}, function (err, bankAccounts) {
+    if (err) return cb(err)
+    return cb(null, bankAccounts)
   })
 }
 
@@ -367,6 +364,13 @@ function createAccount (accountDetails, cb) {
     if (err) return cb(err)
 
     return cb(false , account)
+  })
+}
+
+function retrieveAccount (accountId, cb) {
+  stripeApi.accounts.retrieve(accountId, function (err, accountDetails) {
+    if (err) return cb(err)
+    return cb(false, accountDetails)
   })
 }
 
@@ -501,5 +505,6 @@ module.exports = {
   fetchBank: fetchBank,
   getTransfers: getTransfers,
   getBalance: getBalance,
-  getChargesList: getChargesList
+  getChargesList: getChargesList,
+  retrieveAccount: retrieveAccount
 }
