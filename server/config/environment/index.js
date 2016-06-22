@@ -1,13 +1,13 @@
-'use strict';
+'use strict'
 
-var path = require('path');
-var _ = require('lodash');
+var path = require('path')
+var _ = require('lodash')
 
-function requiredProcessEnv(name) {
-  if(!process.env[name]) {
-    throw new Error('You must set the ' + name + ' environment variable');
+function requiredProcessEnv (name) {
+  if (!process.env[name]) {
+    throw new Error('You must set the ' + name + ' environment variable')
   }
-  return process.env[name];
+  return process.env[name]
 }
 
 // All configurations will extend these options
@@ -39,49 +39,49 @@ var all = {
         safe: true
       }
     },
-    prefix : 'tdpayment_'
+    prefix: 'tdpayment_'
   },
   payment: {
     adapter: path.normalize(__dirname + '/../../..') + '/server/api/adapters/stripe.adapter',
     stripe: {
-      api: "sk_test_i1WgQIKn3mXx4GP5B8Yh79U1",
-      feeStripePercent : 2.9,
-      feeStripeBase : 0.3,
-      feeApplication : 5
+      api: 'sk_test_9AioI4XzoZbMuInmqEAZukPr',
+      feeStripePercent: 2.9,
+      feeStripeBase: 0.3,
+      feeApplication: 5
     },
     balanced: {
-      api: "ak-test-p8Ob9vp9GnqWNwFf6CeLLokeQsf76RIe",
-      marketplace: "TEST-MP2OaM2stYkoWBlGFd0M8YV7",
-      appearsOnStatementAs: "Conv. Select"
+      api: 'ak-test-p8Ob9vp9GnqWNwFf6CeLLokeQsf76RIe',
+      marketplace: 'TEST-MP2OaM2stYkoWBlGFd0M8YV7',
+      appearsOnStatementAs: 'Conv. Select'
     },
-    CSPayFee : false
+    CSPayFee: false
   },
 
   nodePass: {
-    me:{
-      token : 'TDPaymentToken-CHANGE-ME!'
+    me: {
+      token: 'TDPaymentToken-CHANGE-ME!'
     },
-    Loan:{
-      token : 'nodeLoanPass'
+    Loan: {
+      token: 'nodeLoanPass'
     },
-    User:{
-      token : 'nodeUserPass'
+    User: {
+      token: 'nodeUserPass'
     },
-    Payment:{
-      token : 'nodePaymentPass'
+    Payment: {
+      token: 'nodePaymentPass'
     },
-    Crowdfunding:{
-      token : 'nodeCrowdfundingPass'
+    Crowdfunding: {
+      token: 'nodeCrowdfundingPass'
     },
-    Angular:{
-      token : 'nodeAngularPass'
+    Angular: {
+      token: 'nodeAngularPass'
     }
   }
 
-};
+}
 
 // Export the config object based on the NODE_ENV
 // ==============================================
 module.exports = _.merge(
   all,
-  require('./' + process.env.NODE_ENV + '.js') || {});
+  require('./' + process.env.NODE_ENV + '.js') || {})

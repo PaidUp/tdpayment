@@ -316,12 +316,9 @@ function confirmBankVerification (customerId, bankId, amount1, amount2, cb) {
 }
 
 function listBanks (customerId, cb) {
-  httpRequest('GET', {} , '/v1/customers/' + urlencode(customerId) + '/sources?object=bank_account', function (err1, data) {
-    if (err1) {
-      return cb(err1)
-    } else {
-      return cb(null , data)
-    }
+  stripeApi.customers.listSources(customerId, {limit: 1, object: 'bank_account'}, function (err, bankAccounts) {
+    if (err) return cb(err)
+    return cb(null, bankAccounts)
   })
 }
 
@@ -367,6 +364,13 @@ function createAccount (accountDetails, cb) {
     if (err) return cb(err)
 
     return cb(false , account)
+  })
+}
+
+function retrieveAccount (accountId, cb) {
+  stripeApi.accounts.retrieve(accountId, function (err, accountDetails) {
+    if (err) return cb(err)
+    return cb(false, accountDetails)
   })
 }
 
@@ -437,11 +441,27 @@ function updateAccount (accountId, dataUpdate, cb) {
 function getTransfers (filter, cb) {
   stripeApi.transfers.list(filter, function (err, data) {
     if (err) return cb(err)
-    return cb(null , data)
+    return cb(null, data)
   })
 }
 
-/*function UploadingFileAccount(objectData, cb){
+function getBalance (filter, cb) {
+  // const stripeApiBalance = require('stripe')(filter)
+  stripeApi.balance.retrieve(function (err, data) {
+    if (err) return cb(err)
+    return cb(null, data)
+  })
+}
+
+function getChargesList (filter, cb) {
+  // const stripeApiBalance = require('stripe')(filter)
+  stripeApi.charges.list(function (err, data) {
+    if (err) return cb(err)
+    return cb(null, data)
+  })
+}
+
+/* function UploadingFileAccount(objectData, cb){
   stripeApi.fileUploads.create({
     purpose: 'identity_document',
     file: {
@@ -483,5 +503,8 @@ module.exports = {
   associateBank: associateBank,
   confirmBankVerification: confirmBankVerification,
   fetchBank: fetchBank,
-  getTransfers: getTransfers
+  getTransfers: getTransfers,
+  getBalance: getBalance,
+  getChargesList: getChargesList,
+  retrieveAccount: retrieveAccount
 }
