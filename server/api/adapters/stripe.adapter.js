@@ -437,11 +437,27 @@ function updateAccount (accountId, dataUpdate, cb) {
 function getTransfers (filter, cb) {
   stripeApi.transfers.list(filter, function (err, data) {
     if (err) return cb(err)
-    return cb(null , data)
+    return cb(null, data)
   })
 }
 
-/*function UploadingFileAccount(objectData, cb){
+function getBalance (filter, cb) {
+  // const stripeApiBalance = require('stripe')(filter)
+  stripeApi.balance.retrieve(function (err, data) {
+    if (err) return cb(err)
+    return cb(null, data)
+  })
+}
+
+function getChargesList (filter, cb) {
+  // const stripeApiBalance = require('stripe')(filter)
+  stripeApi.charges.list(function (err, data) {
+    if (err) return cb(err)
+    return cb(null, data)
+  })
+}
+
+/* function UploadingFileAccount(objectData, cb){
   stripeApi.fileUploads.create({
     purpose: 'identity_document',
     file: {
@@ -483,5 +499,7 @@ module.exports = {
   associateBank: associateBank,
   confirmBankVerification: confirmBankVerification,
   fetchBank: fetchBank,
-  getTransfers: getTransfers
+  getTransfers: getTransfers,
+  getBalance: getBalance,
+  getChargesList: getChargesList
 }
