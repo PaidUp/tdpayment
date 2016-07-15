@@ -15,6 +15,7 @@ module.exports = function (app) {
   app.use('/api/v1/balance', require('./api/balance'))
   app.use('/api/v1/charge', require('./api/charge'))
   app.use('/api/v1/account', require('./api/account'))
+  app.use('/api/v1/plaid', require('./api/plaid'))
 
   // Insert routes below
   // app.use('/api/things', require('./api/thing'))

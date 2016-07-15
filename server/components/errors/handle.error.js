@@ -39,7 +39,7 @@ function handleError(res, err) {
   }
   result.detail =  err.message;
   result.code =  err.type;
-  result.message = "Oh oh. An error has occurred. If you continue to have this problem, please let us know: ourteam@convenienceselect.com and we will work to resolve the issue quickly.";
+  result.message = "Oh oh. An error has occurred. If you continue to have this problem, please let us know: support@getpaidup.com and we will work to resolve the issue quickly.";
   return res.status(httpErrorCode).json(result);
 };
 

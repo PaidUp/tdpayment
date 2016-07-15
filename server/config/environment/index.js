@@ -49,6 +49,10 @@ var all = {
       feeStripeBase: 0.3,
       feeApplication: 5
     },
+    plaid: {
+      clientId: '577443b366710877408d05d0',
+      secret: '0527be179e6275333084f9f7d18698'
+    },
     balanced: {
       api: 'ak-test-p8Ob9vp9GnqWNwFf6CeLLokeQsf76RIe',
       marketplace: 'TEST-MP2OaM2stYkoWBlGFd0M8YV7',
