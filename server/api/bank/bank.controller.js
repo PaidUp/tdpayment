@@ -5,8 +5,6 @@
 var bankService = require('./bank.service')
 var camelize = require('camelize')
 var handleError = require('../../components/errors/handle.error').handleError
-var TDAuthService
-var tdAuthService
 
 function createBank (req, res) {
   if (!req.body || !req.body.name) {
