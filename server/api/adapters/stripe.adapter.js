@@ -6,12 +6,7 @@ var querystring = require('querystring')
 var camelize = require('camelize')
 var stripeApi = require('stripe')(config.payment.stripe.api)
 var stripeToken = config.payment.stripe.api
-var fs = require('fs')
 var urlencode = require('urlencode')
-
-function setStripeToken (api) {
-  stripeToken = api
-}
 
 function httpRequest (method, bodyRequest, path, cb) {
   var bodyRequest = querystring.stringify(bodyRequest)
@@ -121,8 +116,6 @@ function createBank (bankDetails, cb) {
   })
 }
 
-// url/bank_accounts/BA4rlGQ3rtmDL1Mal7ZWWdeZ \
-// -d "customer=/customers/CU1FzaYMLLAEWG8JvB3VAFwh
 function associateBank (customerId, token, cb) {
   httpRequest('POST', {source: token} , '/v1/customers/' + urlencode(customerId) + '/sources', function (err1, data) {
     if (err1) return cb(err1)
@@ -130,16 +123,7 @@ function associateBank (customerId, token, cb) {
     return cb(null , data)
   })
 }
-/*
-//url/customers/{customers.id}/bank_accounts \
-function listCustomerBanks(customerId, cb) {
-  httpRequest("GET", null, '/customers/' + customerId + '/bank_accounts', function(err, data){
-    if (err) return cb(err)
-    if(hasError(data)) return cb(handleErrors(data))
-    return cb(null, camelize(data))
-  })
-}
-*/
+
 function listCards (customerId, cb) {
   stripeApi.customers.listCards(customerId, function (err, cards) {
     if (err) return cb(err)
@@ -154,25 +138,9 @@ function fetchCard (customerId, cardId, cb) {
     if (err) return cb(err)
     if (hasError(card)) return cb(handleErrors(card))
     return cb(null, camelize(card))
-  }
-  )
-}
-
-/*
-
-//url/customers/CU40AyvBB6ny9u3oelCwyc3C/orders \
-//-d "description=Order #12341234"
-function createOrder(merchantCustomerId, description, cb) {
-  httpRequest("POST", {description: description}, '/customers/'+merchantCustomerId+'/orders', function(err, data){
-    if (err) return cb(err)
-    if(hasError(data)) return cb(handleErrors(data))
-    if (data.errors) {
-      return cb(data.errors)
-    }
-    return cb(null, camelize(data))
   })
 }
-*/
+
 function debitCard (cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
   fee = parseFloat(fee)
   amount = parseFloat(amount)
@@ -220,9 +188,6 @@ function calculateApplicationFee (amount, fee) {
   return parseFloat(Math.ceil(fee * 100) / 100).toFixed(2)
 }
 
-// url/bank_accounts/BA4inLpYaYvBmxsWoxQFPoCQ/debits \
-// -d "amount=5000" \
-// -d "order=/orders/OR49gqHygz3Idp1jezxu2esg"
 function debitBank (bankId, amount, description, appearsOnStatementAs, orderId, cb) {
   var params = {
     amount: Math.round(amount * 100),
@@ -236,71 +201,6 @@ function debitBank (bankId, amount, description, appearsOnStatementAs, orderId, 
     return cb(null, camelize(data))
   })
 }
-/*
-url/debits/{debit_id} \
-function fetchDebit(debitId, cb) {
-  httpRequest("GET",
-    {}, '/debits/'+debitId, function(err, data){
-      if (err) return cb(err)
-      if(hasError(data)) return cb(handleErrors(data))
-      return cb(null, camelize(data))
-    })
-}
-
-//url/orders/OR5sl2RJVnbwEf45nq5eATdz \
-//-d "description=New description for order" \
-//-d "meta[product.id]=1234567890" \
-//-d "meta[anykey]=valuegoeshere"
-function updateOrderDescription(orderId, description, cb) {
-  httpRequest("PUT", {description: description}, '/orders/'+orderId, function(err, data){
-    if (err) return cb(err)
-    if(hasError(data)) return cb(handleErrors(data))
-    return cb(null, camelize(data))
-  })
-}
-
-//curl https://api.balancedpayments.com/bank_accounts/BA31t1BZ0fBcAvdkEPJe6vZP/verifications \
-function createBankVerification(bankId, cb) {
-  httpRequest("POST", null, '/bank_accounts/'+ bankId +'/verifications', function(err, data){
-    if (err) return cb(err)
-    if(hasError(data)) return cb(handleErrors(data))
-    return cb(null, camelize(data))
-  })
-}
-
-//curl https://api.balancedpayments.com/verifications/BZ3mEk8cx3CmgJ62Q01nV6Zq \
-//-d "amount_1=1" \
-//-d "amount_2=1"
-function loadBankVerification(verificationId, cb) {
-  httpRequest("GET", null, '/verifications/'+ verificationId, function(err, data){
-    if (err) return cb(err)
-    if(hasError(data)) return cb(handleErrors(data))
-    return cb(null, camelize(data))
-  })
-}
-
-//url/verifications/BZ3mEk8cx3CmgJ62Q01nV6Zq \
-//-d "amount_1=1" \
-//-d "amount_2=1"
-function confirmBankVerification(verificationId, amount1, amount2, cb) {
-  httpRequest("PUT", {amount_1: amount1, amount_2: amount2}, '/verifications/'+ verificationId, function(err, data){
-    if (err) return cb(err)
-    if(hasError(data)) return cb(handleErrors(data))
-    return cb(null, camelize(data))
-  })
-}
-
-//url/bank_accounts/BA7iosgWjWaeqTsv3XMux19S \
-function deleteBankAccount(bankId, cb){
-  httpRequest("DELETE", {},'/bank_accounts/'+bankId, function(err, data){
-    if(err)
-      return cb(err)
-    if(hasError(data))
-      return cb(handleErrors(data))
-    return cb(null, camelize(data))
-  })
-}
-*/
 
 function confirmBankVerification (customerId, bankId, amount1, amount2, cb) {
   var amounts = [amount1, amount2]
@@ -316,29 +216,17 @@ function confirmBankVerification (customerId, bankId, amount1, amount2, cb) {
 }
 
 function listBanks (customerId, cb) {
-  stripeApi.customers.listSources(customerId, {limit: 1, object: 'bank_account'}, function (err, bankAccounts) {
+  stripeApi.customers.listSources(customerId, {limit: 10, object: 'bank_account'}, function (err, bankAccounts) {
     if (err) return cb(err)
     return cb(null, bankAccounts)
   })
 }
 
 function fetchBank (customerId, bankId, cb) {
-  httpRequest('GET', {} , '/v1/customers/' + urlencode(customerId) + '/sources?object=bank_account', function (err1, bnkAccounts) {
-    if (err1) {
-      return cb(err1)
-    } else {
-      var result = null
-      bnkAccounts.data.forEach(function (ele, idx, arr) {
-        if (ele.id == bankId) {
-          result = ele
-        }
-      })
-      if (result) {
-        return cb(null, result)
-      } else {
-        return cb(null , [])
-      }
-    }
+  stripeApi.customers.retrieveSource(customerId, bankId, function (err, bank) {
+    if (err) return cb(err)
+    if (hasError(bank)) return cb(handleErrors(bank))
+    return cb(null, camelize(bank))
   })
 }
 
@@ -434,7 +322,7 @@ function addLegaInfoAccount (dataLegal, cb) {
 function updateAccount (accountId, dataUpdate, cb) {
   stripeApi.accounts.update(accountId, dataUpdate, function (err, data) {
     if (err) return cb(err)
-    return cb(null , data)
+    return cb(null, data)
   })
 }
 
@@ -460,22 +348,6 @@ function getChargesList (filter, cb) {
     return cb(null, data)
   })
 }
-
-/* function UploadingFileAccount(objectData, cb){
-  stripeApi.fileUploads.create({
-    purpose: 'identity_document',
-    file: {
-      data: fs.readFileSync('../../views/test.jpg'),
-      name: 'test.jpg',
-      type: 'application/octet-stream'
-    }
-  }, function(err, fileUpload) {
-    if (err) {
-      return cb(err)
-    }
-    return cb(null , fileUpload)
-  })
-};*/
 
 function handleErrors (response) {
   return response.errors
