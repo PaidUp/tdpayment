@@ -343,7 +343,7 @@ function getBalance (filter, cb) {
 
 function getChargesList (filter, cb) {
   // const stripeApiBalance = require('stripe')(filter)
-  stripeApi.charges.list(function (err, data) {
+  stripeApi.charges.list({ limit: 100 }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
