@@ -327,7 +327,7 @@ function updateAccount (accountId, dataUpdate, cb) {
 }
 
 function getTransfers (filter, cb) {
-  stripeApi.transfers.list(filter, function (err, data) {
+  stripeApi.transfers.list({ limit: 100 }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
@@ -335,7 +335,7 @@ function getTransfers (filter, cb) {
 
 function getBalance (filter, cb) {
   // const stripeApiBalance = require('stripe')(filter)
-  stripeApi.balance.retrieve(function (err, data) {
+  stripeApi.balance.listTransactions({ limit: 100 }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
