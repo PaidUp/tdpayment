@@ -20,7 +20,8 @@ function getChargesList (req, res) {
       // console.log('obj charge', obj.destination)
       // https://stackoverflow.com/questions/847185/convert-a-unix-timestamp-to-time-in-javascript
       obj.created = new Date(obj.created * 1000)
-      return obj.destination === req.params.connectAccountId // && obj.status === 'succeeded'
+      // return obj.destination === req.params.connectAccountId // && obj.status === 'succeeded'
+      return obj
     })
     return res.status(200).json(data)
   })

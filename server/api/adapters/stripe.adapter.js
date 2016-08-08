@@ -327,23 +327,21 @@ function updateAccount (accountId, dataUpdate, cb) {
 }
 
 function getTransfers (filter, cb) {
-  stripeApi.transfers.list({ limit: 100 }, function (err, data) {
+  stripeApi.transfers.list({ stripe_account: filter, limit: 100 }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
 }
 
 function getBalance (filter, cb) {
-  // const stripeApiBalance = require('stripe')(filter)
-  stripeApi.balance.listTransactions({ limit: 100 }, function (err, data) {
+  stripeApi.balance.listTransactions({ stripe_account: filter, limit: 100 }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
 }
 
 function getChargesList (filter, cb) {
-  // const stripeApiBalance = require('stripe')(filter)
-  stripeApi.charges.list({ limit: 100 }, function (err, data) {
+  stripeApi.charges.list({ stripe_account: filter, limit: 100 }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
