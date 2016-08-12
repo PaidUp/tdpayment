@@ -327,21 +327,31 @@ function updateAccount (accountId, dataUpdate, cb) {
 }
 
 function getTransfers (filter, cb) {
-  stripeApi.transfers.list({ stripe_account: filter, limit: 100 }, function (err, data) {
+  stripeApi.transfers.list({ limit: 100 }, { stripe_account: filter }, function (err, data) {
+    // getBalance({connectAccount:filter, transferId: data.id}, function (err, data) {
+      // console.log('err', err)
+    // })
     if (err) return cb(err)
     return cb(null, data)
   })
 }
 
-function getBalance (filter, cb) {
-  stripeApi.balance.listTransactions({ stripe_account: filter, limit: 100 }, function (err, data) {
+function balanceHistory (filter, balanceTransaction, cb) {
+  stripeApi.balance.retrieveTransaction(balanceTransaction, { stripe_account: filter }, function (err, balanceTransaction) {
+    if (err) return cb(err)
+    return cb(null, balanceTransaction)
+  })
+}
+
+function getBalance (connectAccountId, transferId, cb) {
+  stripeApi.balance.listTransactions({limit: 100, transfer: transferId}, { stripe_account: connectAccountId }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
 }
 
 function getChargesList (filter, cb) {
-  stripeApi.charges.list({ stripe_account: filter, limit: 100 }, function (err, data) {
+  stripeApi.charges.list({ limit: 100 }, { stripe_account: filter }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
@@ -376,5 +386,6 @@ module.exports = {
   getTransfers: getTransfers,
   getBalance: getBalance,
   getChargesList: getChargesList,
-  retrieveAccount: retrieveAccount
+  retrieveAccount: retrieveAccount,
+  balanceHistory: balanceHistory
 }
