@@ -192,7 +192,7 @@ describe.only('stripe adapter', function(){
   });
 
 
-  it('generate token with invalid card' , function(done){
+  it.skip('generate token with invalid card' , function(done){
     var card = modelSpec.tokenDataFail;
     stripeAdapter.generateToken(card, function(err, token){
       if(err) return done(err);
@@ -202,7 +202,7 @@ describe.only('stripe adapter', function(){
     });
   });
 
-  it('associate invalid card', function(done){
+  it.skip('associate invalid card', function(done){
     var customerId = modelSpec.customerRes.id;
     var cardId = modelSpec.cardTokenFail;
     stripeAdapter.associateCard(customerId ,cardId , function(err, data){
@@ -220,7 +220,7 @@ describe.only('stripe adapter', function(){
       });
   });
 
-  it('list Cards again', function(done){
+  it.skip('list Cards again', function(done){
     var customerId = modelSpec.customerRes.id;
     stripeAdapter.listCards(customerId, function(err, data){
       if(err) return done(err);
@@ -231,7 +231,7 @@ describe.only('stripe adapter', function(){
       });
   });
 
-  it('debit card with invalid card', function(done){
+  it.skip('debit card with invalid card', function(done){
     var cardId = modelSpec.cardIdFail;
     var amount = modelSpec.amount;
     var description = modelSpec.description;
@@ -261,7 +261,7 @@ describe.only('stripe adapter', function(){
       });
   });
 
-  it('update customer', function(done){
+  it.skip('update customer', function(done){
     var customerId = modelSpec.customerRes.id;
     var dataSend = {
       description:'test',
@@ -279,7 +279,7 @@ describe.only('stripe adapter', function(){
       });
   });
 
-  it('fetch customer III', function(done){
+  it.skip('fetch customer III', function(done){
     var customerId = modelSpec.customerRes.id;
     stripeAdapter.fetchCustomer(customerId, function(err, data){
       modelSpec.cardIdFail
