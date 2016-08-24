@@ -50,6 +50,7 @@ var all = {
       feeApplication: 5
     },
     plaid: {
+      env: 'tartan',
       clientId: '577443b366710877408d05d0',
       secret: '0527be179e6275333084f9f7d18698'
     },
