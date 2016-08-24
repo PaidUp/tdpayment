@@ -8,9 +8,7 @@ var stripeApi = require('stripe')(config.payment.stripe.api)
 var stripeToken = config.payment.stripe.api
 var urlencode = require('urlencode')
 
-function httpRequest (method, bodyRequest, path, cb) {
-  var bodyRequest = querystring.stringify(bodyRequest)
-
+function httpRequest(method, bodyRequest, path, stripeAccount, cb) {
   var options = {
     host: 'api.stripe.com',
     port: 443,
@@ -19,10 +17,14 @@ function httpRequest (method, bodyRequest, path, cb) {
     headers: {
       'Authorization': 'Basic ' + new Buffer(stripeToken + ':' + '').toString('base64'),
       'Accept': 'application/vnd.api+json;revision=1.1',
-      'Content-Length': bodyRequest.length,
+      'Content-Length': bodyRequest.length || 0,
       'Content-Type': 'application/x-www-form-urlencoded'
     }
   }
+  if (stripeAccount) {
+    options.headers['Stripe-Account'] = stripeAccount;
+  }
+  var bodyRequest = querystring.stringify(bodyRequest)
   var body = ''
   var request = https.request(options, function (res) {
     res.on('data', function (data) {
@@ -43,7 +45,7 @@ function httpRequest (method, bodyRequest, path, cb) {
   request.end()
 }
 
-function generateToken (data, cb) {
+function generateToken(data, cb) {
   stripeApi.tokens.create(data).then(
     function (result) {
       cb(null, result.id)
@@ -54,7 +56,7 @@ function generateToken (data, cb) {
   )
 }
 
-function createCustomer (customer, cb) {
+function createCustomer(customer, cb) {
   var stripeCustomer = {
     description: customer.name,
     email: customer.email,
@@ -62,27 +64,27 @@ function createCustomer (customer, cb) {
   }
   stripeApi.customers.create(stripeCustomer, function (err, customer) {
     if (err) return cb(err)
-    cb(null , camelize(customer))
+    cb(null, camelize(customer))
   })
 }
 
-function fetchCustomer (customerId, cb) {
+function fetchCustomer(customerId, cb) {
   stripeApi.customers.retrieve(customerId, function (err, customer) {
     if (err) return cb(err)
-    cb(null , camelize(customer))
+    cb(null, camelize(customer))
   }
   )
 }
 
-function createCard (cardDetails, cb) {
+function createCard(cardDetails, cb) {
   generateToken(cardDetails, function (err, data) {
     if (err) return cb(err)
     cb(null, data)
   })
 }
 
-function associateCard (customerId, cardId, cb) {
-  stripeApi.customers.createSource(customerId, {source: cardId}, function (err, card) {
+function associateCard(customerId, cardId, cb) {
+  stripeApi.customers.createSource(customerId, { source: cardId }, function (err, card) {
     if (err) return cb(err)
     if (hasError(card)) return cb(handleErrors(card))
     return cb(null, camelize(card))
@@ -90,14 +92,14 @@ function associateCard (customerId, cardId, cb) {
   )
 }
 
-function updateCustomer (customer, data, cb) {
+function updateCustomer(customer, data, cb) {
   stripeApi.customers.update(customer, data, function (err, customer) {
     if (err) return cb(err)
-    cb(null , camelize(customer))
+    cb(null, camelize(customer))
   })
 }
 
-function createBank (bankDetails, cb) {
+function createBank(bankDetails, cb) {
   var bankAccount = {
     bank_account: {
       country: bankDetails.country,
@@ -108,23 +110,23 @@ function createBank (bankDetails, cb) {
   stripeApi.tokens.create(bankAccount, function (err, token) {
     if (err) return cb(err)
 
-    httpRequest('POST', {source: token.id} , '/v1/customers/' + urlencode(bankDetails.customerId) + '/sources', function (err1, data) {
+    httpRequest('POST', { source: token.id }, '/v1/customers/' + urlencode(bankDetails.customerId) + '/sources', null, function (err1, data) {
       if (err1) return cb(err1)
 
-      return cb(null , data)
+      return cb(null, data)
     })
   })
 }
 
-function associateBank (customerId, token, cb) {
-  httpRequest('POST', {source: token} , '/v1/customers/' + urlencode(customerId) + '/sources', function (err1, data) {
+function associateBank(customerId, token, cb) {
+  httpRequest('POST', { source: token }, '/v1/customers/' + urlencode(customerId) + '/sources', null, function (err1, data) {
     if (err1) return cb(err1)
     if (data.error) return cb(data)
-    return cb(null , data)
+    return cb(null, data)
   })
 }
 
-function listCards (customerId, cb) {
+function listCards(customerId, cb) {
   stripeApi.customers.listCards(customerId, function (err, cards) {
     if (err) return cb(err)
     if (hasError(cards)) return cb(handleErrors(cards))
@@ -132,7 +134,7 @@ function listCards (customerId, cb) {
   })
 }
 
-function fetchCard (customerId, cardId, cb) {
+function fetchCard(customerId, cardId, cb) {
   // TODO: send customerId in request.
   stripeApi.customers.retrieveCard(customerId, cardId, function (err, card) {
     if (err) return cb(err)
@@ -141,7 +143,7 @@ function fetchCard (customerId, cardId, cb) {
   })
 }
 
-function debitCard (cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
+function debitCard(cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
   fee = parseFloat(fee)
   amount = parseFloat(amount)
   // TODO: Do question about description, appearsOnStatementAs and orderId
@@ -161,7 +163,7 @@ function debitCard (cardId, amount, description, appearsOnStatementAs, customerI
   })
 }
 
-function debitCardv2 (cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
+function debitCardv2(cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
   fee = parseFloat(fee)
   amount = parseFloat(amount)
   // TODO: Do question about description, appearsOnStatementAs and orderId
@@ -181,30 +183,30 @@ function debitCardv2 (cardId, amount, description, appearsOnStatementAs, custome
   })
 }
 
-function calculateApplicationFee (amount, fee) {
+function calculateApplicationFee(amount, fee) {
   if (!config.payment.CSPayFee) {
     fee += (amount * (config.payment.stripe.feeStripePercent / 100)) + config.payment.stripe.feeStripeBase
   }
   return parseFloat(Math.ceil(fee * 100) / 100).toFixed(2)
 }
 
-function debitBank (bankId, amount, description, appearsOnStatementAs, orderId, cb) {
+function debitBank(bankId, amount, description, appearsOnStatementAs, orderId, cb) {
   var params = {
     amount: Math.round(amount * 100),
     description: description,
     order: '/orders/' + orderId,
     appears_on_statement_as: appearsOnStatementAs
   }
-  httpRequest('POST', params, '/bank_accounts/' + bankId + '/debits', function (err, data) {
+  httpRequest('POST', params, '/bank_accounts/' + bankId + '/debits', null, function (err, data) {
     if (err) return cb(err)
     if (hasError(data)) return cb(handleErrors(data))
     return cb(null, camelize(data))
   })
 }
 
-function confirmBankVerification (customerId, bankId, amount1, amount2, cb) {
+function confirmBankVerification(customerId, bankId, amount1, amount2, cb) {
   var amounts = [amount1, amount2]
-  httpRequest('POST', {'amounts[]': amounts}, '/v1/customers/' + urlencode(customerId) + '/sources/' + urlencode(bankId) + '/verify', function (err, data) {
+  httpRequest('POST', { 'amounts[]': amounts }, '/v1/customers/' + urlencode(customerId) + '/sources/' + urlencode(bankId) + '/verify', null, function (err, data) {
     if (err) {
       return cb(err)
     }
@@ -215,14 +217,14 @@ function confirmBankVerification (customerId, bankId, amount1, amount2, cb) {
   })
 }
 
-function listBanks (customerId, cb) {
-  stripeApi.customers.listSources(customerId, {limit: 10, object: 'bank_account'}, function (err, bankAccounts) {
+function listBanks(customerId, cb) {
+  stripeApi.customers.listSources(customerId, { limit: 10, object: 'bank_account' }, function (err, bankAccounts) {
     if (err) return cb(err)
     return cb(null, bankAccounts)
   })
 }
 
-function fetchBank (customerId, bankId, cb) {
+function fetchBank(customerId, bankId, cb) {
   stripeApi.customers.retrieveSource(customerId, bankId, function (err, bank) {
     if (err) return cb(err)
     if (hasError(bank)) return cb(handleErrors(bank))
@@ -230,7 +232,7 @@ function fetchBank (customerId, bankId, cb) {
   })
 }
 
-function hasError (response) {
+function hasError(response) {
   if (response.errors) {
     return true
   }
@@ -242,7 +244,7 @@ function hasError (response) {
   return false
 }
 
-function createAccount (accountDetails, cb) {
+function createAccount(accountDetails, cb) {
   stripeApi.accounts.create({
     managed: true,
     debit_negative_balances: true,
@@ -251,31 +253,31 @@ function createAccount (accountDetails, cb) {
   }, function (err, account) {
     if (err) return cb(err)
 
-    return cb(false , account)
+    return cb(false, account)
   })
 }
 
-function retrieveAccount (accountId, cb) {
+function retrieveAccount(accountId, cb) {
   stripeApi.accounts.retrieve(accountId, function (err, accountDetails) {
     if (err) return cb(err)
     return cb(false, accountDetails)
   })
 }
 
-function addBankToAccount (accountId, bankDetails, cb) {
+function addBankToAccount(accountId, bankDetails, cb) {
   stripeApi.accounts.update(accountId, {
     bank_account: {
       country: bankDetails.country,
       routing_number: bankDetails.routingNumber,
       account_number: bankDetails.accountNumber
     }
-  }, function (err , data) {
+  }, function (err, data) {
     if (err) return cb(err)
-    return cb(false , data)
+    return cb(false, data)
   })
 }
 
-function addToSAccount (dataToS, cb) {
+function addToSAccount(dataToS, cb) {
   stripeApi.accounts.update(dataToS.accountId,
     {
       tos_acceptance: {
@@ -284,11 +286,11 @@ function addToSAccount (dataToS, cb) {
       }
     }, function (err, data) {
       if (err) return cb(err)
-      return cb(null , data.tos_acceptance)
+      return cb(null, data.tos_acceptance)
     })
 }
 
-function addLegaInfoAccount (dataLegal, cb) {
+function addLegaInfoAccount(dataLegal, cb) {
   stripeApi.accounts.update(dataLegal.accountId,
     {
       legal_entity: {
@@ -315,49 +317,69 @@ function addLegaInfoAccount (dataLegal, cb) {
       }
     }, function (err, data) {
       if (err) return cb(err)
-      return cb(null , data.legal_entity)
+      return cb(null, data.legal_entity)
     })
 }
 
-function updateAccount (accountId, dataUpdate, cb) {
+function updateAccount(accountId, dataUpdate, cb) {
   stripeApi.accounts.update(accountId, dataUpdate, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
 }
 
-function getTransfers (filter, cb) {
+function getTransfers(filter, cb) {
   stripeApi.transfers.list({ limit: 100 }, { stripe_account: filter }, function (err, data) {
     // getBalance({connectAccount:filter, transferId: data.id}, function (err, data) {
-      // console.log('err', err)
+    // console.log('err', err)
     // })
     if (err) return cb(err)
     return cb(null, data)
   })
 }
 
-function balanceHistory (filter, balanceTransaction, cb) {
+function balanceHistory(filter, balanceTransaction, cb) {
   stripeApi.balance.retrieveTransaction(balanceTransaction, { stripe_account: filter }, function (err, balanceTransaction) {
     if (err) return cb(err)
     return cb(null, balanceTransaction)
   })
 }
 
-function getBalance (connectAccountId, transferId, cb) {
-  stripeApi.balance.listTransactions({limit: 100, transfer: transferId}, { stripe_account: connectAccountId }, function (err, data) {
+function getBalance(connectAccountId, transferId, cb) {
+  stripeApi.balance.listTransactions({ limit: 100, transfer: transferId }, { stripe_account: connectAccountId }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
 }
 
-function getChargesList (filter, cb) {
+function getChargesList(filter, cb) {
   stripeApi.charges.list({ limit: 100 }, { stripe_account: filter }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
 }
 
-function handleErrors (response) {
+function getDepositCharge(paymentId, accountId, cb) {
+  httpRequest('GET', {}, '/v1/payments/' + urlencode(paymentId), urlencode(accountId), function (err, data) {
+    if (err) return cb(err)
+    if (data.error) return cb(data)
+    stripeApi.transfers.retrieve(
+      data.source_transfer,
+      function (err, transfer) {
+        if (err) return cb(err)
+        stripeApi.charges.retrieve(
+          transfer.source_transaction,
+          function (err, charge) {
+            if (err) return cb(err)
+            cb(null, charge);
+          }
+        );
+      }
+    );
+  })
+}
+
+function handleErrors(response) {
   return response.errors
 }
 
@@ -387,5 +409,6 @@ module.exports = {
   getBalance: getBalance,
   getChargesList: getChargesList,
   retrieveAccount: retrieveAccount,
-  balanceHistory: balanceHistory
+  balanceHistory: balanceHistory,
+  getDepositCharge: getDepositCharge
 }

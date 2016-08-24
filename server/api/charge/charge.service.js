@@ -10,6 +10,14 @@ function getChargesList (connectAccountId, cb) {
   })
 }
 
+function getDepositCharge (paymentId, connectAccountId, cb) {
+  paymentAdapter.getDepositCharge(paymentId,connectAccountId, function (err, data) {
+    if (err) return cb(err)
+    return cb(null, data)
+  })
+}
+
 module.exports = {
-  getChargesList: getChargesList
+  getChargesList: getChargesList,
+  getDepositCharge: getDepositCharge
 }
