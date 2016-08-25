@@ -379,6 +379,34 @@ function getDepositCharge(paymentId, accountId, cb) {
   })
 }
 
+function getDepositChargeRefund(paymentIdr, accountId, cb) {
+  stripeApi.refunds.retrieve(
+    paymentIdr, { stripe_account: accountId },
+    function (err, refund) {
+      if (err) return cb(err)
+      httpRequest('GET', {}, '/v1/payments/' + urlencode(refund.charge), urlencode(accountId), function (err, data) {
+        if (err) return cb(err)
+        if (data.error) return cb(data)
+        stripeApi.transfers.retrieve(
+          data.source_transfer,
+          function (err, transfer) {
+            if (err) return cb(err)
+            stripeApi.charges.retrieve(
+              transfer.source_transaction,
+              function (err, charge) {
+                if (err) return cb(err)
+                cb(null, charge);
+              }
+            );
+          }
+        );
+      })
+    }
+  );
+
+
+}
+
 function handleErrors(response) {
   return response.errors
 }
@@ -410,5 +438,6 @@ module.exports = {
   getChargesList: getChargesList,
   retrieveAccount: retrieveAccount,
   balanceHistory: balanceHistory,
-  getDepositCharge: getDepositCharge
+  getDepositCharge: getDepositCharge,
+  getDepositChargeRefund: getDepositChargeRefund
 }

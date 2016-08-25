@@ -42,7 +42,23 @@ function getDepositCharge (req, res) {
   })
 };
 
+function getDepositChargeRefund (req, res) {
+  if (!req.params || !req.params.paymentId) {
+    return res.status(400).json({
+      'code': 'ValidationError',
+      'message': 'paymentId Id is required'
+    })
+  }
+  chargeService.getDepositChargeRefund(req.params.paymentId, req.params.accountId, function (err, data) {
+    if (err) {
+      return handleError(res, err)
+    }
+    return res.status(200).json(data)
+  })
+};
+
 module.exports = {
   getChargesList: getChargesList,
-  getDepositCharge: getDepositCharge
+  getDepositCharge: getDepositCharge,
+  getDepositChargeRefund: getDepositChargeRefund
 }
