@@ -17,7 +17,15 @@ function getDepositCharge (paymentId, connectAccountId, cb) {
   })
 }
 
+function getDepositChargeRefund (paymentIdr, connectAccountId, cb) {
+  paymentAdapter.getDepositChargeRefund(paymentIdr,connectAccountId, function (err, data) {
+    if (err) return cb(err)
+    return cb(null, data)
+  })
+}
+
 module.exports = {
   getChargesList: getChargesList,
-  getDepositCharge: getDepositCharge
+  getDepositCharge: getDepositCharge,
+  getDepositChargeRefund: getDepositChargeRefund
 }
