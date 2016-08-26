@@ -9,5 +9,6 @@ const router = express.Router()
 
 router.get('/:connectAccountId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getChargesList)
 router.get('/payment/:paymentId/account/:accountId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getDepositCharge);
+router.get('/payment/:paymentId/account/:accountId/refund', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getDepositChargeRefund);
 
 module.exports = router
