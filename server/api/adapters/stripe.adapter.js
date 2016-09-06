@@ -410,7 +410,9 @@ function getDepositChargeRefund(paymentIdr, accountId, cb) {
 function refund(chargeId, reason, cb) {
   stripeApi.refunds.create({
     charge: chargeId,
-    metadata: {comment : reason}
+    metadata: {comment : reason},
+    refund_application_fee: true,
+    reverse_transfer: true
   }, function (err, refund) {
     if (err) {
       return cb(err)
