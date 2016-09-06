@@ -10,6 +10,15 @@ function getTransfers (filter, cb) {
   })
 }
 
+function retrieveTransfer (transferId, cb) {
+  console.log(transferId)
+  paymentAdapter.retrieveTransfer(transferId, function (err, data) {
+    if (err) return cb(err)
+    return cb(null, data)
+  })
+}
+
 module.exports = {
-  getTransfers: getTransfers
+  getTransfers: getTransfers,
+  retrieveTransfer: retrieveTransfer
 }
