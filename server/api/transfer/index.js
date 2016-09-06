@@ -8,4 +8,5 @@ const auth = require('TDCore').authCoreService
 const router = express.Router()
 
 router.get('/:destinationId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getTransfers)
+router.get('/retrieve/:transferId',  auth.isAuthenticatedServer(config.nodePass.me.token), controller.retrieveTransfer)
 module.exports = router

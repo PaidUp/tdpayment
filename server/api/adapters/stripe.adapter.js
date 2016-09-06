@@ -407,6 +407,31 @@ function getDepositChargeRefund(paymentIdr, accountId, cb) {
 
 }
 
+function refund(chargeId, reason, cb) {
+  stripeApi.refunds.create({
+    charge: chargeId,
+    metadata: {comment : reason}
+  }, function (err, refund) {
+    if (err) {
+      return cb(err)
+    } else {
+      return cb(null, refund)
+    }
+  });
+}
+
+function retrieveTransfer(transferId, cb) {
+  stripeApi.transfers.retrieve(
+    transferId,
+    function (err, transfer) {
+      if (err) {
+        return cb(err)
+      } else {
+        return cb(null, transfer)
+      }
+    })
+}
+
 function handleErrors(response) {
   return response.errors
 }
@@ -439,5 +464,7 @@ module.exports = {
   retrieveAccount: retrieveAccount,
   balanceHistory: balanceHistory,
   getDepositCharge: getDepositCharge,
-  getDepositChargeRefund: getDepositChargeRefund
+  getDepositChargeRefund: getDepositChargeRefund,
+  refund: refund,
+  retrieveTransfer: retrieveTransfer
 }

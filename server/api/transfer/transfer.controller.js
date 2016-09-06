@@ -28,6 +28,23 @@ function getTransfers (req, res) {
   })
 }
 
+function retrieveTransfer (req, res) {
+  if (!req.params || !req.params.transferId) {
+    return res.status(400).json({
+      'code': 'ValidationError',
+      'message': 'transferId is required'
+    })
+  }
+  console.log(req.params.transferId)
+  transferService.retrieveTransfer(req.params.transferId, function (err, data) {
+    if (err) {
+      return handleError(res, err)
+    }
+    return res.status(200).json(data)
+  })
+}
+
 module.exports = {
-  getTransfers: getTransfers
+  getTransfers: getTransfers,
+  retrieveTransfer: retrieveTransfer
 }
