@@ -57,8 +57,30 @@ function getDepositChargeRefund (req, res) {
   })
 };
 
+function refund (req, res) {
+  if (!req.body || !req.body.chargeId) {
+    return res.status(400).json({
+      'code': 'ValidationError',
+      'message': 'chargeId is required'
+    })
+  }
+  if (!req.body || !req.body.reason) {
+    return res.status(400).json({
+      'code': 'ValidationError',
+      'message': 'reason is required'
+    })
+  }
+  chargeService.refund(req.body.chargeId, req.body.reason, function (err, data) {
+    if (err) {
+      return handleError(res, err)
+    }
+    return res.status(200).json(data)
+  })
+};
+
 module.exports = {
   getChargesList: getChargesList,
   getDepositCharge: getDepositCharge,
-  getDepositChargeRefund: getDepositChargeRefund
+  getDepositChargeRefund: getDepositChargeRefund,
+  refund: refund
 }
