@@ -10,7 +10,7 @@ function getTransfers (req, res) {
       'message': 'Destination Id is required'
     })
   }
-  transferService.getTransfers(req.params.destinationId, function (err, data) {
+  transferService.getTransfers(req.params.destinationId, req.params.from, req.params.to, function (err, data) {
     if (err) {
       return handleError(res, err)
     }

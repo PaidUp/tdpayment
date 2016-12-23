@@ -328,8 +328,8 @@ function updateAccount(accountId, dataUpdate, cb) {
   })
 }
 
-function getTransfers(filter, cb) {
-  stripeApi.transfers.list({ limit: 100 }, { stripe_account: filter }, function (err, data) {
+function getTransfers(stripeAccount, filter, cb) {
+  stripeApi.transfers.list(filter, {stripe_account: stripeAccount} , function (err, data) {
     // getBalance({connectAccount:filter, transferId: data.id}, function (err, data) {
     // console.log('err', err)
     // })
