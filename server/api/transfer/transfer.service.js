@@ -4,24 +4,27 @@ var config = require('../../config/environment')
 var paymentAdapter = require(config.payment.adapter)
 
 function getTransfers (stripeAccount, from, to, cb) {
-  var dateFrom = new Date(from).toISOString().substring(0,10)
-  var dateTo = new Date(to).toISOString().substring(0,10)
-
   var filter = {
-    limit: 100000,
+    limit: 1000,
     date: {
-      gte: new Date(dateFrom).getTime()/1000,
-      lte: new Date(dateTo).getTime()/1000
+      gte: getTimeUnix(from, 0, 0),
+      lte: getTimeUnix(to, 23, 59)
     }
   }
+
   paymentAdapter.getTransfers(stripeAccount, filter, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
 }
 
+function getTimeUnix(stringDate, hours, minutes){
+  let arrDt = stringDate.split('/')
+  let month = parseInt(arrDt[0]) - 1;
+  return Date.UTC(arrDt[2],month,arrDt[1],hours, minutes) / 1000
+}
+
 function retrieveTransfer (transferId, cb) {
-  console.log(transferId)
   paymentAdapter.retrieveTransfer(transferId, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
