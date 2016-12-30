@@ -4,8 +4,6 @@ var config = require('../../config/environment')
 var paymentAdapter = require(config.payment.adapter)
 
 function getTransfers (stripeAccount, from, to, cb) {
-  console.log('from: ', from)
-  console.log('from: ', to)
   var filter = {
     limit: 1000,
     date: {
@@ -13,9 +11,6 @@ function getTransfers (stripeAccount, from, to, cb) {
       lte: getTimeUnix(to, 23, 59)
     }
   }
-
-  console.log('filter: ', filter)
-  
 
   paymentAdapter.getTransfers(stripeAccount, filter, function (err, data) {
     if (err) return cb(err)
