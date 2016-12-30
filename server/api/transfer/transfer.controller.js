@@ -2,6 +2,7 @@
 
 var transferService = require('./transfer.service.js')
 var handleError = require('../../components/errors/handle.error').handleError
+var urlencode = require('urlencode');
 
 function getTransfers (req, res) {
   if (!req.params || !req.params.destinationId) {
@@ -10,7 +11,7 @@ function getTransfers (req, res) {
       'message': 'Destination Id is required'
     })
   }
-  transferService.getTransfers(req.params.destinationId, req.params.from, req.params.to, function (err, data) {
+  transferService.getTransfers(req.params.destinationId, urlencode.decode(req.params.from), urlencode.decode(req.params.to), function (err, data) {
     if (err) {
       return handleError(res, err)
     }
