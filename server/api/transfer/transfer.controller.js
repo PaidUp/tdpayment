@@ -36,7 +36,6 @@ function retrieveTransfer (req, res) {
       'message': 'transferId is required'
     })
   }
-  console.log(req.params.transferId)
   transferService.retrieveTransfer(req.params.transferId, function (err, data) {
     if (err) {
       return handleError(res, err)
