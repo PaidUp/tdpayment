@@ -20,8 +20,6 @@ function getTransfers (stripeAccount, from, to, cb) {
 
 function getTimeUnix(stringDate, hours, minutes){
   let arrDt = stringDate.split('/')
-  console.log('arrDt: ', arrDt)
-  
   let month = parseInt(arrDt[0]) - 1;
   return Date.UTC(arrDt[2],month,arrDt[1],hours, minutes) / 1000
 }
