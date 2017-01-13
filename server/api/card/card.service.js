@@ -34,7 +34,7 @@ function debitCard (debitCardData, cb) {
 function debitCardv2 (debitCardData, cb) {
   paymentAdapter.debitCardv2(debitCardData.cardId, debitCardData.amount, debitCardData.description,
     debitCardData.appearsOnStatementAs, debitCardData.customerId, debitCardData.providerId,
-    debitCardData.fee, debitCardData.meta, function (err, data) {
+    debitCardData.fee, debitCardData.meta, debitCardData.statementDescriptor, function (err, data) {
       if (err) return cb(err)
       return cb(null, data)
     })
