@@ -163,11 +163,11 @@ function debitCard(cardId, amount, description, appearsOnStatementAs, customerId
   })
 }
 
-function debitCardv2(cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, cb) {
+function debitCardv2(cardId, amount, description, appearsOnStatementAs, customerId, providerId, fee, meta, statementDescriptor, cb) {
   fee = parseFloat(fee)
   amount = parseFloat(amount)
   // TODO: Do question about description, appearsOnStatementAs and orderId
-  stripeApi.charges.create({
+  let params = {
     amount: Math.round(amount * 100),
     currency: 'usd',
     source: cardId, // cardId
@@ -175,8 +175,12 @@ function debitCardv2(cardId, amount, description, appearsOnStatementAs, customer
     destination: providerId, // acc_xx
     description: description,
     application_fee: Math.round(fee * 100),
-    metadata: meta
-  }, function (err, charge) {
+    metadata: meta,
+  }
+  if(statementDescriptor && statementDescriptor.length > 0){
+    params.statement_descriptor = statementDescriptor;
+  }
+  stripeApi.charges.create(params, function (err, charge) {
     if (err) return cb(err)
     if (hasError(charge)) return cb(handleErrors(charge))
     return cb(null, camelize(charge))
