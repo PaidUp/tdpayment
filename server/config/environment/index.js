@@ -50,9 +50,10 @@ var all = {
       feeApplication: 5
     },
     plaid: {
-      env: 'tartan',
-      clientId: '577443b366710877408d05d0',
-      secret: '0527be179e6275333084f9f7d18698'
+      env: 'sandbox',
+      publicKey: 'c104e73c056e34530e2c5774e6fc5f',
+      clientId: 'xxxxxxxxxx',
+      secret: 'xxxxxxxx'
     },
     balanced: {
       api: 'ak-test-p8Ob9vp9GnqWNwFf6CeLLokeQsf76RIe',
