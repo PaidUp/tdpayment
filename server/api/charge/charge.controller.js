@@ -70,7 +70,7 @@ function refund (req, res) {
       'message': 'reason is required'
     })
   }
-  chargeService.refund(req.body.chargeId, req.body.reason, function (err, data) {
+  chargeService.refund(req.body.chargeId, req.body.reason, req.body.amount, function (err, data) {
     if (err) {
       return handleError(res, err)
     }
