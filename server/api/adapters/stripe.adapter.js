@@ -419,7 +419,7 @@ function refund(chargeId, reason, amount, cb) {
     reverse_transfer: true
   }
   if(amount){
-    params['amount'] = amount;
+    params['amount'] = amount * 100;
   }
   stripeApi.refunds.create(params, function (err, refund) {
     if (err) {
