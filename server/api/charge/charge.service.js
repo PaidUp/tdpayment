@@ -24,8 +24,8 @@ function getDepositChargeRefund (paymentIdr, connectAccountId, cb) {
   })
 }
 
-function refund (chargeId, reason, cb) {
-  paymentAdapter.refund(chargeId, reason, function (err, data) {
+function refund (chargeId, reason, amount, cb) {
+  paymentAdapter.refund(chargeId, reason, amount, function (err, data) {
     console.log(err)
     if (err) return cb(err)
     return cb(null, data)
