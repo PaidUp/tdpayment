@@ -6,7 +6,7 @@ var paymentAdapter = require(config.payment.adapter)
 function getTransfers (stripeAccount, from, to, cb) {
   var filter = {
     limit: 1000,
-    date: {
+    arrival_date: {
       gte: getTimeUnix(from, 0, 0),
       lte: getTimeUnix(to, 23, 59)
     }
@@ -14,6 +14,7 @@ function getTransfers (stripeAccount, from, to, cb) {
 
   paymentAdapter.getTransfers(stripeAccount, filter, function (err, data) {
     if (err) return cb(err)
+    console.log(data)
     return cb(null, data)
   })
 }
