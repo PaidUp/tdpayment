@@ -7,6 +7,7 @@ var camelize = require('camelize')
 var stripeApi = require('stripe')(config.payment.stripe.api)
 var stripeToken = config.payment.stripe.api
 var urlencode = require('urlencode')
+var async = require('async');
 
 function httpRequest(method, bodyRequest, path, stripeAccount, cb) {
   var options = {
@@ -177,7 +178,7 @@ function debitCardv2(cardId, amount, description, appearsOnStatementAs, customer
     application_fee: Math.round(fee * 100),
     metadata: meta,
   }
-  if(statementDescriptor && statementDescriptor.length > 0){
+  if (statementDescriptor && statementDescriptor.length > 0) {
     params.statement_descriptor = statementDescriptor;
   }
   stripeApi.charges.create(params, function (err, charge) {
@@ -333,12 +334,31 @@ function updateAccount(accountId, dataUpdate, cb) {
 }
 
 function getTransfers(stripeAccount, filter, cb) {
-  stripeApi.transfers.list(filter, {stripe_account: stripeAccount} , function (err, data) {
+  let externalAccounts = {}
+  stripeApi.payouts.list(filter, { stripe_account: stripeAccount }, function (err, payouts) {
     // getBalance({connectAccount:filter, transferId: data.id}, function (err, data) {
     // console.log('err', err)
     // })
     if (err) return cb(err)
-    return cb(null, data)
+    async.eachSeries(payouts.data, function iteratee(item, callback) {
+      if (externalAccounts[item.destination]) {
+        item['bank_name'] = externalAccounts[item.destination]
+        callback(); // if many items are cached, you'll overflow
+      } else {
+        stripeApi.accounts.retrieveExternalAccount(
+          stripeAccount,
+          item.destination,
+          function (err, external_account) {
+            // asynchronously called
+            externalAccounts[item.destination] = external_account.bank_name
+            item['bank_name'] = external_account.bank_name
+            callback();
+          }
+        )
+      }
+    }, function done() {
+      return cb(null, payouts)
+    });
   })
 }
 
@@ -350,7 +370,7 @@ function balanceHistory(filter, balanceTransaction, cb) {
 }
 
 function getBalance(connectAccountId, transferId, cb) {
-  stripeApi.balance.listTransactions({ limit: 100, transfer: transferId }, { stripe_account: connectAccountId }, function (err, data) {
+  stripeApi.balance.listTransactions({ limit: 100, payout: transferId }, { stripe_account: connectAccountId }, function (err, data) {
     if (err) return cb(err)
     return cb(null, data)
   })
@@ -414,11 +434,11 @@ function getDepositChargeRefund(paymentIdr, accountId, cb) {
 function refund(chargeId, reason, amount, cb) {
   let params = {
     charge: chargeId,
-    metadata: {comment : reason},
+    metadata: { comment: reason },
     refund_application_fee: true,
     reverse_transfer: true
   }
-  if(amount){
+  if (amount) {
     params['amount'] = amount * 100;
   }
   stripeApi.refunds.create(params, function (err, refund) {

@@ -13,6 +13,7 @@ function getTransfers (req, res) {
   }
   transferService.getTransfers(req.params.destinationId, urlencode.decode(req.params.from), urlencode.decode(req.params.to), function (err, data) {
     if (err) {
+      console.log(err)
       return handleError(res, err)
     }
     data.data = data.data.filter((obj) => {
