@@ -349,9 +349,10 @@ function getTransfers(stripeAccount, filter, cb) {
           stripeAccount,
           item.destination,
           function (err, external_account) {
-            // asynchronously called
-            externalAccounts[item.destination] = external_account.bank_name
-            item['bank_name'] = external_account.bank_name
+            if(external_account){
+              externalAccounts[item.destination] = external_account.bank_name
+              item['bank_name'] = external_account.bank_name
+            }
             callback();
           }
         )
