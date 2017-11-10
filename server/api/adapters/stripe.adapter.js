@@ -251,7 +251,6 @@ function hasError(response) {
 
 function createAccount(accountDetails, cb) {
   stripeApi.accounts.create({
-    managed: true,
     debit_negative_balances: true,
     country: accountDetails.country,
     email: accountDetails.email,
