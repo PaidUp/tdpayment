@@ -14,7 +14,6 @@ function getTransfers (stripeAccount, from, to, cb) {
 
   paymentAdapter.getTransfers(stripeAccount, filter, function (err, data) {
     if (err) return cb(err)
-    console.log(data)
     return cb(null, data)
   })
 }
