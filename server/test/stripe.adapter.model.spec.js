@@ -33,7 +33,8 @@ var data = {
     customerRes: {},
     accountDetails: {
       email: faker.internet.email(),
-      country: 'US'
+      country: 'US',
+      type: 'custom'
     },
     account: {
       id: ''
