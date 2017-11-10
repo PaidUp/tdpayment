@@ -30,7 +30,8 @@ exports.fetchCustomer = function (customerId, cb) {
 exports.createConnectAccount = function (dataAccount, cb) {
   var account = {
     email: dataAccount.email,
-    country: dataAccount.country
+    country: dataAccount.country,
+    type: "custom"
   }
   paymentAdapter.createAccount(account, function(err, data){
     if(err) return cb(err);
