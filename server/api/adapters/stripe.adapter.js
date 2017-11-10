@@ -254,7 +254,8 @@ function createAccount(accountDetails, cb) {
     managed: true,
     debit_negative_balances: true,
     country: accountDetails.country,
-    email: accountDetails.email
+    email: accountDetails.email,
+    type: accountDetails.type
   }, function (err, account) {
     if (err) return cb(err)
 
