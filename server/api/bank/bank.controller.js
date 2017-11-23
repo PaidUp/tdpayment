@@ -143,21 +143,6 @@ function loadBankVerification (req, res) {
   })
 }
 
-function deleteBankAccount (req, res) {
-  if (!req.body || !req.body.bankId) {
-    return res.status(400).json(400, {
-      'code': 'ValidationError',
-      'message': 'Bank Id is required'
-    })
-  }
-  bankService.deleteBankAccount(req.body.bankId, function (err, data) {
-    if (err) {
-      return handleError(res, err)
-    }
-    return res.status(200).json(data)
-  })
-}
-
 function confirmBankVerification (req, res) {
   if (!req.body || !req.body.bankId) {
     return res.status(400).json({
@@ -307,6 +292,28 @@ function addBankToAccount (req, res) {
   })
 }
 
+function deleteBankAccount (req, res) {
+  if (!req.params || !req.params.customerId) {
+    return res.status(400).json({
+      'code': 'ValidationError',
+      'message': 'User is required'
+    })
+  }
+  if (!req.params || !req.params.bankId) {
+    return res.status(400).json({
+      'code': 'ValidationError',
+      'message': 'Bank id is required'
+    })
+  }
+
+  bankService.deleteBankAccount(req.params, function (err, data) {
+    if (err) {
+      return handleError(res, err)
+    }
+    return res.status(200).json(data)
+  })
+}
+
 module.exports = {
   createBank: createBank,
   associateBank: associateBank,
@@ -320,5 +327,6 @@ module.exports = {
   prepareBank: prepareBank,
   fetchBank: fetchBank,
   getUserDefaultBankId: getUserDefaultBankId,
-  addBankToAccount: addBankToAccount
+  addBankToAccount: addBankToAccount,
+  deleteBankAccount: deleteBankAccount
 }
