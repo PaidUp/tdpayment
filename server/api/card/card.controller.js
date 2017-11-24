@@ -226,6 +226,28 @@ function getUserDefaultCardId (req, res) {
   })
 }
 
+function deleteCardAccount (req, res) {
+  if (!req.params || !req.params.customerId) {
+    return res.status(400).json({
+      'code': 'ValidationError',
+      'message': 'User is required'
+    })
+  }
+  if (!req.params || !req.params.cardId) {
+    return res.status(400).json({
+      'code': 'ValidationError',
+      'message': 'Card Id is required'
+    })
+  }
+
+  cardService.deleteCardAccount(req.params, function (err, data) {
+    if (err) {
+      return handleError(res, err)
+    }
+    return res.status(200).json(data)
+  })
+}
+
 module.exports = {
   createCard: createCard,
   associateCard: associateCard,
@@ -234,5 +256,6 @@ module.exports = {
   listCards: listCards,
   prepareCard: prepareCard,
   fetchCard: fetchCard,
-  getUserDefaultCardId: getUserDefaultCardId
+  getUserDefaultCardId: getUserDefaultCardId,
+  deleteCardAccount: deleteCardAccount
 }

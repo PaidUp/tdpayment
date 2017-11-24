@@ -18,5 +18,7 @@ router.get('/list/customerId/:customerId', auth.isAuthenticatedServer(config.nod
 router.post('/prepare', auth.isAuthenticatedServer(config.nodePass.me.token), controller.prepareCard)
 router.get('/fetch/customerId/:customerId/cardId/:cardId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.fetchCard)
 router.get('/default/customerId/:customerId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.getUserDefaultCardId)
+router.delete('/customer/:customerId/card/:cardId', auth.isAuthenticatedServer(config.nodePass.me.token), controller.deleteCardAccount)
+
 
 module.exports = router
