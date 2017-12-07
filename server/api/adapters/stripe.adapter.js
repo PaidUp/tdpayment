@@ -463,6 +463,32 @@ function retrieveTransfer(transferId, cb) {
     })
 }
 
+function deleteCard(customerId, cardId, cb){
+  stripeApi.customers.deleteCard(
+    customerId,
+    cardId,
+    function(err, confirmation) {
+      if(err){
+        return cb(err);
+      }
+      cb(null, confirmation);
+    }
+  );
+}
+
+function deleteBank(customerId, bankId, cb){
+  stripeApi.customers.deleteSource(
+    customerId,
+    bankId,
+    function(err, confirmation) {
+      if(err){
+        return cb(err);
+      }
+      cb(null, confirmation);
+    }
+  );
+}
+
 function handleErrors(response) {
   return response.errors
 }
@@ -497,5 +523,7 @@ module.exports = {
   getDepositCharge: getDepositCharge,
   getDepositChargeRefund: getDepositChargeRefund,
   refund: refund,
-  retrieveTransfer: retrieveTransfer
+  retrieveTransfer: retrieveTransfer,
+  deleteCard: deleteCard,
+  deleteBank, debitBank
 }

@@ -95,7 +95,7 @@
     "winston": "1.0.1"
   },
   "engines": {
-    "node": "4.1.0"
+    "node": "6.11.2"
   },
   "scripts": {
     "start": "node server/app.js",
