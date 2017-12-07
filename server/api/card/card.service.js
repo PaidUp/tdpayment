@@ -80,6 +80,13 @@ function getUserDefaultCardId (params, cb) {
   })
 }
 
+function deleteCardAccount (params, cb) {
+  paymentAdapter.deleteCard(params.customerId, params.cardId, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}
+
 module.exports = {
   createCard: createCard,
   associateCard: associateCard,
@@ -88,5 +95,6 @@ module.exports = {
   listCards: listCards,
   prepareCard: prepareCard,
   fetchCard: fetchCard,
-  getUserDefaultCardId: getUserDefaultCardId
+  getUserDefaultCardId: getUserDefaultCardId,
+  deleteCardAccount: deleteCardAccount
 }

@@ -50,13 +50,6 @@ function loadBankVerification (params, cb) {
   });
 }
 
-function deleteBankAccount (bankId, cb) {
-  paymentAdapter.deleteBankAccount(bankId, function(err, data){
-    if(err) return cb(err);
-    return cb(null, data);
-  });
-}
-
 function confirmBankVerification (params, cb) {
   paymentAdapter.confirmBankVerification(params.customerId, params.bankId, params.amount1, params.amount2, function(err, data){
     if(err) return cb(err);
@@ -113,6 +106,13 @@ function getUserDefaultBankId (params, cb) {
 
 function addBankToAccount (accountId, bankDetails, cb) {
   paymentAdapter.addBankToAccount(accountId, bankDetails, function(err, data){
+    if(err) return cb(err);
+    return cb(null, data);
+  });
+}
+
+function deleteBankAccount (params, cb) {
+  paymentAdapter.deleteBank(params.customerId, params.bankId, function(err, data){
     if(err) return cb(err);
     return cb(null, data);
   });
